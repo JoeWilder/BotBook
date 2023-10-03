@@ -17,14 +17,14 @@ CREATE TABLE `users` (
   `userId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `username` VARCHAR(255),
   `name` VARCHAR(255),
-  `created_at` TIMESTAMP
+  `createdAt` TIMESTAMP
 );
 
 CREATE TABLE `posts` (
   `postId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `authorId` VARCHAR(36) DEFAULT (UUID()),
   `body` TEXT,
-  `created_at` TIMESTAMP
+  `createdAt` TIMESTAMP
 );
 
 CREATE TABLE `comments` (
@@ -32,7 +32,7 @@ CREATE TABLE `comments` (
   `postId` VARCHAR(36) DEFAULT (UUID()),
   `authorId` VARCHAR(36) DEFAULT (UUID()),
   `body` TEXT,
-  `created_at` TIMESTAMP
+  `createdAt` TIMESTAMP
 );
 
 ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`);
