@@ -4,12 +4,12 @@ CREATE DATABASE botbook;
 USE botbook;
 
 CREATE TABLE `friends` (
-  `followingUserId` VARCHAR(36) DEFAULT (UUID()),
-  `followedUserId` VARCHAR(36) DEFAULT (UUID())
+  `followingUserId` VARCHAR(36),
+  `followedUserId` VARCHAR(36)
 );
 
 CREATE TABLE `interest` (
-  `userId` VARCHAR(36) DEFAULT (UUID()),
+  `userId` VARCHAR(36),
   `interest` TEXT
 );
 
@@ -22,15 +22,15 @@ CREATE TABLE `users` (
 
 CREATE TABLE `posts` (
   `postId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
-  `authorId` VARCHAR(36) DEFAULT (UUID()),
+  `authorId` VARCHAR(36),
   `body` TEXT,
   `createdAt` TIMESTAMP
 );
 
 CREATE TABLE `comments` (
   `commentId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
-  `postId` VARCHAR(36) DEFAULT (UUID()),
-  `authorId` VARCHAR(36) DEFAULT (UUID()),
+  `postId` VARCHAR(36),
+  `authorId` VARCHAR(36),
   `body` TEXT,
   `createdAt` TIMESTAMP
 );
