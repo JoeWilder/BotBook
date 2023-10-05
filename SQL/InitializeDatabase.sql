@@ -41,6 +41,6 @@ ALTER TABLE `interest` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`commentId`) REFERENCES `users` (`userId`);
+ALTER TABLE `comments` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `comments` ADD FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`);
