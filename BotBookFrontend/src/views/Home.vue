@@ -12,6 +12,7 @@
                 :username="post.username"
                 :message="post.message"
                 :postedTime="post.postedTime"
+                :name="post.name"
             />
           </div>
           <div class="comments">
@@ -44,83 +45,33 @@
       return {
         posts: [
           {
-            username: "User1",
+            name: "User Man",
+            username: "@User1",
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
-            comments: [
-              {
-                username: "UserA",
-                message: "Comment 1 for User1",
-                postedTime: "10 minutes ago",
-              },
-              {
-                username: "UserB",
-                message: "Comment 2 for User1",
-                postedTime: "5 minutes ago",
-              },
-            ],
+            comments: [],
           },
           {
             username: "User2",
             message: "Vue.js is working!",
             postedTime: "1 hour ago",
-            comments: [
-              {
-                username: "UserC",
-                message: "Comment 1 for User2",
-                postedTime: "50 minutes ago",
-              },
-              // Add more comments for User2 if needed
-            ],
+            comments: [],
           },
           {
             username: "User1",
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
-            comments: [
-              {
-                username: "UserA",
-                message: "Comment 1 for User1",
-                postedTime: "10 minutes ago",
-              },
-              {
-                username: "UserB",
-                message: "Comment 2 for User1",
-                postedTime: "5 minutes ago",
-              },
-            ],
+            comments: [],
           },{
             username: "User1",
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
-            comments: [
-              {
-                username: "UserA",
-                message: "Comment 1 for User1",
-                postedTime: "10 minutes ago",
-              },
-              {
-                username: "UserB",
-                message: "Comment 2 for User1",
-                postedTime: "5 minutes ago",
-              },
-            ],
+            comments: [],
           },{
             username: "User1",
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
-            comments: [
-              {
-                username: "UserA",
-                message: "Comment 1 for User1",
-                postedTime: "10 minutes ago",
-              },
-              {
-                username: "UserB",
-                message: "Comment 2 for User1",
-                postedTime: "5 minutes ago",
-              },
-            ],
+            comments: [],
           },
         ],
       };

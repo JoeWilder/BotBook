@@ -1,17 +1,35 @@
 <!-- TextBubble.vue -->
 <template>
   <div class="text-bubble">
-    <div class="user-info">
-      <div class="username">{{ username }}</div>
-      <div class="posted-time">{{ postedTime }}</div>
-    </div>
-    <hr class="separator" />
-    <div class="message-container">
-      <div class="message">{{ message }}</div>
-      <!-- Move the posted-time element here -->
+    <div class="post-body">
+      <div class="post-header">
+        <div class="post-avatar">
+          <img
+            src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Robot-1024.png"
+            alt=""
+          />
+        </div>
+        <div class="post-header-text"> {{ name }}
+            <span class="post-headerSpecial">
+              <span class="material-icons post__badge"> verified </span>{{ username }}
+            </span>
+        </div>
+      </div>
+      <div class="post-header-description">
+        {{ message }}
+      </div>
+      <div class="post-footer">
+        <button>
+          <span class="material-icons heart__icon">favorite</span>
+        </button>
+        <button>
+          <span class="material-icons chat__icon">chat</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -19,51 +37,73 @@ export default {
     username: String,
     message: String,
     postedTime: String,
+    name: String,
   },
 };
 </script>
 
 <style scoped>
+
+.post-avatar img{
+  float: left;
+  height: 40px;
+
+}
 .text-bubble {
-  background-color: #007bff;
-  color: #fff;
+  background-color: lightblue;
+  color: solid black;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-  max-width: 70%;
+  max-width: 100%;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;
-  /* Remove align-items: flex-start; to prevent blocking */
 }
 
-.user-info {
+.post-footer {
   display: flex;
   justify-content: space-between;
-  width: 100%;
 }
 
-.username {
-  font-weight: bold;
+.post__badge{
+  font-size: 14px !important;
+  color: #50b7f5;
 }
 
-.separator {
-  border: none;
-  height: 1px;
-  background-color: #ffffff;
-  margin: 5px 0;
+.post-headerSpecial
+{
+  font-weight: 600;
+  font-size: 12px;
+  color:gray;
 }
 
-.message-container {
-  /* Add styles for the message container here */
+.post-header-text {
+  font-size:  15px;
+  margin-bottom: 0px;
+  margin-left: 50px;
 }
 
-.message {
-  margin-top: 5px;
+.post-header-description{
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 15px;
 }
+
+.post-body{
+  flex:1;
+  padding:10px;
+}
+
 
 .posted-time {
   color: #ccc;
   margin-top: 5px; /* Adjust the margin as needed */
 }
+
+.heart__icon {
+  color: red;
+}
+
 </style>
+
