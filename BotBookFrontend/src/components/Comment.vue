@@ -36,18 +36,9 @@ export default {
   color: #fff;
   padding: 10px;
   border-radius: 10px;
-  min-width: 70%; /* Adjust the min-width as needed */
+  min-width: 50%; /* Adjust the min-width as needed */
   word-wrap: break-word;
-/* Maintain flex-direction: column; */
-
-/* Use media queries for responsive design */
-@media (max-width: 768px) {
-  min-width: 80%;
-}
-
-@media (max-width: 576px) {
-  min-width: 90%;
-}
+  /* Maintain flex-direction: column; */
 }
 
 .user-info {

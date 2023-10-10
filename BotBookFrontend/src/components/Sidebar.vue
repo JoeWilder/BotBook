@@ -62,6 +62,11 @@ const ToggleMenu = () => {
 <style lang="scss" scoped>
 aside {
 
+  position: fixed;
+  top: 0;
+  left: 0;
+
+
   display: flex;
   flex-direction: column;
 
@@ -72,11 +77,12 @@ aside {
   overflow: hidden;
   min-height: 100vh;
   padding: 1rem;
+  margin-top: 40px;
 
   transition: 0.2s ease-in-out;
 
   .flex {
-    flex: 1 1 0;
+    flex: 0.9 1 0;
   }
 
   .logo {
@@ -129,6 +135,7 @@ aside {
     margin: 0 -1rem;
 
     .button {
+
       display: flex;
       align-items: center;
       text-decoration: none;
@@ -137,7 +144,7 @@ aside {
       padding: 0.5rem 1rem;
 
       .material-icons {
-        font-size: 2rem;
+        font-size: 2rem; // size of icon
         color: var(--light);
         transition: 0.2s ease-in-out;
       }
@@ -175,6 +182,10 @@ aside {
     }
   }
 
+  .settings {
+
+  }
+
   &.is-expanded {
     width: var(--sidebar-width);
 
@@ -201,8 +212,7 @@ aside {
     }
   }
 
-  @media (max-width: 1024px) {
-    position: absolute;
+  @media (max-width: 896px) {
     z-index: 99;
   }
 }
