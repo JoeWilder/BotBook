@@ -46,7 +46,7 @@
         posts: [
           {
             name: "User Man",
-            username: "@User1",
+            username: " @User1",
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
             comments: [],

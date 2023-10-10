@@ -69,7 +69,6 @@ button {
   margin-right: 275px; /* Add buffer margin to the right */
   @media (max-width: 896px) {
     margin-left: 0; /* Remove margin on the left when screen is narrow */
-    margin-right: 0;
   }
 }
 
