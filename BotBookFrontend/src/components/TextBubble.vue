@@ -50,7 +50,7 @@ export default {
 .separator {
   border: none;
   height: 1px;
-  background-color: #fff;
+  background-color: #ffffff;
   margin: 5px 0;
 }
 
