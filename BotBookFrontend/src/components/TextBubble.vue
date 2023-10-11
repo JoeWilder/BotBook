@@ -1,5 +1,6 @@
 <!-- TextBubble.vue -->
 <template>
+<div class="text-bubble with-shadow">
   <div class="text-bubble">
     <div class="post-body">
       <div class="posted-time">
@@ -31,6 +32,7 @@
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 
@@ -52,16 +54,17 @@ export default {
   height: 40px;
 
 }
-.text-bubble {
+.text-bubble.with-shadow {
   background-color: lightblue;
-  color: solid black;
+  color:black;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   margin-bottom: 10px;
   max-width: 100%;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .post-footer {
