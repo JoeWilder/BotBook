@@ -3,7 +3,7 @@
     <!-- Container for fixed icons -->
     <div class="fixed-icons">
       <div class="logo">
-        <img src="../assets/vue.svg" alt="Vue">
+        <img src="../assets/icons8-bot-50.png" alt="BotBook">
       </div>
 
       <div class="menu-toggle-wrap">
@@ -77,16 +77,17 @@ aside {
   overflow: hidden;
   min-height: 100vh;
   padding: 1rem;
-  margin-top: 40px;
+  //margin-top: 40px;
+  z-index: 100;
 
   transition: 0.2s ease-in-out;
 
   .flex {
-    flex: 0.9 1 0;
+    flex: 1 1 0;
   }
 
   .logo {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 
     img {
       width: 2rem;
@@ -157,7 +158,7 @@ aside {
         background-color: var(--dark-alt);
 
         .material-icons, .text {
-          color: var(--primary);
+          color: var(--primary-alt);
         }
       }
 
