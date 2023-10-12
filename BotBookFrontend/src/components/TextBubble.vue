@@ -68,6 +68,7 @@ export default {
 
 }
 
+
 .text-bubble {
   background-color: #5BC0DE; /* Change to a different background color */
   color: white; /* Change text color to improve contrast */
