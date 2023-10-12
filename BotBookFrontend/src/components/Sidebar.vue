@@ -214,7 +214,7 @@ aside {
   }
 
   @media (max-width: 896px) {
-    z-index: 99;
+    z-index: 200;
   }
 }
 </style>

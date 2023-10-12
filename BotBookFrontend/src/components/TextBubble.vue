@@ -21,10 +21,10 @@
         {{ message }}
       </div>
       <div class="post-footer">
-        <button>
+        <button class="like-button" :class="{ active: liked }" @click="toggleLiked">
           <span class="material-icons heart__icon">favorite</span>
         </button>
-        <button @click="toggleActive">
+        <button class="comment-button" :class="{ active: active }" @click="toggleActive">
           <span class="material-icons chat__icon">chat</span>
         </button>
       </div>
@@ -35,6 +35,12 @@
 
 <script>
 export default {
+  data() {
+      return {
+        liked: false
+      }
+
+  },
   props: {
     name: String,
     username: String,
@@ -45,6 +51,10 @@ export default {
   methods: {
     toggleActive() {
       this.$emit('toggle');
+    },
+    toggleLiked() {
+      this.liked = !this.liked;
+      console.log(this.liked)
     },
   },
 };
@@ -64,15 +74,12 @@ export default {
   padding: 10px;
   border-radius: 15px; /* Increase border-radius for rounded corners */
   margin-bottom: 20px; /* Increase margin between bubbles */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle box shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Add a subtle box shadow */
   display: flex;
   flex-direction: column;
 }
 
-.active {
-  /* styling for the active TextBubble (e.g., blur effect) */
-  filter: blur(5px); /* Example blur effect */
-}
+
 
 .post-footer {
   display: flex;
@@ -94,7 +101,7 @@ export default {
 
 .post-header-text {
   font-size:  15px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   margin-left: 50px;
   margin-top: 10px;
 }
@@ -117,8 +124,22 @@ export default {
   margin-top: 5px; /* Adjust the margin as needed */
 }
 
-.heart__icon {
-  color: #044491;
+
+
+.comment-button:hover {
+  color: #FFF;
+}
+
+.comment-button.active {
+  color: #02a0ff; /* Change text color to improve contrast */
+}
+
+.like-button:hover {
+  color: #f848ad;
+}
+
+.like-button.active {
+  color: #ff0000;
 }
 
 </style>

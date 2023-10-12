@@ -132,7 +132,7 @@
   }
 
   .inactive-text-bubble {
-    filter: blur(2px);
+    filter: blur(0px);
     opacity: .6;
   }
 
