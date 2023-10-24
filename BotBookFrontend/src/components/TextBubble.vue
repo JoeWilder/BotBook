@@ -27,6 +27,9 @@
         <button class="comment-button" :class="{ active: active }" @click="toggleActive">
           <span class="material-icons chat__icon">chat</span>
         </button>
+        <div class="comment-count-container">
+          <span class="comment-count">{{commentCount}}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -34,12 +37,15 @@
 
 
 <script>
-export default {
-  data() {
-      return {
-        liked: false
-      }
+import CommentFeed from './CommentFeed.vue'; // Adjust the path to your actual component
 
+export default {
+
+
+  data() {
+    return {
+      liked: false
+    }
   },
   props: {
     name: String,
@@ -47,6 +53,7 @@ export default {
     message: String,
     postedTime: String,
     active: Boolean,
+    commentCount: Number,
   },
   methods: {
     toggleActive() {
@@ -55,6 +62,7 @@ export default {
     toggleLiked() {
       this.liked = !this.liked;
       console.log(this.liked)
+      console.log(this.commentCount)
     },
   },
 };
