@@ -15,6 +15,7 @@
                 :message="post.message"
                 :postedTime="post.postedTime"
                 :active="activeTextBubbleIndex === index"
+                :comment-count="post.comments.length"
                 @toggle="toggleTextBubble(index)"
             />
           </div>
