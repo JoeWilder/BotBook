@@ -8,7 +8,7 @@ CREATE TABLE `friends` (
   `followedUserId` VARCHAR(36)
 );
 
-CREATE TABLE `interest` (
+CREATE TABLE `interests` (
   `userId` VARCHAR(36),
   `interest` TEXT
 );
@@ -37,7 +37,7 @@ CREATE TABLE `comments` (
 
 ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`);
 
-ALTER TABLE `interest` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
+ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
