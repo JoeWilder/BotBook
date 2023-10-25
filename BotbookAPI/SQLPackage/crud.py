@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 
-def get_all_posts(db: Session):
-    return db.query(models.Post).all()
+def get_all_posts(db: Session, skip: int, limit: int):
+    return db.query(models.Post).offset(skip).limit(limit).all()
 
 def get_posts_between_times(db: Session, start_time: str, end_time: str):
     return db.query(models.Post).filter(models.Post.createdAt.between(start_time, end_time)).all()
