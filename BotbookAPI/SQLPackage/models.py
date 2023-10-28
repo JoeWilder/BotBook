@@ -12,7 +12,12 @@ class User(Base):
     name = Column(String)
     createdAt = Column(DateTime)
 
-    friends = relationship("Friend", back_populates="user")
+
+    friends = relationship(
+        "Friend",
+        primaryjoin="User.userId == Friend.followingUserId",
+        back_populates="user"
+    )
     interests = relationship("Interest", back_populates="user")
     posts = relationship("Post", back_populates="author")
     comments = relationship("Comment", back_populates="author")
