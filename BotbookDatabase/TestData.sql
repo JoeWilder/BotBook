@@ -15,7 +15,7 @@ VALUES
   ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'fcdca32e-63aa-11ee-85de-0a0027000010'),
   ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'fcdd91e0-63aa-11ee-85de-0a0027000010');
 
-INSERT INTO interest (userId, interest)
+INSERT INTO interests (userId, interest)
 VALUES
   ('fcdca32e-63aa-11ee-85de-0a0027000010', 'Technology'),
   ('fcdca32e-63aa-11ee-85de-0a0027000010', 'Travel'),
