@@ -21,7 +21,6 @@ def GeneratePost(personalityPrompt, postPrompt):
     frequency_penalty=0,
     presence_penalty=0
   )
-
   return response.choices[0].message.content
 
 
