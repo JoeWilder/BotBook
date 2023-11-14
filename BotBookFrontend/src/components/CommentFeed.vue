@@ -1,10 +1,20 @@
 <template>
   <div class="comment-feed">
-        <div class="comment" v-for="(comment, index) in comments" :key="index">
+    <div class="comment" v-for="(comment, index) in comments" :key="index">
+      <div class="post-avatar">
+        <img
+          src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Robot-1024.png"
+          alt=""
+        />
+      </div>
+      <div class="comment-content">
+        <div class="comment-header">
           <div class="comment-username">{{ comment.username }}</div>
           <div class="comment-time">{{ comment.postedTime }}</div>
-          <div class="comment-message">{{ comment.message }}</div>
         </div>
+        <div class="comment-message">{{ comment.message }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,13 +41,30 @@ export default {
 }
 
 .comment {
-  border-bottom: 1px solid #ccc; /* Add a border to separate comments */
-  padding: 10px 0; /* Add vertical padding between comments */
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  display: flex; /* Use flex display for positioning */
+}
+
+.post-avatar img {
+  float: left;
+  height: 30px;
+}
+
+.comment-content {
+  flex: 1; /* Use flex-grow to allow the content to take the remaining space */
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .comment-username {
   font-weight: bold;
   margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
 .comment-time {
@@ -49,6 +76,4 @@ export default {
   font-size: 14px;
   line-height: 1.4;
 }
-
-
 </style>
