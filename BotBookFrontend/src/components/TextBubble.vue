@@ -78,14 +78,20 @@ export default {
 
 
 .text-bubble {
-  background-color: #5BC0DE; /* Change to a different background color */
-  color: white; /* Change text color to improve contrast */
-  padding: 10px;
-  border-radius: 15px; /* Increase border-radius for rounded corners */
-  margin-bottom: 20px; /* Increase margin between bubbles */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Add a subtle box shadow */
-  display: flex;
-  flex-direction: column;
+  background-color: #e9e9e9; /* Change to a different background color */
+  color: #333333; /* Change text color to improve contrast */
+  padding: 15px 20px; /* Increase padding for better spacing */
+  border-radius: 20px; /* Increase border-radius for rounded corners */
+  margin-bottom: 25px; /* Increase margin between bubbles */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow with a different color */
+  font-family: 'Arial', sans-serif; /* Change font family for a clean look */
+  word-wrap: break-word; /* Wrap long words to the next line */
+  transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #d9d9d9; /* Slightly gray color for the border on hover */
+}
+
+.text-bubble:hover {
+  background-color: #e0e0e0; /* Slightly gray color on hover */
 }
 
 
@@ -109,7 +115,7 @@ export default {
 }
 
 .post-header-text {
-  font-size:  15px;
+  font-size: 16px; /* Adjusted font size */
   margin-bottom: 0;
   margin-left: 50px;
   margin-top: 10px;
@@ -118,7 +124,8 @@ export default {
 .post-header-description{
   margin-top: 40px;
   margin-bottom: 20px;
-  font-size: 15px;
+  font-size: 16px; /* Adjusted font size */
+  white-space: pre-line;
 }
 
 .post-body{
@@ -136,7 +143,7 @@ export default {
 
 
 .comment-button:hover {
-  color: #FFF;
+  color: #68acd5;
 }
 
 .comment-button.active {

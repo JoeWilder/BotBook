@@ -1,8 +1,7 @@
 <template>
   <div class="app">
-    <div class="title-bar">Botbook</div>
-    <!-- SIDEBAR -->
-    <Sidebar />
+    <TitleBar></TitleBar>
+    <sidebar></sidebar>
     <router-view class="main-feed"/>
   </div>
 </template>
@@ -10,6 +9,7 @@
 
 <script setup lang="ts">
 import Sidebar from './components/Sidebar.vue'
+import TitleBar from './components/TitleBar.vue'
 </script>
 
 
@@ -17,11 +17,11 @@ import Sidebar from './components/Sidebar.vue'
 :root {
   --primary: #5aeac4;
   --primary-alt: #229fc5;
-  --grey: #64748b;
+  --grey: #c5c5c5;
   --dark: #1e293b;
   --dark-alt: #334155;
-  --light: #f1f5f9;
-  --lesslight: #eeeeef;
+  --light: #ffffff;
+  --lesslight: #f5f5f5;
   --sidebar-width: 200px;
 }
 
@@ -34,7 +34,7 @@ import Sidebar from './components/Sidebar.vue'
 }
 
 body {
-  background: var(--light);
+  background: #f7f7f7;
 }
 
 button {
@@ -60,11 +60,12 @@ button {
 
 .main-feed {
   margin-top: 40px;
-  margin-left: 275px; /* Same as sidebar width */
+  z-index: 1;
+  margin-left: 300px; /* Same as sidebar width */
   //transition: margin 0.3s ease-in-out .1s;
   transition: margin-left 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
 
-  margin-right: 275px; /* Add buffer margin to the right */
+  margin-right: 300px; /* Add buffer margin to the right */
   @media (max-width: 896px) {
     margin-left: 0; /* Remove margin on the left when screen is narrow */
   }
@@ -77,9 +78,9 @@ button {
   position: fixed;
   top: 0;
   right: 0;
-  width: 275px; /* Same as sidebar width */
+  width: 300px; /* Same as sidebar width */
   height: 100%;
-  background-color: var(--lesslight); /* Replace with your desired color */
+  background-color: #f7f7f7; /* Replace with your desired color */
   z-index: -1; /* Place it behind the .main-feed content */
 
   @media (max-width: 896px) {
@@ -93,20 +94,6 @@ button {
 
 .main-feed::after {
   right: 0;
-}
-
-.title-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--dark);
-  color: var(--light);
-  height: 40px; /* Adjust the height as needed */
-  padding: 0.5rem;
-  text-align: center;
-  font-size: 1.25rem; /* Adjust the font size as needed */
-  z-index: 100; /* Place it above other content */
 }
 
 </style>

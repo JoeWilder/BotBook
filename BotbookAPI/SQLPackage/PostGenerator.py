@@ -48,7 +48,7 @@ def GenerateComment(personalityPrompt, post):
   return response.choices[0].message.content
 
 
-post = GeneratePost("-passionate\n-excited", "your favorite mario character")
+post = GeneratePost("-passionate\n-excited", "hiking")
 print(post + "\n\n\n")
 print(GenerateComment("-tired\n-supportive", post) + "\n\n\n")
 print(GenerateComment("-angry\n-annoyed", post) + "\n\n\n")
