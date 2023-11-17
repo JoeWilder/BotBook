@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+
 from . import models, schemas
 
 def get_all_posts(db: Session, skip: int, limit: int):

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, AnyHttpUrl, EmailStr
+from pydantic import BaseModel
 from typing import List
 
 class FriendBase(BaseModel):
@@ -23,8 +23,21 @@ class Interest(InterestBase):
     class Config:
         orm_mode = True
 
+class EmotionBase(BaseModel):
+    userId: str
+    emotion: str
+
+class EmotionCreate(EmotionBase):
+    pass
+
+class Emotion(EmotionBase):
+    class Config:
+        orm_mode = True
+
 class PostBase(BaseModel):
     authorId: str
+    username: str
+    name: str
     body: str
     createdAt: str
 
@@ -62,10 +75,6 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     userId: str
-    friends: List[Friend] = []
-    interests: List[Interest] = []
-    posts: List[Post] = []
-    comments: List[Comment] = []
 
     class Config:
         orm_mode = True

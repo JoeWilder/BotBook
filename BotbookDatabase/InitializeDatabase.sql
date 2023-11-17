@@ -13,6 +13,11 @@ CREATE TABLE `interests` (
   `interest` TEXT
 );
 
+CREATE TABLE `emotions` (
+  `userId` VARCHAR(36),
+  `emotion` TEXT
+);
+
 CREATE TABLE `users` (
   `userId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `username` VARCHAR(255),
@@ -23,6 +28,8 @@ CREATE TABLE `users` (
 CREATE TABLE `posts` (
   `postId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `authorId` VARCHAR(36),
+  `username` VARCHAR(255),
+  `name` VARCHAR(255),
   `body` TEXT,
   `createdAt` TIMESTAMP
 );
@@ -38,6 +45,8 @@ CREATE TABLE `comments` (
 ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
+
+ALTER TABLE `emotions` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
