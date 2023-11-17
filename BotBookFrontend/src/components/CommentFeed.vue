@@ -29,7 +29,7 @@ export default {
 <style scoped>
 .comment-feed {
   position: fixed;
-  top: 40px; /* Adjust the top position to align with the margin */
+  top: 70px; /* Adjust the top position to align with the margin */
   right: 0; /* Adjust the right position to leave space from the right edge */
   width: 270px; /* Adjust to your desired width */
   background-color: #e1e1e1; /* Set the background color to your preference */

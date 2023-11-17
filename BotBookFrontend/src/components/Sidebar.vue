@@ -49,6 +49,7 @@ aside {
 
   margin-left: 50px;
   width: 200px;
+  border-right: .5px solid rgb(183, 182, 182);
 
   .flex {
     flex: 1 1 0;
@@ -72,54 +73,49 @@ aside {
   }
 
   .menu {
-    margin: 0 -1rem;
+  margin: 0;
 
-    .button {
+  .button {
+    box-sizing: border-box;  // Add this line to include padding and border in the total width calculation
+    width: 100%;  // Make buttons take up 100% of the container width
 
-      display: flex;
-      align-items: center;
-      text-decoration: none;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 
+    transition: 0.2s ease-in-out;
+    padding: .6rem 1rem;
+
+    .material-icons {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+      color: var(--dark);
       transition: 0.2s ease-in-out;
-      padding: .6rem 1rem;
+    }
+    .text {
+      color: var(--dark);
+      transition: 0.2s ease-in-out;
+    }
 
-      .material-icons {
-        font-size: 2rem; // size of icon
-        margin-right: 0.5rem;
-        color: var(--dark);
-        transition: 0.2s ease-in-out;
+    &:hover {
+      background-color: #e8e8e8;
+      border-radius: 8px;
+
+      .material-icons, .text {
+        // color: var(--grey);
       }
-      .text {
-        color: var(--dark);
-        transition: 0.2s ease-in-out;
-      }
+    }
 
-      &:hover {
-        background-color: #e8e8e8;
-        border-radius: 8px;
+    &.router-link-exact-active {
+      background-color: #e3e3e3;
+      border-right: 5px solid var(--grey);
+      border-radius: 8px;
 
-        .material-icons, .text {
-          //color: var(--grey);
-        }
-      }
-
-      &.router-link-exact-active {
-        background-color: #e3e3e3;
-        border-right: 5px solid var(--grey);
-        border-radius: 8px;
-
-        .material-icons, .text {
-          color: #212121;
-        }
+      .material-icons, .text {
+        color: #212121;
       }
     }
   }
-
-
-
-
-  @media (max-width: 896px) {
-    z-index: 200;
-  }
+}
 }
 </style>

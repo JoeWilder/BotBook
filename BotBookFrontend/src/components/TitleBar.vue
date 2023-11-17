@@ -48,9 +48,10 @@ onUnmounted(() => {
   color: var(--dark);
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 60px;
   padding: 0.5rem 2rem;
   z-index: 100;
+  border-bottom: .5px solid rgb(183, 182, 182);
 
   .logo {
     margin-right: 0.5rem;
