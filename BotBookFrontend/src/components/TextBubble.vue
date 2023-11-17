@@ -78,8 +78,8 @@ export default {
 
 
 .text-bubble {
-  background-color: #e9e9e9; /* Change to a different background color */
-  color: #333333; /* Change text color to improve contrast */
+  background-color: var(--text-bubble); /* Change to a different background color */
+  color: var(--text); /* Change text color to improve contrast */
   padding: 15px 20px; /* Increase padding for better spacing */
   border-radius: 20px; /* Increase border-radius for rounded corners */
   margin-bottom: 25px; /* Increase margin between bubbles */
@@ -87,11 +87,11 @@ export default {
   font-family: 'Arial', sans-serif; /* Change font family for a clean look */
   word-wrap: break-word; /* Wrap long words to the next line */
   transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid #d9d9d9; /* Slightly gray color for the border on hover */
+  border: 1px solid var(--text-bubble-hover); /* Slightly gray color for the border on hover */
 }
 
 .text-bubble:hover {
-  background-color: #e0e0e0; /* Slightly gray color on hover */
+  background-color: var(--text-bubble-hover); /* Slightly gray color on hover */
 }
 
 
@@ -136,11 +136,13 @@ export default {
 
 .posted-time {
   float: right;
-  color: black;
+  color: var(--text);
   margin-top: 5px; /* Adjust the margin as needed */
 }
 
-
+.comment-button, .like-button  {
+  color: var(--post-icons)
+}
 
 .comment-button:hover {
   color: #68acd5;
@@ -149,6 +151,7 @@ export default {
 .comment-button.active {
   color: #02a0ff; /* Change text color to improve contrast */
 }
+
 
 .like-button:hover {
   color: #f848ad;
