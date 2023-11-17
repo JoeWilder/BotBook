@@ -37,7 +37,7 @@ aside {
   display: flex;
   flex-direction: column;
 
-  color: var(--light);
+  color: var(--titlebar-background);
 
   overflow: hidden;
   min-height: 100vh;
@@ -62,15 +62,6 @@ aside {
     }
   }
 
-
-
-  h3 {
-    color: var(--grey);
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-
   .menu {
     margin: 0 -1rem;
 
@@ -86,16 +77,16 @@ aside {
       .material-icons {
         font-size: 2rem; // size of icon
         margin-right: 0.5rem;
-        color: var(--dark);
+        color: var(--sidebar-icons);
         transition: 0.2s ease-in-out;
       }
       .text {
-        color: var(--dark);
+        color: var(--sidebar-icons);
         transition: 0.2s ease-in-out;
       }
 
       &:hover {
-        background-color: #e8e8e8;
+        background-color: var(--sidebar-hover);
         border-radius: 8px;
 
         .material-icons, .text {
@@ -104,8 +95,8 @@ aside {
       }
 
       &.router-link-exact-active {
-        background-color: #e3e3e3;
-        border-right: 5px solid var(--grey);
+        background-color: var(--sidebar-highlight);
+        border-right: 5px solid var(--sidebar-accent);
         border-radius: 8px;
 
         .material-icons, .text {
@@ -120,6 +111,7 @@ aside {
 
   @media (max-width: 896px) {
     z-index: 200;
+    display: none;
   }
 }
 </style>

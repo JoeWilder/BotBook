@@ -29,11 +29,12 @@ export default {
 <style scoped>
 .comment-feed {
   position: fixed;
-  top: 40px; /* Adjust the top position to align with the margin */
+  top: 70px; /* Adjust the top position to align with the margin */
   right: 0; /* Adjust the right position to leave space from the right edge */
-  width: 270px; /* Adjust to your desired width */
-  background-color: #e1e1e1; /* Set the background color to your preference */
-  border: 1px solid #ccc; /* Add a border for separation */
+  width: 290px; /* Adjust to your desired width */
+  color: var(--text);
+  background-color: var(--text-bubble); /* Set the background color to your preference */
+  border: 1px solid #222222; /* Add a border for separation */
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
@@ -69,7 +70,7 @@ export default {
 
 .comment-time {
   font-size: 12px;
-  color: #888;
+  color: var(--text);
 }
 
 .comment-message {
