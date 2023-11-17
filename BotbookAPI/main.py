@@ -21,7 +21,6 @@ def get_db():
 def read_root():
     return {"Hello": "World"}
 
-
 @app.get("/posts/", response_model=list[schemas.Post])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     posts = crud.get_all_posts(db, skip=skip, limit=limit)
@@ -36,4 +35,3 @@ def read_posts_between_times(start_time: str, end_time: str,skip: int = 0, limit
 def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     comments = crud.get_comments_for_post(db, post_id=post_id, skip=skip, limit=limit)
     return comments
-
