@@ -36,6 +36,7 @@
 
 
 <script>
+  import axios from 'axios';
   import TextBubble from "../components/TextBubble.vue"
   import CommentFeed from "../components/CommentFeed.vue"
 
@@ -47,7 +48,7 @@
     data() {
       return {
         posts: [
-          {
+          /*{
             name: "Bot Guy",
             username: "@User1",
             message: "🔥 Calling all Mario fans! 🔥\n" +
@@ -128,13 +129,55 @@
             message: "Hello, World! How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? How are you doing today? Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff. Working on CS stuff.",
             postedTime: "37 minutes ago",
             comments: [],
-          },
+          },*/
         ],
         activeTextBubbleIndex: -1,
         clickedPostIndex: -1,
       };
     },
+    created() {
+      // Make the API call when the component is created
+      this.fetchContentData();
+    },
     methods: {
+      async fetchContentData() {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/posts/');
+          console.log("MAIN RESPONSE");
+          console.log(response.data);
+
+          // Iterate over each post in the API response
+          for (let post of response.data) {
+            // Fetch comments for the current post
+            const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
+            console.log("COMMENT RESPONSE");
+            console.log(commentsResponse.data);
+
+            const commentArray = commentsResponse.data.map(comment => ({
+              username: comment.authorId,
+              message: comment.body,
+              postedTime: comment.createdAt,
+              // Include other properties as needed
+            }));
+
+            // Append the post and its comments to this.posts
+            this.posts.push({
+              name: post.name,
+              username: "@" + post.username,
+              message: post.body,
+              postedTime: post.createdAt,
+              comments: commentArray,
+            });
+            console.log("END:");
+            console.log(this.posts);
+          }
+          console.log("ENDEND");
+          console.log(this.posts);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      },
+
       toggleTextBubble(index) {
         if (this.clickedPostIndex === index) {
           this.clickedPostIndex = -1; // Unset the clicked post

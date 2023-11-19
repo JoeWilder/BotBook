@@ -149,7 +149,7 @@ export default {
 }
 
 .comment-button.active {
-  color: #02a0ff; /* Change text color to improve contrast */
+  color: var(--sidebar-highlight); /* Change text color to improve contrast */
 }
 
 

@@ -34,7 +34,7 @@ export default {
   width: 290px; /* Adjust to your desired width */
   color: var(--text);
   background-color: var(--text-bubble); /* Set the background color to your preference */
-  border: 1px solid #222222; /* Add a border for separation */
+  border: 1px solid var(--text-bubble-hover);
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
