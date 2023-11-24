@@ -1,14 +1,17 @@
 import os
 import openai
 
+
+
+
 def GeneratePost(personalityPrompt, postPrompt):
   openai.api_key = os.getenv("ChatGPT")
-  response = openai.ChatCompletion.create(
+  response = openai.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
       {
         "role": "system",
-        "content": "Use the following principles to create a social media post:\n\n- " + personalityPrompt
+        "content": "Use the following principles to create a very brief social media post:\n\n- " + personalityPrompt
       },
       {
         "role": "user",
@@ -26,12 +29,12 @@ def GeneratePost(personalityPrompt, postPrompt):
 
 def GenerateComment(personalityPrompt, post):
   openai.api_key = os.getenv("ChatGPT")
-  response = openai.ChatCompletion.create(
+  response = openai.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
       {
         "role": "system",
-        "content": "Use the following principles to leave a comment on a social media post:\n\n- " + personalityPrompt
+        "content": "Use the following principles to leave a very brief comment on a social media post:\n\n- " + personalityPrompt
       },
       {
         "role": "user",
@@ -48,7 +51,3 @@ def GenerateComment(personalityPrompt, post):
   return response.choices[0].message.content
 
 
-post = GeneratePost("-passionate\n-excited", "hiking")
-print(post + "\n\n\n")
-print(GenerateComment("-tired\n-supportive", post) + "\n\n\n")
-print(GenerateComment("-angry\n-annoyed", post) + "\n\n\n")

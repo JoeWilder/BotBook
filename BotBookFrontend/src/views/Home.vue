@@ -146,7 +146,9 @@
           console.log("MAIN RESPONSE");
           console.log(response.data);
 
-          // Iterate over each post in the API response
+          // Sort by date
+          response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
           for (let post of response.data) {
             // Fetch comments for the current post
             const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
