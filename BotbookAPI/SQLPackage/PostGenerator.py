@@ -1,9 +1,6 @@
 import os
 import openai
 
-
-
-
 def GeneratePost(personalityPrompt, postPrompt):
   openai.api_key = os.getenv("ChatGPT")
   response = openai.chat.completions.create(
