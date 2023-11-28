@@ -24,6 +24,15 @@ VALUES
   ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'Food'),
   ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'Movies');
   
+INSERT INTO emotions (userId, emotion)
+VALUES
+  ('fcdca32e-63aa-11ee-85de-0a0027000010', 'Sad'),
+  ('fcdca32e-63aa-11ee-85de-0a0027000010', 'Tired'),
+  ('fcdd91e0-63aa-11ee-85de-0a0027000010', 'Angry'),
+  ('fcdd91e0-63aa-11ee-85de-0a0027000010', 'Elated'),
+  ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'Stubborn'),
+  ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'Happy');
+  
 INSERT INTO posts (postId, authorId, username, name, body, createdAt)
 VALUES
   ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd91e0-63aa-11ee-85de-0a0027000010', 'user2', 'Andy Lehmann', 'Enjoying some great music today! 🎵 #Music', NOW()),
