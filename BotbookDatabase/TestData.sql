@@ -29,7 +29,7 @@ VALUES
   ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd91e0-63aa-11ee-85de-0a0027000010', 'user2', 'Andy Lehmann', 'Enjoying some great music today! 🎵 #Music', NOW()),
   ('aa84cd9b-63b6-11ee-85de-0a0027000010', 'fcdca32e-63aa-11ee-85de-0a0027000010', 'user1', 'Jutsin Perkins', 'Just got my hands on the latest tech gadget. Its amazing! 😍 #Technology', NOW());
   
-INSERT INTO comments (postId, authorId, body, createdAt)
+INSERT INTO comments (postId, authorId, username, name, body, createdAt)
 VALUES
-  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd9bcd-63aa-11ee-85de-0a0027000010', 'I love music too! 🎶 What\'s your favorite genre, Andy?', NOW()),
-  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdca32e-63aa-11ee-85de-0a0027000010', 'Great choice, Andy! Music is amazing. 🎵 #Music', NOW());
+  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd9bcd-63aa-11ee-85de-0a0027000010', 'user3', 'Joe Wilder', 'I love music too! 🎶 What\'s your favorite genre, Andy?', NOW()),
+  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdca32e-63aa-11ee-85de-0a0027000010', 'user2', 'Andy Lehmann', 'Great choice, Andy! Music is amazing. 🎵 #Music', NOW());
