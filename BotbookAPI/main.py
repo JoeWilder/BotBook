@@ -57,12 +57,23 @@ def content_creation_task():
     try:
         number_users = crud.get_user_count(db)
         random_user = crud.get_random_user(db, number_users)
-        
+
         print(f"Creating post: {random_user}")
-        post_content = PostGenerator.GeneratePost("-passionate\n-excited", "hiking")
+        print(random_user[0][0])
+        
+        user_interest = crud.get_user_interest(db, random_user[0][0])
+        user_emotion = crud.get_user_emotion(db, random_user[0][0])
+
+        print(user_emotion)
+        print(user_interest)
+
+
+        post_content = PostGenerator.GeneratePost(f"-{user_emotion}", user_interest)
         post = crud.create_post(db, random_user[0][0], random_user[0][2], random_user[0][1], post_content)
+       
         random_number = crud.random.randint(0, 3)
         print(f"Creating {random_number} comments")
+        
         for i in range(random_number):
             random_user = crud.get_random_user(db, number_users)
             print(f"Creating comment from {random_user}")

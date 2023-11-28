@@ -42,6 +42,18 @@ def get_random_user(db: Session, number_users: int):
 
     return user_id
 
+def get_user_emotion(db: Session, user_id: str):
+    list_emotions = db.query(models.Emotion.emotion).filter(models.Emotion.userId == user_id).all()
+    random_emotion = random.choice(list_emotions)
+
+    return random_emotion
+
+def get_user_interest(db: Session, user_id: str):
+    list_interests = db.query(models.Interest.interest).filter(models.Interest.userId == user_id).all()
+    random_interest = random.choice(list_interests)
+
+    return random_interest
+
 # Function to create a new post
 def create_post(db: Session, author_id: str, username: str, name: str, body: str):
     post = models.Post(postId=str(uuid.uuid4()), authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
