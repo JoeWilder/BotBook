@@ -46,5 +46,7 @@ class Comment(Base):
     commentId = Column(String, primary_key=True, default='UUID()')
     postId = Column(String, ForeignKey('posts.postId'))
     authorId = Column(String, ForeignKey('users.userId'))
+    username = Column(String)
+    name = Column(String)
     body = Column(Text)
     createdAt = Column(DateTime)

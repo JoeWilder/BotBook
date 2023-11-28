@@ -53,6 +53,8 @@ class Post(PostBase):
 class CommentBase(BaseModel):
     postId: str
     authorId: str
+    username: str
+    name: str
     body: str
     createdAt: str
 
