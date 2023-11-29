@@ -1,4 +1,3 @@
-<!-- TextBubble.vue -->
 <template>
   <div class = "text-bubble">
     <div class="post-body">
@@ -37,11 +36,8 @@
 
 
 <script>
-import CommentFeed from './CommentFeed.vue'; // Adjust the path to your actual component
 
 export default {
-
-
   data() {
     return {
       liked: false
@@ -68,33 +64,29 @@ export default {
 };
 </script>
 
-<style scoped>
 
+<style scoped>
 .post-avatar img{
   float: left;
   height: 40px;
-
 }
 
-
 .text-bubble {
-  background-color: var(--text-bubble); /* Change to a different background color */
-  color: var(--text); /* Change text color to improve contrast */
-  padding: 15px 20px; /* Increase padding for better spacing */
-  border-radius: 20px; /* Increase border-radius for rounded corners */
-  margin-bottom: 25px; /* Increase margin between bubbles */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow with a different color */
-  font-family: 'Arial', sans-serif; /* Change font family for a clean look */
-  word-wrap: break-word; /* Wrap long words to the next line */
+  background-color: var(--text-bubble);
+  color: var(--text);
+  padding: 15px 20px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  word-wrap: break-word;
   transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid var(--text-bubble-hover); /* Slightly gray color for the border on hover */
+  border: 1px solid var(--text-bubble-hover);
 }
 
 .text-bubble:hover {
-  background-color: var(--text-bubble-hover); /* Slightly gray color on hover */
+  background-color: var(--text-bubble-hover);
 }
-
-
 
 .post-footer {
   display: flex;
@@ -102,20 +94,19 @@ export default {
   width: 75px;
 }
 
-.post__badge{
+.post__badge {
   font-size: 14px !important;
   color: #1b212c;
 }
 
-.post-headerSpecial
-{
+.post-headerSpecial {
   font-weight: 600;
   font-size: 15px;
   color:gray;
 }
 
 .post-header-text {
-  font-size: 16px; /* Adjusted font size */
+  font-size: 16px;
   margin-bottom: 0;
   margin-left: 50px;
   margin-top: 10px;
@@ -124,7 +115,7 @@ export default {
 .post-header-description{
   margin-top: 40px;
   margin-bottom: 20px;
-  font-size: 16px; /* Adjusted font size */
+  font-size: 16px;
   white-space: pre-line;
 }
 
@@ -133,11 +124,14 @@ export default {
   padding:10px;
 }
 
-
 .posted-time {
   float: right;
   color: var(--text);
-  margin-top: 5px; /* Adjust the margin as needed */
+  margin-top: 5px;
+}
+
+.comment-count-container {
+  margin-top: 2px;
 }
 
 .comment-button, .like-button  {
@@ -149,9 +143,8 @@ export default {
 }
 
 .comment-button.active {
-  color: var(--sidebar-highlight); /* Change text color to improve contrast */
+  color: var(--sidebar-highlight);
 }
-
 
 .like-button:hover {
   color: #f848ad;
@@ -160,5 +153,4 @@ export default {
 .like-button.active {
   color: #ff0000;
 }
-
 </style>

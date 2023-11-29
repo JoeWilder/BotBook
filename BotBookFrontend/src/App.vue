@@ -14,31 +14,26 @@ import Sidebar from './components/Sidebar.vue'
 import TitleBar from './components/TitleBar.vue'
 import SearchBar from './components/SearchBar.vue';
 
+const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');
 
-const isDarkMode = ref(false);
 const handleToggleChange = () => {
   isDarkMode.value = !isDarkMode.value;
 };
-
 </script>
 
 
 <style lang="scss">
 :root {
-  //--primary: #5aeac4;
-  //--primary-alt: #229fc5;
   --post-icons: #000000;
   --sidebar-accent: #6dafad;
   --sidebar-icons: #1e293b;
   --sidebar-hover: #e8e8e8;
   --sidebar-highlight: #87dad8;
-  //--dark-alt: #334155;
   --titlebar-background: #efefef;
   --titlebar-divider: #b0b0b0;
   --background: #f7f7f7;
   --title-text: #1e293b;
   --text: #333333;
-  --sidebar-width: 200px;
   --text-bubble: #e9e9e9;
   --text-bubble-hover: #e0e0e0;
   --app-side-divider: #d7d7d7;
@@ -51,10 +46,7 @@ const handleToggleChange = () => {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Fira sans', sans-serif;
-
 }
-
-
 
 button {
   cursor: pointer;
@@ -68,19 +60,13 @@ html, body {
   height: 100%;
 }
 
-
 .app {
   display: flex;
 
   min-height: 100vh;
-  background-color: var(--background); // Move this line here
+  background-color: var(--background);
 
   &.darkMode {
-    //--primary: #1e1e1e;
-    //--primary-alt: #1e1e1e;
-    //--grey: #1e1e1e;;
-    //--dark: #1e1e1e;;
-    //--dark-alt: #1e1e1e;;
     --post-icons: #cccccc;
     --text: #eeeeee;
     --text-bubble: #424242;
@@ -110,14 +96,14 @@ html, body {
 .main-feed {
   margin-top: 40px;
   z-index: 1;
-  margin-left: 300px; /* Same as sidebar width */
-  margin-right: 300px; /* Add buffer margin to the right */
+  margin-left: 300px;
+  margin-right: 300px;
   position: relative;
   transition: margin-left 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
 
   @media (max-width: 896px) {
-    margin-left: 0; /* Remove margin on the left when the screen is narrow */
-    margin-right: 0; /* Remove buffer margin on the right when the screen is narrow */
+    margin-left: 0;
+    margin-right: 0;
   }
 
   &::before,
@@ -126,17 +112,17 @@ html, body {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 1px; /* Adjust the thickness of the lines */
+    width: 1px;
     height: 100%;
-    background-color: var(--app-side-divider); /* Replace with your desired color */
-    margin-left: 10px; /* Adjust the padding between the line and main feed */
-    margin-right: 10px; /* Adjust the padding between the line and main feed */
-    transform: translateZ(0); /* Ensure consistent rendering */
+    background-color: var(--app-side-divider);
+    margin-left: 10px;
+    margin-right: 10px;
+    transform: translateZ(0);
 
     @media (max-width: 896px) {
-      width: 0; /* Remove the colored margins when the screen is narrow */
-      margin-left: 0; /* Remove padding on the left when the screen is narrow */
-      margin-right: 0; /* Remove padding on the right when the screen is narrow */
+      width: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 
@@ -148,6 +134,5 @@ html, body {
     right: 1px;
   }
 }
-
 </style>
 
