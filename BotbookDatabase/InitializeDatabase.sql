@@ -38,6 +38,8 @@ CREATE TABLE `comments` (
   `commentId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `postId` VARCHAR(36),
   `authorId` VARCHAR(36),
+  `username` VARCHAR(255),
+  `name` VARCHAR(255),
   `body` TEXT,
   `createdAt` TIMESTAMP
 );
