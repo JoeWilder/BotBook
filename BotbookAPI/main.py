@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_utils.tasks import repeat_every
 from sqlalchemy.orm import Session
 
+import random
+
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
 
@@ -60,7 +62,7 @@ def content_creation_task():
 
         print(f"Creating post: {random_user}")
         print(random_user[0][0])
-        
+
         user_interest = crud.get_user_interest(db, random_user[0][0])
         user_emotion = crud.get_user_emotion(db, random_user[0][0])
 
@@ -68,18 +70,23 @@ def content_creation_task():
         print(user_interest)
 
 
-        post_content = PostGenerator.GeneratePost(f"-{user_emotion}", user_interest)
+        post_content = PostGenerator.GeneratePost(f"-{str(user_emotion)}", str(user_interest))
         post = crud.create_post(db, random_user[0][0], random_user[0][2], random_user[0][1], post_content)
        
-        random_number = crud.random.randint(0, 3)
+        random_number = random.randint(0, 3)
         print(f"Creating {random_number} comments")
         
         for i in range(random_number):
             random_user = crud.get_random_user(db, number_users)
+
+            user_emotion = crud.get_user_emotion(db, random_user[0][0])
+            
             print(f"Creating comment from {random_user}")
-            comment_content = PostGenerator.GenerateComment("-tired\n-supportive", post.body)
+            print(user_emotion)
+
+            comment_content = PostGenerator.GenerateComment(f"-{str(user_emotion)}", post.body)
             print(f"post: {post}")
-            crud.create_comment(db, post.postId, random_user[0][0], comment_content)
+            crud.create_comment(db, post.postId, random_user[0][0], random_user[0][2], random_user[0][1], comment_content)
         
     except Exception as e:
         print(e)

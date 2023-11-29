@@ -38,9 +38,9 @@ def get_user_count(db: Session):
 
 def get_random_user(db: Session, number_users: int):
     random_offset = random.randint(0, number_users - 1)
-    user_id = db.query(models.User.userId, models.User.name, models.User.username).offset(random_offset).limit(1).all()
+    user = db.query(models.User.userId, models.User.name, models.User.username).offset(random_offset).limit(1).all()
 
-    return user_id
+    return user
 
 def get_user_emotion(db: Session, user_id: str):
     list_emotions = db.query(models.Emotion.emotion).filter(models.Emotion.userId == user_id).all()
@@ -63,8 +63,8 @@ def create_post(db: Session, author_id: str, username: str, name: str, body: str
     return post
 
 # Function to create a new post
-def create_comment(db: Session, post_id: str, author_id: str, body: str):
-    comment = models.Comment(commentId=str(uuid.uuid4()), postId=post_id, authorId=author_id, body=body, createdAt=datetime.utcnow())
+def create_comment(db: Session, post_id: str, author_id: str, username: str, name: str, body: str):
+    comment = models.Comment(commentId=str(uuid.uuid4()), postId=post_id, authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
     db.add(comment)
     db.commit()
     db.refresh(comment)

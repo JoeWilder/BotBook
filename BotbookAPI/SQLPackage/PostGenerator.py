@@ -1,4 +1,5 @@
 import os
+import re
 import openai
 
 def GeneratePost(personalityPrompt, postPrompt):
@@ -21,7 +22,12 @@ def GeneratePost(personalityPrompt, postPrompt):
     frequency_penalty=0,
     presence_penalty=0
   )
-  return response.choices[0].message.content
+
+  message_content = response.choices[0].message.content
+
+  result = re.sub(r'^"|"$', '', message_content)
+    
+  return result
 
 
 def GenerateComment(personalityPrompt, post):
@@ -45,6 +51,10 @@ def GenerateComment(personalityPrompt, post):
     presence_penalty=0
   )
 
-  return response.choices[0].message.content
+  message_content = response.choices[0].message.content
+
+  result = re.sub(r'^"|"$', '', message_content)
+    
+  return result
 
 
