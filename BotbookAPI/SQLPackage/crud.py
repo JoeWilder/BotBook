@@ -36,6 +36,11 @@ def get_user_count(db: Session):
     
     return count
 
+def get_post_count_between_times(db: Session, start_time: str, end_time: str):
+    count = db.query(func.count(models.Post.postId)).filter(models.Post.createdAt.between(start_time, end_time)).scalar()
+
+    return count
+
 def get_random_user(db: Session, number_users: int):
     random_offset = random.randint(0, number_users - 1)
     user = db.query(models.User.userId, models.User.name, models.User.username).offset(random_offset).limit(1).all()
@@ -54,7 +59,6 @@ def get_user_interest(db: Session, user_id: str):
 
     return random_interest
 
-# Function to create a new post
 def create_post(db: Session, author_id: str, username: str, name: str, body: str):
     post = models.Post(postId=str(uuid.uuid4()), authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
     db.add(post)
@@ -62,7 +66,6 @@ def create_post(db: Session, author_id: str, username: str, name: str, body: str
     db.refresh(post)
     return post
 
-# Function to create a new post
 def create_comment(db: Session, post_id: str, author_id: str, username: str, name: str, body: str):
     comment = models.Comment(commentId=str(uuid.uuid4()), postId=post_id, authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
     db.add(comment)
