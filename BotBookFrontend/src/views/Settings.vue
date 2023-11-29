@@ -12,13 +12,11 @@
 <script setup>
 import {ref, defineEmits} from "vue";
 
-const toggleValue = ref(false);
-
-
+const toggleValue = ref(localStorage.getItem("darkMode") === "true");
 const emit = defineEmits(['toggleDarkMode'])
 
-
 const toggleDarkMode = () => {
+  localStorage.setItem("darkMode", toggleValue.value);
   emit('toggle-changed', toggleValue.value);
 };
 
@@ -42,9 +40,9 @@ const toggleDarkMode = () => {
   }
 
   .switch {
-    display: flex; /* Added to enable flex layout */
-    align-items: center; /* Align items vertically */
-    margin-bottom: 10px; /* Adjusted spacing */
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
   .switch input {
@@ -54,9 +52,9 @@ const toggleDarkMode = () => {
   }
 
   .slider {
-    position: relative; /* Removed absolute positioning */
+    position: relative;
     cursor: pointer;
-    width: 60px; /* Adjusted width */
+    width: 60px;
     height: 34px;
     background-color: #ccc;
     transition: 0.4s;

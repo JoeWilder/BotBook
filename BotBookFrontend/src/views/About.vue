@@ -41,6 +41,7 @@
   </main>
 </template>
 
+
 <style lang="scss" scoped>
 .about-page {
   max-width: 800px;

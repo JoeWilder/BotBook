@@ -18,33 +18,35 @@
   </div>
 </template>
 
+
 <script>
 export default {
   props: {
-    comments: Array, // Pass the comments data as a prop
+    comments: Array
   },
 };
 </script>
 
+
 <style scoped>
 .comment-feed {
   position: fixed;
-  top: 70px; /* Adjust the top position to align with the margin */
-  right: 0; /* Adjust the right position to leave space from the right edge */
-  width: 290px; /* Adjust to your desired width */
+  top: 70px;
+  right: 0;
+  width: 290px;
   color: var(--text);
-  background-color: var(--text-bubble); /* Set the background color to your preference */
+  background-color: var(--text-bubble);
   border: 1px solid var(--text-bubble-hover);
   border-radius: 15px;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-  z-index: 100; /* Place it above other content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 }
 
 .comment {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
-  display: flex; /* Use flex display for positioning */
+  display: flex;
 }
 
 .post-avatar img {
@@ -53,7 +55,7 @@ export default {
 }
 
 .comment-content {
-  flex: 1; /* Use flex-grow to allow the content to take the remaining space */
+  flex: 1;
 }
 
 .comment-header {

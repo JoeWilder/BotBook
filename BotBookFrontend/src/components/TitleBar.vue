@@ -4,14 +4,14 @@
     <div class="title">BotBook</div>
     <span class="material-icons menu-icon" @click="toggleMenu">more_horiz</span>
     <div v-if="isMenuOpen" class="square-menu">
-      <router-link class="menu-option" to="/settings" style="text-decoration: none; color: inherit;">
+      <router-link @click.native="isMenuOpen = false" class="menu-option" to="/settings" style="text-decoration: none; color: inherit;">
         <span class="material-icons settings-icon">settings</span>
         <span class="menu-text">Settings</span>
       </router-link>
-      <!-- Add more menu options as needed -->
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
@@ -37,6 +37,7 @@ onUnmounted(() => {
 });
 </script>
 
+
 <style lang="scss">
 .title-bar {
   position: fixed;
@@ -54,9 +55,8 @@ onUnmounted(() => {
   z-index: 100;
 }
 
-
 .logo {
-  margin-right: 1rem; /* Adjust the margin to your preference */
+  margin-right: 1rem;
   max-height: 24px;
   z-index: 1;
   position: relative;
@@ -82,7 +82,6 @@ onUnmounted(() => {
     border: 1px solid #ccc;
   }
 }
-
 
 .square-menu {
   position: absolute;
@@ -114,7 +113,7 @@ onUnmounted(() => {
 
 .square-menu .settings-icon {
   margin-right: 8px;
-  cursor: auto;
+  cursor: pointer;
 
   &:hover {
     background-color: transparent;
@@ -122,5 +121,4 @@ onUnmounted(() => {
     border: none;
   }
 }
-
 </style>
