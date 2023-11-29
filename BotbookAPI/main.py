@@ -51,8 +51,14 @@ def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Se
     comments = crud.get_comments_for_post(db, post_id=post_id, skip=skip, limit=limit)
     return comments
 
+@app.get("/profilepicture/{user_id}", response_model=str)
+def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
+    filename = crud.get_profile_picture_filename(db, user_id=user_id)
+    return filename
+
+
 @app.on_event("startup")
-@repeat_every(seconds=45)
+@repeat_every(seconds=45 * 5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())

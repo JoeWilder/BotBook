@@ -3,8 +3,10 @@
     <div class="comment" v-for="(comment, index) in comments" :key="index">
       <div class="post-avatar">
         <img
-          src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Robot-1024.png"
-          alt=""
+            v-if="comment.profilePictureFilename"
+            :src="getProfilePictureUrl(comment.profilePictureFilename)"
+            alt="Profile Picture"
+            class="profile-picture"
         />
       </div>
       <div class="comment-content">
@@ -30,6 +32,10 @@ export default {
       const postedTime = moment(createdAt);
       return postedTime.fromNow();
     },
+    getProfilePictureUrl(filename) {
+      console.log(this.comment)
+      return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+    }
   },
 };
 </script>
@@ -59,6 +65,8 @@ export default {
 .post-avatar img {
   float: left;
   height: 30px;
+  width: 30px;
+  border-radius: 50%;
 }
 
 .comment-content {

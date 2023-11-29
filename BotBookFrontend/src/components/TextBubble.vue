@@ -6,8 +6,10 @@
       </div>
       <div class="post-avatar">
         <img
-            src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Robot-1024.png"
-            alt=""
+            v-if="profilePictureFilename"
+            :src="getProfilePictureUrl(profilePictureFilename)"
+            alt="Profile Picture"
+            class="profile-picture"
         />
       </div>
       <div class="post-header">
@@ -50,6 +52,7 @@ export default {
     postedTime: String,
     active: Boolean,
     commentCount: Number,
+    profilePictureFilename: String,
   },
   methods: {
     toggleActive() {
@@ -58,10 +61,14 @@ export default {
       }
     },
     toggleLiked() {
+      console.log(`../assets/ProfilePictures/${this.profilePictureFilename}`)
       this.liked = !this.liked;
       console.log(this.liked)
       console.log(this.commentCount)
     },
+    getProfilePictureUrl(filename) {
+      return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+    }
   },
 };
 </script>
@@ -70,7 +77,9 @@ export default {
 <style scoped>
 .post-avatar img{
   float: left;
-  height: 40px;
+  width: 50px; /* adjust as needed */
+  height: 50px; /* adjust as needed */
+  border-radius: 50%;
 }
 
 .text-bubble {
@@ -99,6 +108,13 @@ export default {
 .post__badge {
   font-size: 14px !important;
   color: #1b212c;
+}
+
+.post-header {
+  font-size: 16px;
+  margin-bottom: 0;
+  margin-left: 10px; /* Adjust the margin as needed */
+  margin-top: 10px;
 }
 
 .post-headerSpecial {

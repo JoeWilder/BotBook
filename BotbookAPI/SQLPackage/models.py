@@ -11,6 +11,7 @@ class User(Base):
     username = Column(String)
     name = Column(String)
     createdAt = Column(DateTime)
+    profilePictureFilename = Column(String)
 
 class Friend(Base):
     __tablename__ = 'friends'
