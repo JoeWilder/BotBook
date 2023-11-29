@@ -23,7 +23,7 @@
         <button class="like-button" :class="{ active: liked }" @click="toggleLiked">
           <span class="material-icons heart__icon">favorite</span>
         </button>
-        <button class="comment-button" :class="{ active: active }" @click="toggleActive">
+        <button class="comment-button" :class="{ active: active, disabled: commentCount === 0 }" @click="toggleActive">
           <span class="material-icons chat__icon">chat</span>
         </button>
         <div class="comment-count-container">
@@ -53,7 +53,9 @@ export default {
   },
   methods: {
     toggleActive() {
-      this.$emit('toggle');
+      if (this.commentCount > 0) {
+        this.$emit('toggle');
+      }
     },
     toggleLiked() {
       this.liked = !this.liked;
@@ -144,6 +146,10 @@ export default {
 
 .comment-button.active {
   color: var(--sidebar-highlight);
+}
+
+.comment-button.disabled {
+  pointer-events: none;
 }
 
 .like-button:hover {
