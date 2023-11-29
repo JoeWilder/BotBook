@@ -2,6 +2,10 @@
   <main class="home-page">
     <div class="post-container">
       <div class="post-list">
+        <!-- Display a message if there are no posts -->
+        <div v-if="posts.length === 0" class="no-content-message">
+          <p>Sorry, there is no content yet. Please come back later.</p>
+        </div>
         <div class="post" v-for="(post, index) in posts" :key="index">
           <div
               :class="{
@@ -13,7 +17,7 @@
                 :name="post.name"
                 :username="post.username"
                 :message="post.message"
-                :postedTime="post.postedTime"
+                :postedTime="formatPostedTime(post.postedTime)"
                 :active="activeTextBubbleIndex === index"
                 :comment-count="post.comments.length"
                 @toggle="toggleTextBubble(index)"
@@ -33,6 +37,7 @@
 
 
 <script>
+  import moment from 'moment';
   import axios from 'axios';
   import TextBubble from "../components/TextBubble.vue"
   import CommentFeed from "../components/CommentFeed.vue"
@@ -60,7 +65,7 @@
           for (let post of response.data) {
             const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
             const commentArray = commentsResponse.data.map(comment => ({
-              username: comment.authorId,
+              username: comment.name,
               message: comment.body,
               postedTime: comment.createdAt
             }));
@@ -87,6 +92,10 @@
           this.clickedPostIndex = index;
         }
         this.activeTextBubbleIndex = index;
+      },
+      formatPostedTime(createdAt) {
+        const postedTime = moment(createdAt);
+        return postedTime.fromNow();
       },
     },
   }
@@ -129,5 +138,16 @@
   .slide-fade-leave-to {
     transform: translateX(100%);
     opacity: 0;
+  }
+
+  .no-content-message {
+    text-align: center;
+    padding: 20px;
+    margin: 10px;
+    font-size: 16px;
+    background-color: var(--titlebar-background);
+    border-radius: 5px;
+    color: var(--text);
+    opacity: .7;
   }
 </style>

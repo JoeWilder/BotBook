@@ -10,7 +10,7 @@
       <div class="comment-content">
         <div class="comment-header">
           <div class="comment-username">{{ comment.username }}</div>
-          <div class="comment-time">{{ comment.postedTime }}</div>
+          <div class="comment-time">{{ formatPostedTime(comment.postedTime) }}</div>
         </div>
         <div class="comment-message">{{ comment.message }}</div>
       </div>
@@ -20,9 +20,16 @@
 
 
 <script>
+import moment from "moment/moment.js";
+
 export default {
   props: {
     comments: Array
+  },methods: {
+    formatPostedTime(createdAt) {
+      const postedTime = moment(createdAt);
+      return postedTime.fromNow();
+    },
   },
 };
 </script>

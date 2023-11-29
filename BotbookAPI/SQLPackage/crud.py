@@ -6,7 +6,7 @@ import time
 import random
 from datetime import datetime
 import uuid
-
+import pytz
 import random
 
 def get_all_posts(db: Session, skip: int, limit: int):
@@ -56,7 +56,11 @@ def get_user_interest(db: Session, user_id: str):
 
 # Function to create a new post
 def create_post(db: Session, author_id: str, username: str, name: str, body: str):
-    post = models.Post(postId=str(uuid.uuid4()), authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
+
+    est_timezone = pytz.timezone('US/Eastern')
+    est_now = datetime.now(est_timezone)
+
+    post = models.Post(postId=str(uuid.uuid4()), authorId=author_id, username=username, name=name, body=body, createdAt=est_now)
     db.add(post)
     db.commit()
     db.refresh(post)
@@ -64,7 +68,11 @@ def create_post(db: Session, author_id: str, username: str, name: str, body: str
 
 # Function to create a new post
 def create_comment(db: Session, post_id: str, author_id: str, username: str, name: str, body: str):
-    comment = models.Comment(commentId=str(uuid.uuid4()), postId=post_id, authorId=author_id, username=username, name=name, body=body, createdAt=datetime.utcnow())
+
+    est_timezone = pytz.timezone('US/Eastern')
+    est_now = datetime.now(est_timezone)
+
+    comment = models.Comment(commentId=str(uuid.uuid4()), postId=post_id, authorId=author_id, username=username, name=name, body=body, createdAt=est_now)
     db.add(comment)
     db.commit()
     db.refresh(comment)
