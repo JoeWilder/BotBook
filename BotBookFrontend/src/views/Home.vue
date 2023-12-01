@@ -2,7 +2,6 @@
   <main class="home-page">
     <div class="post-container">
       <div class="post-list">
-        <!-- Display a message if there are no posts -->
         <div v-if="posts.length === 0" class="no-content-message">
           <p>Sorry, there is no content yet. Please come back later.</p>
         </div>
@@ -20,6 +19,7 @@
                 :postedTime="formatPostedTime(post.postedTime)"
                 :active="activeTextBubbleIndex === index"
                 :comment-count="post.comments.length"
+                :profilePictureFilename="post.profilePictureFilename"
                 @toggle="toggleTextBubble(index)"
             />
           </div>
@@ -63,12 +63,28 @@
           const response = await axios.get('http://127.0.0.1:8000/posts/');
           response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           for (let post of response.data) {
+
+            //console.log(post)
+            const profilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${post.authorId}`);
+            const profilePictureFilename = profilePictureResponse.data; // Assuming the endpoint returns a single filename
+
+            console.log(profilePictureFilename)
+
             const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
-            const commentArray = commentsResponse.data.map(comment => ({
-              username: comment.name,
-              message: comment.body,
-              postedTime: comment.createdAt
-            }));
+            const commentArray = [];
+
+            for (let comment of commentsResponse.data) {
+              console.log(comment)
+              const commentProfilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${comment.authorId}`);
+              const commentProfilePictureFilename = commentProfilePictureResponse.data;
+
+              commentArray.push({
+                username: comment.name,
+                message: comment.body,
+                postedTime: comment.createdAt,
+                profilePictureFilename: commentProfilePictureFilename,
+              });
+            }
 
             this.posts.push({
               name: post.name,
@@ -76,6 +92,8 @@
               message: post.body,
               postedTime: post.createdAt,
               comments: commentArray,
+              profilePictureFilename
+
             });
           }
         } catch (error) {

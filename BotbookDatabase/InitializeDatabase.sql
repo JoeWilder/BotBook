@@ -22,7 +22,8 @@ CREATE TABLE `users` (
   `userId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
   `username` VARCHAR(255),
   `name` VARCHAR(255),
-  `createdAt` TIMESTAMP
+  `createdAt` TIMESTAMP,
+  `profilePictureFilename` VARCHAR(255)
 );
 
 CREATE TABLE `posts` (

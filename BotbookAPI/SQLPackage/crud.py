@@ -31,6 +31,11 @@ def get_comments_for_post(db: Session, post_id: str, skip: int, limit: int):
 
     return comments
 
+def get_profile_picture_filename(db: Session, user_id: str):
+    filename = db.query(models.User.profilePictureFilename).filter(models.User.userId == user_id).scalar()
+    return filename
+
+
 def get_user_count(db: Session):
     count = db.query(func.count(models.User.userId)).scalar()
     
