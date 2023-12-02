@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-feed" @wheel="handleWheel">
+  <div class="comment-feed">
     <div class="comment" v-for="(comment, index) in comments" :key="index">
       <div class="post-avatar">
         <img
@@ -35,16 +35,6 @@ export default {
     },
     getProfilePictureUrl(filename) {
       return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
-    },
-    handleWheel(event) {
-      // Check if the cursor is over the comment feed
-      const commentFeed = this.$refs.commentFeed;
-      const isCursorOverCommentFeed = commentFeed && commentFeed.contains(event.target);
-
-      // If the cursor is over the comment feed, prevent the default behavior
-      if (isCursorOverCommentFeed) {
-        event.preventDefault();
-      }
     }
   },
 };
