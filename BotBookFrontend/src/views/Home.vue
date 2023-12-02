@@ -121,6 +121,14 @@
 
 
 <style>
+
+  .post-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Minimum height to fill the viewport */
+  }
+
+
   .inactive-text-bubble {
     filter: blur(0px);
     opacity: .6;
