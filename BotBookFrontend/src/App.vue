@@ -62,8 +62,6 @@ html, body {
 
 .app {
   display: flex;
-
-  min-height: 100vh;
   background-color: var(--background);
 
   &.darkMode {
@@ -88,7 +86,7 @@ html, body {
     padding: 2rem;
 
     @media (max-width: 896px) {
-      padding-left: 6rem;
+      padding-left: 2rem;
     }
   }
 }
@@ -101,9 +99,14 @@ html, body {
   position: relative;
   transition: margin-left 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
 
-  @media (max-width: 896px) {
+  @media (max-width: 600px) {
     margin-left: 0;
     margin-right: 0;
+
+    &::before,
+    &::after {
+      content: none;
+    }
   }
 
   &::before,
