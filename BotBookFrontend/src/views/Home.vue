@@ -27,6 +27,8 @@
               <CommentFeed
                   v-if="activeTextBubbleIndex === index"
                   :comments="post.comments"
+                  class = "comment-feed"
+                  @click = "toggleTextBubble(-1)"
               />
             </transition>
         </div>
@@ -68,13 +70,11 @@
             const profilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${post.authorId}`);
             const profilePictureFilename = profilePictureResponse.data; // Assuming the endpoint returns a single filename
 
-            console.log(profilePictureFilename)
 
             const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
             const commentArray = [];
 
             for (let comment of commentsResponse.data) {
-              console.log(comment)
               const commentProfilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${comment.authorId}`);
               const commentProfilePictureFilename = commentProfilePictureResponse.data;
 
@@ -121,23 +121,9 @@
 
 
 <style>
-  .post-container {
-    overflow-y: auto;
-  }
-
   .inactive-text-bubble {
     filter: blur(0px);
     opacity: .6;
-  }
-
-  .comment-feed {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 100%;
-    background-color: #64748b;
-    overflow-y: auto;
   }
 
   .slide-fade-enter-active {

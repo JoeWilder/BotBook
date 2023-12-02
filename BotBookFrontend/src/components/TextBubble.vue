@@ -175,4 +175,57 @@ export default {
 .like-button.active {
   color: #ff0000;
 }
+
+/* Media query for screens smaller than 600px */
+@media screen and (max-width: 600px) {
+  .text-bubble {
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  .post-header-description {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .post-avatar img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .post-footer {
+    width: 60px;
+  }
+
+  .like-button,
+  .comment-button {
+    font-size: 16px;
+  }
+
+  .post-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .post-header-text {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  .post-headerSpecial {
+    display: none;
+  }
+
+  .posted-time {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-top: 10px;
+  }
+
+  /* Adjust the margin for better spacing */
+  .posted-time span {
+    margin-left: 5px;
+  }
+}
 </style>

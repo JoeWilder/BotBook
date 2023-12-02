@@ -1,6 +1,8 @@
 <template>
   <div class="title-bar">
-    <img src="../assets/icons8-bot-50.png" alt="BotBook" class="logo" />
+    <router-link to="/">
+      <img src="../assets/icons8-bot-50.png" alt="BotBook" class="logo" />
+    </router-link>
     <div class="title">BotBook</div>
     <span class="material-icons menu-icon" @click="toggleMenu">more_horiz</span>
     <div v-if="isMenuOpen" class="square-menu">
@@ -67,6 +69,12 @@ onUnmounted(() => {
   font-size: 1.25rem;
   color: var(--title-text);
   margin-right: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .title {
+    display: none;
+  }
 }
 
 .menu-icon {

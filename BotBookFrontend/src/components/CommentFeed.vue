@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-feed">
+  <div class="comment-feed" @wheel="handleWheel">
     <div class="comment" v-for="(comment, index) in comments" :key="index">
       <div class="post-avatar">
         <img
@@ -24,6 +24,7 @@
 <script>
 import moment from "moment/moment.js";
 
+
 export default {
   props: {
     comments: Array
@@ -33,8 +34,17 @@ export default {
       return postedTime.fromNow();
     },
     getProfilePictureUrl(filename) {
-      console.log(this.comment)
       return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+    },
+    handleWheel(event) {
+      // Check if the cursor is over the comment feed
+      const commentFeed = this.$refs.commentFeed;
+      const isCursorOverCommentFeed = commentFeed && commentFeed.contains(event.target);
+
+      // If the cursor is over the comment feed, prevent the default behavior
+      if (isCursorOverCommentFeed) {
+        event.preventDefault();
+      }
     }
   },
 };
@@ -47,13 +57,15 @@ export default {
   top: 70px;
   right: 0;
   width: 290px;
+  height: 90%;
   color: var(--text);
   background-color: var(--text-bubble);
   border: 1px solid var(--text-bubble-hover);
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  z-index: 1000;
+  overflow-y: scroll;
 }
 
 .comment {
@@ -93,5 +105,25 @@ export default {
 .comment-message {
   font-size: 14px;
   line-height: 1.4;
+}
+
+@media screen and (max-width: 768px) {
+  .comment-feed {
+    top: 30%; /* Adjust the position as needed */
+    bottom: 5px;
+    width: 100%;
+    height: auto;
+  }
+
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: all 0.3s;
+  }
+
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    transform: translateY(100%); /* Slide up from the bottom */
+    opacity: 0;
+  }
 }
 </style>
