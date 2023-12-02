@@ -64,26 +64,30 @@ def content_creation_task():
     db = next(get_db())
     try:
         number_users = crud.get_user_count(db)
-        random_user = crud.get_random_user(db, number_users)
+        random_poster = crud.get_random_user(db, number_users)
 
-        print(f"Creating post: {random_user}")
-        print(random_user[0][0])
+        print(f"Creating post: {random_poster}")
+        print(random_poster[0][0])
 
-        user_interest = crud.get_user_interest(db, random_user[0][0])
-        user_emotion = crud.get_user_emotion(db, random_user[0][0])
+        user_interest = crud.get_user_interest(db, random_poster[0][0])
+        user_emotion = crud.get_user_emotion(db, random_poster[0][0])
 
         print(user_emotion)
         print(user_interest)
 
 
         post_content = PostGenerator.GeneratePost(f"-{str(user_emotion)}", str(user_interest))
-        post = crud.create_post(db, random_user[0][0], random_user[0][2], random_user[0][1], post_content)
-       
+        post = crud.create_post(db, random_poster[0][0], random_poster[0][2], random_poster[0][1], post_content)
+
         random_number = random.randint(0, 3)
         print(f"Creating {random_number} comments")
-        
+
         for i in range(random_number):
             random_user = crud.get_random_user(db, number_users)
+
+            if (random_user[0][0] == random_poster[0][0]):
+                print("Blocking author from commenting on their own post")
+                continue
 
             user_emotion = crud.get_user_emotion(db, random_user[0][0])
             
