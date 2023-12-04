@@ -52,7 +52,7 @@ onUnmounted(() => {
   justify-content: space-between;
   height: 60px;
   padding: 0 2rem; // Instead of padding: 0.5rem 2rem;
-  z-index: 100;
+  z-index: 5;
 }
 
 .logo {

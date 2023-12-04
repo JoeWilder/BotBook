@@ -12,7 +12,6 @@
       </div>
       <div class="post-header">
         <div class="post-header-text"> {{ name }}<span class="post-headerSpecial">
-            <span class="material-icons post__badge"> verified </span> {{ username }}
           </span>
         </div>
       </div>
@@ -108,10 +107,11 @@ export default {
 }
 
 .post-header-text {
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 0;
   margin-left: 50px;
   margin-top: 10px;
+  font-weight: bold;
 }
 
 .post-header-description{

@@ -1,7 +1,6 @@
 <template>
   <div :class="{ darkMode: isDarkMode }" class="app">:
     <TitleBar></TitleBar>
-    <SearchBar></SearchBar>
     <sidebar></sidebar>
     <router-view @toggle-changed="handleToggleChange" class="main-feed"/>
   </div>
@@ -11,8 +10,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Sidebar from './components/Sidebar.vue'
-import TitleBar from './components/TitleBar.vue'
-import SearchBar from './components/SearchBar.vue';
+import TitleBar from './components/TitleBar.vue';
 
 const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');
 
@@ -79,7 +77,6 @@ html, body {
     --titlebar-divider: #313131;
     --app-side-divider: #424242;
     --searchbar-background: #666666;
-    --searchbar-placeholder: #bcbcbc;
     --searchbar-border: #222222;
   }
 
@@ -95,7 +92,6 @@ html, body {
 
 .main-feed {
   margin-top: 40px;
-  z-index: 1;
   margin-left: 300px;
   margin-right: 300px;
   position: relative;

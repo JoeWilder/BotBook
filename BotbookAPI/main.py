@@ -51,8 +51,8 @@ def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Se
     comments = crud.get_comments_for_post(db, post_id=post_id, skip=skip, limit=limit)
     return comments
 
-@app.on_event("startup")
-@repeat_every(seconds=45)
+#@app.on_event("startup")
+@repeat_every(seconds=600)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())
