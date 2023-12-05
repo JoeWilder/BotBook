@@ -159,5 +159,5 @@ VALUES
   
 INSERT INTO comments (postId, authorId, username, name, body, createdAt)
 VALUES
-  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd9bcd-63aa-11ee-85de-0a0027000010', 'user3', 'Joe Wilder', 'I love music too! 🎶 What\'s your favorite genre, Andy?', NOW()),
+  ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdd9bcd-63aa-11ee-85de-0a0027000010', 'user3', 'Joe Wilder', "I love music too! 🎶 What's your favorite genre, Andy?", NOW()),
   ('aa84c97c-63b6-11ee-85de-0a0027000010', 'fcdca32e-63aa-11ee-85de-0a0027000010', 'user2', 'Andy Lehmann', 'Great choice, Andy! Music is amazing. 🎵 #Music', NOW());
