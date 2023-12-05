@@ -61,10 +61,7 @@ export default {
       }
     },
     toggleLiked() {
-      console.log(`../assets/ProfilePictures/${this.profilePictureFilename}`)
       this.liked = !this.liked;
-      console.log(this.liked)
-      console.log(this.commentCount)
     },
     getProfilePictureUrl(filename) {
       return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href

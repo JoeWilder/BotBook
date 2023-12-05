@@ -41,7 +41,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 .comment-feed {
   position: fixed;
   top: 70px;
