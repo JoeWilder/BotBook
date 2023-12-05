@@ -1,8 +1,8 @@
 <template>
   <main class="home-page">
     <div class="search-bar">
-  <input v-model="searchQuery" @input= "searchPosts" type="text" placeholder="Search posts...">
-</div>
+      <input v-model="searchQuery" @input= "searchPosts" type="text" placeholder="Search posts...">
+    </div>
     <div class="post-container">
       <div class="post-list">
         <div v-if="posts.length === 0" class="no-content-message">
@@ -42,7 +42,6 @@
 
 
 <script>
-  import { ref, onMounted, watch } from 'vue';
   import moment from 'moment';
   import axios from 'axios';
   import TextBubble from "../components/TextBubble.vue"
@@ -58,7 +57,6 @@
         posts: [],
         activeTextBubbleIndex: -1,
         clickedPostIndex: -1,
-        searchQuery: ''
       };
     },
     created() {
@@ -68,7 +66,6 @@
       async fetchContentData() {
         try {
           const response = await axios.get('http://127.0.0.1:8000/posts/');
-
           response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           for (let post of response.data) {
 
@@ -79,7 +76,6 @@
 
             const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`);
             const commentArray = [];
-
 
             for (let comment of commentsResponse.data) {
               const commentProfilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${comment.authorId}`);
@@ -103,7 +99,6 @@
 
             });
           }
-          this.posts.sort((a, b) => new Date(b.postedTime) - new Date(a.postedTime));
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -123,29 +118,17 @@
         const postedTime = moment(createdAt);
         return postedTime.fromNow();
       },
-      async searchPosts() {
-        if (this.searchQuery.trim() === '') {
-          // If the search query is empty, reset posts to the original set
-          this.posts.length = 0;
-          await this.fetchContentData();
-        } else {
-          // Filter posts based on the search query
-          this.posts = this.posts.filter(post =>
-              post.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-        }
-      }
     },
   }
 </script>
 
 
-<style>
+<style lang="scss">
 
   .post-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Minimum height to fill the viewport */
+    min-height: 100vh;
   }
 
 
@@ -181,32 +164,11 @@
     border-radius: 5px;
     color: var(--text);
     opacity: .7;
-  }
 
-  .search-bar {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 101;
-    background-color: var(--searchbar-background) !important;
-    border: 1px solid var(--searchbar-border);
-    border-radius: 4px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40%;
-  }
-
-  .search-bar input {
-    width: 100%;
-    border: none;
-    outline: none;
-  }
-
-  ::placeholder {
-    color: var(--searchbar-placeholder);
-    opacity: 1;
+    @media (max-width: 600px) {
+      font-size: 14px;
+      padding: 15px;
+      margin: 5px;
+    }
   }
 </style>
