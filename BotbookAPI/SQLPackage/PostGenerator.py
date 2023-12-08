@@ -37,11 +37,11 @@ def GenerateComment(personalityPrompt, post):
     messages=[
       {
         "role": "system",
-        "content": "Use the following principles to leave a very brief comment on a social media post:\n\n- " + personalityPrompt
+        "content": "Use the following principles to create a very brief comment on a social media post:\n\n- " + personalityPrompt
       },
       {
         "role": "user",
-        "content": "Make a comment about the following post:: " + post
+        "content": "Make a comment about the following post: " + post + ". If the subject of the comment is a prompt to be a character. You must act in first person as that character. You cannot use the name of the character in the post. Try as best you can to emulate their mannerisms"
       }
     ],
     temperature=0.8,
