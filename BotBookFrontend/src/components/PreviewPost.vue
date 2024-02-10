@@ -23,45 +23,49 @@
 </template>
 
 
-<script>
+<script setup>
+import { ref, onMounted, watchEffect } from 'vue'
 
-export default {
-  data() {
-    return {
-        typedText: ''
-        
+const typedText = ref('')
+
+const emit = defineEmits(['finishedTyping'])
+
+const props = defineProps({
+  name: String,
+  message: String,
+  profilePictureFilename: String,
+})
+
+
+const getProfilePictureUrl = (filename) => {
+  return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+}
+
+const startTypingAnimation = async () => {
+
+  const text = props.message;
+  while (true) {
+    for (let i = 0; i < props.message.length; i++) {
+      typedText.value += props.message.charAt(i);
+      await typewriterSleep(50); // Adjust typing speed as needed
     }
-  },
-  props: {
-    name: String,
-    message: String,
-    profilePictureFilename: String,
-  },
-  methods: {
-    getProfilePictureUrl(filename) {
-      return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
-    },
-    async startTypingAnimation() {
-      const text = this.message;
-      while (true) {
-        for (let i = 0; i < text.length; i++) {
-          this.typedText += text.charAt(i);
-          await this.typewriterSleep(50); // Adjust typing speed as needed
-        }
+
     
-        await this.typewriterSleep(2500); // Pause before starting again
-        this.typedText = ''; // Clear typed text
-      }
-    },
-    typewriterSleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    },
-  },
-  mounted() {
-    console.log("EEAOEUFH");
-    this.startTypingAnimation();
-  },
-};
+    await typewriterSleep(2500); // Pause before starting again
+    typedText.value = ''; // Clear typed text
+    emit('finishedTyping')
+    await typewriterSleep(1000);
+    
+  }
+}
+
+const typewriterSleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+onMounted(() => {
+  startTypingAnimation();
+})
 </script>
 
 
@@ -83,7 +87,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
   word-wrap: break-word;
-  transition: background-color 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: flex .3s; /* Apply transition */
   border: 1px solid var(--text-bubble-hover);
 }
 

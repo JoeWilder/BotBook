@@ -15,6 +15,10 @@ const router = createRouter({
                 component: LandingPage
               }
             ]
+          },
+          {
+            path: '/feed',
+            component: () => import('../pages/Home.vue')
           }
         /*{
             path: '/',
