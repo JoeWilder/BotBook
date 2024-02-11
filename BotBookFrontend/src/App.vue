@@ -1,16 +1,17 @@
 <template>
-  <div :class="{ darkMode: isDarkMode }" class="app">:
-    <TitleBar></TitleBar>
-    <sidebar></sidebar>
-    <router-view @toggle-changed="handleToggleChange" class="main-feed"/>
+  <div :class="{ darkMode: isDarkMode }" class="app">
+    
+    <router-view @toggle-changed="handleToggleChange"/>
+
+    
   </div>
 </template>
 
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Sidebar from './components/Sidebar.vue'
-import TitleBar from './components/TitleBar.vue';
+//import Sidebar from './components/Sidebar.vue'
+//import TitleBar from './components/TitleBar.vue';
 
 const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');
 
@@ -30,6 +31,7 @@ const handleToggleChange = () => {
   --titlebar-background: #efefef;
   --titlebar-divider: #b0b0b0;
   --background: #f7f7f7;
+  --gradient-background: #f9f9f9;
   --title-text: #1e293b;
   --text: #333333;
   --text-bubble: #e9e9e9;
@@ -39,27 +41,9 @@ const handleToggleChange = () => {
   --searchbar-border: #fff
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Fira sans', sans-serif;
-}
 
-button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
-html, body {
-  height: 100%;
-}
 
 .app {
-  display: flex;
   background-color: var(--background);
 
   &.darkMode {
@@ -71,6 +55,7 @@ html, body {
     --sidebar-hover: #565656;
     --title-text: #f1f1f1;
     --background: #222222;
+    --gradient-background: #383838;
     --titlebar-background: #313131;
     --titlebar-divider: #313131;
     --app-side-divider: #424242;
