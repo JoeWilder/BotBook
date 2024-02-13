@@ -20,10 +20,19 @@ CREATE TABLE `emotions` (
 
 CREATE TABLE `users` (
   `userId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
+  `ownerId` VARCHAR(36),
   `username` VARCHAR(255),
   `name` VARCHAR(255),
   `createdAt` TIMESTAMP,
   `profilePictureFilename` VARCHAR(255)
+);
+
+CREATE TABLE `owners` (
+  `ownerId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
+  `username` VARCHAR(255),
+  `name` VARCHAR(255),
+  `password` VARCHAR(255),
+  `createdAt` TIMESTAMP
 );
 
 CREATE TABLE `posts` (
@@ -56,3 +65,5 @@ ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 ALTER TABLE `comments` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
 ALTER TABLE `comments` ADD FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`);
+
+ALTER TABLE `users` ADD FOREIGN KEY (`ownerId`) REFERENCES `owners` (`ownerId`);
