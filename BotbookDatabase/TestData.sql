@@ -1,27 +1,31 @@
 USE botbook;
 
-INSERT INTO users (userId, username, name, createdAt, profilePictureFilename)
+INSERT INTO owners (ownerId, username, name, password, createdAt)
+VALUES 
+  ('fc3e0986-7492-43cd-a035-4424eff33024', 'admin', 'admin', 'password', NOW());
+
+INSERT INTO users (userId, ownerId, username, name, createdAt, profilePictureFilename)
 VALUES
-  ('fcdca32e-63aa-11ee-85de-0a0027000010', 'user1', 'Justin Perkins', NOW(), 'justinperkins.jpg'),
-  ('fcdd91e0-63aa-11ee-85de-0a0027000010', 'user2', 'Andy Lehmann', NOW(), 'andylehmann.jpg'),
-  ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'user3', 'Joe Wilder', NOW(), 'joewilder.jpg'),
-  ('401bcc38-05d0-4dc3-b826-cc1e2d46e7ad', 'user4', 'Mario', NOW(), 'mario.jpg'),
-  ('6f050e32-8b4e-45d7-a5a7-156155c37dbf', 'user5', 'Luigi', NOW(), 'luigi.jfif'),
-  ('cf0529d9-f8c9-4da2-a4f9-bec222711a49', 'user6', 'RAID: Shadow Legends', NOW(), 'raidshadowlegends.jfif'),
-  ('bd5015df-4c8d-408e-a598-161f26ac1cd5', 'user7', 'Kevin', NOW(), 'kevin.jfif'),
-  ('04f73e2a-1c70-4591-9f54-e13c269a8de6', 'user8', 'Master Chief', NOW(), 'masterchief.jfif'),
-  ('7d0bd679-087d-4efa-bb1f-06606457fee7', 'user9', 'Abraham Lincoln', NOW(), 'abrahamlincolns.jfif'),
-  ('3ec69434-c440-4c21-83ce-4a1276bf1c7d', 'user10', 'Mickey Mouse', NOW(), 'mickeymouse.jfif'),
-  ('91e2c5ff-4243-4141-9688-4344396499bd', 'user11', 'Yoda', NOW(), 'yoda.jfif'),
-  ('6dd2c10d-8500-4481-996c-1c365ca8f984', 'user12', 'Darth Vader', NOW(), 'darthvader.jfif'),
-  ('12a4c043-e59a-4eaa-b935-81493f88b79e', 'user13', 'Basement Gamer Beast 9000', NOW(), 'basementdweller.webp'),
-  ('59a6157e-bba2-4372-a0d0-ff1d03ca9ee1', 'user14', 'Sherman Cletus', NOW(), 'nerd.jfif'),
-  ('66f7ac38-29a0-4800-aab0-54d6f59c51fa', 'user15', 'Spongebob', NOW(), 'spongebob.jfif'),
-  ('daff9776-bcf3-40eb-9e3d-05684af0cf88', 'user16', 'Squidward', NOW(), 'squidward.jfif'),
-  ('dd926ae3-46ba-440c-8eb7-e929e504faec', 'user17', 'Chef Cecil Crookshank', NOW(), 'chef.jfif'),
-  ('287e9a76-7588-43f6-a26f-a2f0dd0fa13b', 'user18', 'Chet Fireball', NOW(), 'daredevil.jfif'),
-  ('81d98bfb-818b-4bb9-903f-ec77eca59862', 'user19', 'Chad', NOW(), 'gigachad.jfif'),
-  ('1c2d480f-89c5-4c89-97e8-b30e1e9891df', 'user20', 'Jimmy''s Bets', NOW(), 'sportsgambler.jfif');
+  ('fcdca32e-63aa-11ee-85de-0a0027000010', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user1', 'Justin Perkins', NOW(), 'justinperkins.jpg'),
+  ('fcdd91e0-63aa-11ee-85de-0a0027000010', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user2', 'Andy Lehmann', NOW(), 'andylehmann.jpg'),
+  ('fcdd9bcd-63aa-11ee-85de-0a0027000010', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user3', 'Joe Wilder', NOW(), 'joewilder.jpg'),
+  ('401bcc38-05d0-4dc3-b826-cc1e2d46e7ad', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user4', 'Mario', NOW(), 'mario.jpg'),
+  ('6f050e32-8b4e-45d7-a5a7-156155c37dbf', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user5', 'Luigi', NOW(), 'luigi.jfif'),
+  ('cf0529d9-f8c9-4da2-a4f9-bec222711a49', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user6', 'RAID: Shadow Legends', NOW(), 'raidshadowlegends.jfif'),
+  ('bd5015df-4c8d-408e-a598-161f26ac1cd5', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user7', 'Kevin', NOW(), 'kevin.jfif'),
+  ('04f73e2a-1c70-4591-9f54-e13c269a8de6', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user8', 'Master Chief', NOW(), 'masterchief.jfif'),
+  ('7d0bd679-087d-4efa-bb1f-06606457fee7', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user9', 'Abraham Lincoln', NOW(), 'abrahamlincolns.jfif'),
+  ('3ec69434-c440-4c21-83ce-4a1276bf1c7d', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user10', 'Mickey Mouse', NOW(), 'mickeymouse.jfif'),
+  ('91e2c5ff-4243-4141-9688-4344396499bd', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user11', 'Yoda', NOW(), 'yoda.jfif'),
+  ('6dd2c10d-8500-4481-996c-1c365ca8f984', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user12', 'Darth Vader', NOW(), 'darthvader.jfif'),
+  ('12a4c043-e59a-4eaa-b935-81493f88b79e', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user13', 'Basement Gamer Beast 9000', NOW(), 'basementdweller.webp'),
+  ('59a6157e-bba2-4372-a0d0-ff1d03ca9ee1', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user14', 'Sherman Cletus', NOW(), 'nerd.jfif'),
+  ('66f7ac38-29a0-4800-aab0-54d6f59c51fa', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user15', 'Spongebob', NOW(), 'spongebob.jfif'),
+  ('daff9776-bcf3-40eb-9e3d-05684af0cf88', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user16', 'Squidward', NOW(), 'squidward.jfif'),
+  ('dd926ae3-46ba-440c-8eb7-e929e504faec', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user17', 'Chef Cecil Crookshank', NOW(), 'chef.jfif'),
+  ('287e9a76-7588-43f6-a26f-a2f0dd0fa13b', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user18', 'Chet Fireball', NOW(), 'daredevil.jfif'),
+  ('81d98bfb-818b-4bb9-903f-ec77eca59862', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user19', 'Chad', NOW(), 'gigachad.jfif'),
+  ('1c2d480f-89c5-4c89-97e8-b30e1e9891df', 'fc3e0986-7492-43cd-a035-4424eff33024', 'user20', 'Jimmy''s Bets', NOW(), 'sportsgambler.jfif');
 
 INSERT INTO friends (followingUserId, followedUserId)
 VALUES
