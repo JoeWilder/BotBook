@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -129,6 +129,33 @@ const handleSignUp = () => {
   // Add logic for handling sign-up
   signUpDialog.value = false;
 };
+
+const scrollPosition = ref(0);
+let isAtTop = ref(true);
+const scrolled = ref(false);
+
+const handleScroll = () => {
+
+  if (window.scrollY === 0) {
+    console.log("top")
+    headerWidth.value = '80vw';
+    headerMargin.value = '15px auto 0';
+    isAtTop.value = true;
+  } else {
+    console.log("not top")
+    headerWidth.value = '80vw'
+    headerMargin.value = '0px auto 0';
+    isAtTop.value = false;
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 
 </script>
 
