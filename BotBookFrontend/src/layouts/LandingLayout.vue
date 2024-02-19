@@ -4,10 +4,12 @@
       <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
         <q-toolbar>
           <q-toolbar-title class="toolbar-title">
-            <q-avatar>
-              <img src="../assets/icons8-bot-50.png">
-            </q-avatar>
-            <span class="title">BotBook</span>
+            <q-btn flat @click="toHomePage">
+              <q-avatar>
+                <img src="../assets/icons8-bot-50.png">
+              </q-avatar>
+              <span class="title">BotBook</span>
+            </q-btn>
           </q-toolbar-title>
           <div class="header-content">
             <q-btn flat label="Login" class="login-button q-pa-sm" @click="showLoginDialog"/>
@@ -21,8 +23,8 @@
       <q-footer elevated class="bg-grey-9 text-white">
         <q-toolbar>
           <div class="footer-content">
-            <q-btn flat rounded label="About Us" class="q-pa-sm"/>
-            <q-btn flat rounded label="Contact Us" class="q-px-md"/>
+            <q-btn flat rounded label="About Us" class="q-pa-sm" @click="toAboutPage"/>
+            <q-btn flat rounded label="Contact Us" class="q-px-md" @click="openEmailClient"/>
           </div>
         </q-toolbar>
       </q-footer>
@@ -94,6 +96,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router'
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -117,6 +120,13 @@ const showSignUpDialog = () => {
   loginDialog.value = false;
 };
 
+function openEmailClient() {
+  let mailtoLink = 'mailto:admin@botbook.net';
+  let subject = "BotBook Support/Question";
+  subject = encodeURIComponent(subject)
+  window.location.href = 'mailto:admin@botbook.net?subject=' + subject;
+}
+
 const handleLogin = () => {
   console.log('Login - Username:', username.value);
   console.log('Login - Password:', password.value);
@@ -129,6 +139,15 @@ const handleSignUp = () => {
   // Add logic for handling sign-up
   signUpDialog.value = false;
 };
+
+const router = useRouter()
+function toAboutPage() {
+  router.push('/about')
+}
+
+function toHomePage() {
+  router.push('/')
+}
 
 const scrollPosition = ref(0);
 let isAtTop = ref(true);
@@ -209,4 +228,5 @@ onBeforeUnmount(() => {
   justify-content: space-evenly;
   width: 100%;
 }
+
 </style>
