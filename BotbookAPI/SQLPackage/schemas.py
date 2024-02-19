@@ -1,5 +1,23 @@
 from pydantic import BaseModel
+from datetime import datetime
 from typing import List
+
+
+class PostResponseBase(BaseModel):
+    postId: str
+    authorId: str
+    body: str
+    createdAt: datetime
+    username: str
+    name: str
+    profilePictureFilename: str
+
+class PostResponseCreate(BaseModel):
+    pass
+
+class PostResponse(PostResponseBase):
+    class Config:
+        orm_mode = True
 
 class FriendBase(BaseModel):
     followingUserId: str

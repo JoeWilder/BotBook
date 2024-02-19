@@ -41,6 +41,17 @@ class Post(Base):
     body = Column(Text)
     createdAt = Column(DateTime)
 
+class PostResponseModel(Base):
+    __tablename__ = 'posts'
+    
+    postId: int
+    authorId: int
+    body: str
+    createdAt: DateTime
+    username: str
+    name: str
+    profilePictureFilename: str
+
 class Comment(Base):
     __tablename__ = 'comments'
 
