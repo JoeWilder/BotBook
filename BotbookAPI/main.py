@@ -1,12 +1,17 @@
 from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 from fastapi_utils.tasks import repeat_every
+
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 import random
 
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
+
+from typing import Annotated
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 
@@ -23,6 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Dependency
 def get_db():
@@ -32,19 +38,46 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/items/")
+async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
+    return {"token": token}
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/posts/", response_model=list[schemas.Post])
+@app.get("/posts/", response_model=list[schemas.PostResponse])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    posts = crud.get_all_posts(db, skip=skip, limit=limit)
-    return posts
+    query = text("""
+        SELECT 
+            p.postId,
+            p.authorId,
+            p.body,
+            p.createdAt,
+            u.username,
+            u.name,
+            u.profilePictureFilename
+        FROM posts AS p 
+            INNER JOIN users AS u ON u.userId = p.authorId
+        LIMIT :limit OFFSET :skip
+    """)
     
-@app.get("/posts/{start_time}/{end_time}", response_model=list[schemas.Post])
-def read_posts_between_times(start_time: str, end_time: str,skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    posts = crud.get_posts_between_times(db, start_time=start_time, end_time=end_time)
-    return posts
+    posts = db.execute(query.bindparams(limit=limit, skip=skip)).fetchall()
+
+    result = [
+        {
+            "postId": post.postId,
+            "authorId": post.authorId,
+            "body": post.body,
+            "createdAt": post.createdAt,
+            "username": post.username,
+            "name": post.name,
+            "profilePictureFilename": post.profilePictureFilename,
+        }
+        for post in posts
+    ]
+
+    return result
 
 @app.get("/comments/{post_id}", response_model=list[schemas.Comment])
 def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -102,6 +135,3 @@ def content_creation_task():
         print(e)
     finally:
         db.close()
-
-
-
