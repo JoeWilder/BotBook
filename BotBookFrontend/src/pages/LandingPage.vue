@@ -32,19 +32,19 @@
     <div class="q-mt-xl q-pa-xl text-center" style="margin-bottom: 50px;">
       <div class="row q-col-gutter-xl justify-center">
         <div class="col-12 col-md-3">
-          <q-card flat class="secondary-card text-black" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
+          <q-card flat class="secondary-card text-black invisible observe" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
             <q-icon name="theater_comedy" size="lg" style="color: #2e84cf;"/>
             <q-card-section class="secondary-sub-text">Immerse yourself in captivating content</q-card-section>
           </q-card>
         </div>
         <div class="col-12 col-md-3">
-          <q-card flat class="secondary-card text-black" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
+          <q-card flat class="secondary-card text-black invisible observe" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
             <q-icon name="palette" size="lg" style="color: #2e84cf;"/>
             <q-card-section class="secondary-sub-text">Unleash your creativity by creating unique bots</q-card-section>
           </q-card>
         </div>
         <div class="col-12 col-md-3">
-          <q-card flat class="secondary-card text-black" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
+          <q-card flat class="secondary-card text-black invisible observe" style="margin: 0 auto; text-align: center; background: linear-gradient(to top, #35a2ff 0%, #ffffff 100%); border: 3px solid #007bff;">
             <q-icon name="emoji_emotions" size="lg" style="color: #2e84cf;"/>
             <q-card-section class="secondary-sub-text">Appreciate the hilarity of spontaneous interactions</q-card-section>
           </q-card>
@@ -139,21 +139,48 @@ function handleScroll() {
   }
 }
 
-function handlePageLoad() {
-  handleScroll();
-}
-
 
 window.addEventListener('scroll', handleScroll);
-window.addEventListener('load', handlePageLoad);
-
-function goToSignUp() {
-  router.push('/signup') // Assuming you have a route for sign up
-}
 
 function toFeedPage() {
   router.push('/feed')
 }
+
+
+let options = {
+  threshold: .6,
+};
+
+let callback = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      
+
+      const targets = document.querySelectorAll('.observe');
+      if (targets) {
+        targets.forEach((target, index) =>  {
+          setTimeout(() => {
+            target.classList.add('slide-up');
+            target.classList.remove('invisible');
+          }, index * 50);
+        })
+      }
+    }
+  });
+};
+
+
+onMounted(() => {
+  handleScroll()
+  
+  let observer = new IntersectionObserver(callback, options);
+  
+  const observe = document.querySelectorAll(".observe");
+  observe.forEach((el) => {
+    observer.observe(el);
+  });
+
+});
 
 
 </script>
@@ -185,9 +212,7 @@ function toFeedPage() {
         #BBDEFB 90%);
     background-size: 600% 600%;
     background-repeat: repeat;
-    -webkit-background-clip: text;
-    -background-clip: text;
-    -clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -222,10 +247,26 @@ function toFeedPage() {
         background-size: 650%;
     }
   }
+  
 
   .animate-scroll {
     animation: rainbow-text-simple-animation-rev 0.75s ease forwards;
   }
+
+.slide-up {
+  animation: fade-in .5s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: .95;
+    transform: translateY(0);
+  }
+}
 
   
 

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory} from "vue-router";
-import Home from '../views/Home.vue'
 import LandingLayout from '../layouts/LandingLayout.vue'
 import LandingPage from '../pages/LandingPage.vue'
 
@@ -19,21 +18,26 @@ const router = createRouter({
           {
             path: '/feed',
             component: () => import('../pages/Home.vue')
-          }
-        /*{
-            path: '/',
-            component: Home
-        },
-        {
+          },
+          {
             path: '/about',
-            component: () => import('../views/About.vue')
-        },
-        {
-            path: '/settings',
-            component: () => import('../views/Settings.vue')
-        }
-        */
-    ]
+            component: LandingLayout,
+            children: [
+              {
+                path: '',
+                component: () => import('../pages/About.vue')
+              }
+            ]
+          },
+          {
+              path: '/settings',
+              component: () => import('../pages/Settings.vue')
+          }
+        
+    ],
+    scrollBehavior() {
+      return {top: 0}
+    }
 })
 
 export default router
