@@ -3,6 +3,13 @@ from datetime import datetime
 from typing import List
 
 
+class Token(BaseModel):
+    accessToken: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str or None = None
+
 class PostResponseBase(BaseModel):
     postId: str
     authorId: str
@@ -98,3 +105,12 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+class OwnerBase(BaseModel):
+    userId: str
+    username: str
+    name: str
+    createdAt: str
+ 
+class Owner(OwnerBase):
+    password: str

@@ -1,11 +1,15 @@
 from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi_utils.tasks import repeat_every
+
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 
+from datetime import datetime, timedelta
 import random
 
 from .SQLPackage import crud, models, schemas, PostGenerator
@@ -14,6 +18,13 @@ from .SQLPackage.database import SessionLocal
 from typing import Annotated
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
+
+SECRET_KEY = "73e204ac4d1dd633235379b51cbd6fe8"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Initialize API application
 app = FastAPI()
@@ -28,8 +39,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -38,13 +47,38 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/items/")
-async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
-    return {"token": token}
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def get_user(username: str):
+    pass
+
+def authenticate_user(username: str, password: str):
+    user = get_user(username)
+    if not user:
+        return False
+    if not verify_password(password, user.password):
+        return False
+    
+    return user
+
+def create_access_token(data: dict, expires_delta: timedelta or None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+    return encoded_jwt
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    
 
 @app.get("/posts/", response_model=list[schemas.PostResponse])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
