@@ -29,6 +29,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `owners` (
   `ownerId` VARCHAR(36) DEFAULT (UUID()) PRIMARY KEY,
+  `email` varchar(255),
   `username` VARCHAR(255),
   `name` VARCHAR(255),
   `password` VARCHAR(255),
