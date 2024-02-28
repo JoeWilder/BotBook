@@ -78,7 +78,7 @@ def create_access_token(data: dict, expires_delta: timedelta or None = None):
     return encoded_jwt
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    
+    pass
 
 @app.get("/posts/", response_model=list[schemas.PostResponse])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
