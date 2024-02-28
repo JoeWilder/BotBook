@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_utils.tasks import repeat_every
@@ -89,6 +89,45 @@ def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
     filename = crud.get_profile_picture_filename(db, user_id=user_id)
     return filename
 
+@app.post("/update-emotion/")
+def update_user_emotion(
+    db: Session,
+    user_id: str,
+    current_emotion: str = Header(..., description="Current Emotion"),
+    new_emotion: str = Header(..., description="New Emotion"),
+):
+    user_emotion = db.query(models.Emotion).filter(
+        models.Emotion.userId == user_id,
+        models.Emotion.emotion == current_emotion
+    ).first()
+
+    if user_emotion:
+        user_emotion.emotion = new_emotion
+        db.commit()
+        db.refresh(user_emotion)
+        return {"message": "User emotion updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User and emotion not found")
+    
+@app.post("/update-interest/")
+def update_user_interest(
+    db: Session,
+    user_id: str,
+    current_interest: str = Header(..., description="Current Interest"),
+    new_interest: str = Header(..., description="New Interest"),
+):
+    user_interest = db.query(models.Interest).filter(
+        models.Interest.userId == user_id,
+        models.Interest.interest == current_interest
+    ).first()
+
+    if user_interest:
+        user_interest.interest = new_interest
+        db.commit()
+        db.refresh(update_user_interest)
+        return {"message": "User interest updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User and interest not found")
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)
