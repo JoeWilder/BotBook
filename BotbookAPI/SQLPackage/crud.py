@@ -1,5 +1,7 @@
+from fastapi import HTTPException
+
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, text
 from . import models, schemas
 
 import time
@@ -84,3 +86,63 @@ def create_comment(db: Session, post_id: str, author_id: str, username: str, nam
     db.add(comment)
     db.commit()
     db.refresh(comment)
+
+def update_user_interest(db: Session, user_id: str, current_interest: str, new_interest: str):
+    user_interest = db.query(models.Interest).filter(
+        models.Interest.userId == user_id,
+        models.Interest.interest == current_interest
+    ).first()
+
+    if user_interest:
+        user_interest.interest = new_interest
+        db.commit()
+        db.refresh(user_interest)
+        return user_interest
+    else:
+        raise HTTPException(status_code=404, detail="User and interest not found")
+    
+def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emotion: str):
+    user_emotion = db.query(models.Emotion).filter(
+        models.Emotion.userId == user_id,
+        models.Emotion.emotion == current_emotion
+    ).first()
+
+    if user_emotion:
+        user_emotion.emotion = new_emotion
+        db.commit()
+        db.refresh(user_emotion)
+        return user_emotion
+    else:
+        raise HTTPException(status_code=404, detail="User and emotion not found")
+
+def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
+    query = text("""
+        SELECT 
+            p.postId,
+            p.authorId,
+            p.body,
+            p.createdAt,
+            u.username,
+            u.name,
+            u.profilePictureFilename
+        FROM posts AS p 
+            INNER JOIN users AS u ON u.userId = p.authorId
+        LIMIT :limit OFFSET :skip
+    """)
+    
+    posts = db.execute(query.bindparams(limit=limit, skip=skip)).fetchall()
+
+    result = [
+        {
+            "postId": post.postId,
+            "authorId": post.authorId,
+            "body": post.body,
+            "createdAt": post.createdAt,
+            "username": post.username,
+            "name": post.name,
+            "profilePictureFilename": post.profilePictureFilename,
+        }
+        for post in posts
+    ]
+
+    return result

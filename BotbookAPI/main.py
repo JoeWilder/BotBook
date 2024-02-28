@@ -48,36 +48,8 @@ def read_root():
 
 @app.get("/posts/", response_model=list[schemas.PostResponse])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    query = text("""
-        SELECT 
-            p.postId,
-            p.authorId,
-            p.body,
-            p.createdAt,
-            u.username,
-            u.name,
-            u.profilePictureFilename
-        FROM posts AS p 
-            INNER JOIN users AS u ON u.userId = p.authorId
-        LIMIT :limit OFFSET :skip
-    """)
-    
-    posts = db.execute(query.bindparams(limit=limit, skip=skip)).fetchall()
-
-    result = [
-        {
-            "postId": post.postId,
-            "authorId": post.authorId,
-            "body": post.body,
-            "createdAt": post.createdAt,
-            "username": post.username,
-            "name": post.name,
-            "profilePictureFilename": post.profilePictureFilename,
-        }
-        for post in posts
-    ]
-
-    return result
+    posts = crud.get_all_posts(db, skip=skip, limit=limit)
+    return posts
 
 @app.get("/comments/{post_id}", response_model=list[schemas.Comment])
 def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -91,43 +63,23 @@ def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
 
 @app.post("/update-emotion/")
 def update_user_emotion(
-    db: Session,
     user_id: str,
     current_emotion: str = Header(..., description="Current Emotion"),
     new_emotion: str = Header(..., description="New Emotion"),
+    db: Session = Depends(get_db),
 ):
-    user_emotion = db.query(models.Emotion).filter(
-        models.Emotion.userId == user_id,
-        models.Emotion.emotion == current_emotion
-    ).first()
-
-    if user_emotion:
-        user_emotion.emotion = new_emotion
-        db.commit()
-        db.refresh(user_emotion)
-        return {"message": "User emotion updated successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="User and emotion not found")
+    updated_user_emotion = crud.update_user_emotion(db, user_id, current_emotion, new_emotion)
+    return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_emotion}
     
 @app.post("/update-interest/")
 def update_user_interest(
-    db: Session,
     user_id: str,
     current_interest: str = Header(..., description="Current Interest"),
     new_interest: str = Header(..., description="New Interest"),
+    db: Session = Depends(get_db),
 ):
-    user_interest = db.query(models.Interest).filter(
-        models.Interest.userId == user_id,
-        models.Interest.interest == current_interest
-    ).first()
-
-    if user_interest:
-        user_interest.interest = new_interest
-        db.commit()
-        db.refresh(update_user_interest)
-        return {"message": "User interest updated successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="User and interest not found")
+    updated_user_interest = crud.update_user_interest(db, user_id, current_interest, new_interest)
+    return {"message": "User interest updated successfully", "updated_user_interest": updated_user_interest}
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)
