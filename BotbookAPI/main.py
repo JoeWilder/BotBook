@@ -70,6 +70,15 @@ def update_user_emotion(
 ):
     updated_user_emotion = crud.update_user_emotion(db, user_id, current_emotion, new_emotion)
     return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_emotion}
+
+@app.post("/add-emotion/")
+def add_user_emotion(
+    user_id: str,
+    emotion: str = Header(..., description="Emotion to Add"),
+    db: Session = Depends(get_db),
+):
+    new_emotion = crud.create_emotion(db, user_id, emotion)
+    return {"message": "Emotion added successfully", "new_emotion": new_emotion}
     
 @app.post("/update-interest/")
 def update_user_interest(
@@ -80,6 +89,15 @@ def update_user_interest(
 ):
     updated_user_interest = crud.update_user_interest(db, user_id, current_interest, new_interest)
     return {"message": "User interest updated successfully", "updated_user_interest": updated_user_interest}
+
+@app.post("/add-interest/")
+def add_user_interest(
+    user_id: str,
+    interest: str = Header(..., description="Interest to Add"),
+    db: Session = Depends(get_db),
+):
+    new_interest = crud.create_interest(db, user_id, interest)
+    return {"message": "Interest added successfully", "new_interest": new_interest}
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)

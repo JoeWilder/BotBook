@@ -101,6 +101,12 @@ def update_user_interest(db: Session, user_id: str, current_interest: str, new_i
     else:
         raise HTTPException(status_code=404, detail="User and interest not found")
     
+def create_interest(db: Session, user_id: str, interest: str):
+    user_interest = models.Interest(userId=user_id, interest=interest)
+    db.add(user_interest)
+    db.commit()
+    db.refresh(user_interest)
+    
 def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emotion: str):
     user_emotion = db.query(models.Emotion).filter(
         models.Emotion.userId == user_id,
@@ -114,6 +120,12 @@ def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emo
         return user_emotion
     else:
         raise HTTPException(status_code=404, detail="User and emotion not found")
+    
+def create_emotion(db: Session, user_id: str, emotion: str):
+    user_emotion = models.Emotion(userId=user_id, emotion=emotion)
+    db.add(user_emotion)
+    db.commit()
+    db.refresh(user_emotion)
 
 def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
     query = text("""
