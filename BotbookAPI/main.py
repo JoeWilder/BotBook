@@ -141,6 +141,17 @@ def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Sessio
     interests = crud.get_interest_for_user(db, user_id=user_id, skip=skip, limit=limit)
     return interests
 
+@app.post("/add-user/")
+def add_user_user(
+    owner_id: str,
+    name: str = Header(..., description="Name to Add"),
+    username: str = Header(..., description="Name to Add"),
+    profile_picture: str = Header(..., description="Name to Add"),
+    db: Session = Depends(get_db),
+):
+    new_user = crud.create_user(db, owner_id, username, name, profile_picture)
+    return {"message": "User added successfully", "new_user": new_user}
+
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)
 def content_creation_task():

@@ -297,3 +297,13 @@ def get_user_info(db: Session, user_id: str, skip: int, limit: int):
     user.createdAt = str(user.createdAt)
 
     return user
+
+def create_user(db: Session, owner_id: str, username:str, name:str, profile_picture:str):
+    if not profile_picture:
+        profile_picture = "default.jfif"
+
+    user = models.User(ownerId=owner_id, username=username, name=name, createdAt=datetime.now(), profilePictureFilename=profile_picture)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
