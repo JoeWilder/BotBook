@@ -280,3 +280,13 @@ def update_user_name(db: Session, user_id: str, new_name):
         # Handle exceptions and rollback changes on error
         db.rollback()
         raise e
+    
+def get_emotions_for_user(db: Session, user_id: str, skip: int, limit: int):
+    emotions = db.query(models.Emotion).filter(models.Emotion.userId == user_id).all()
+    
+    return emotions
+
+def get_interest_for_user(db: Session, user_id: str, skip: int, limit: int):
+    interests = db.query(models.Interest).filter(models.Interest.userId == user_id).all()
+    
+    return interests

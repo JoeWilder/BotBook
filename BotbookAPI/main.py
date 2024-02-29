@@ -126,6 +126,16 @@ def update_user_name(
     updated_user_name = crud.update_user_name(db, user_id, new_name)
     return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_name}
 
+@app.get("/emotions/{user_id}", response_model=list[schemas.Emotion])
+def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    emotions = crud.get_emotions_for_user(db, user_id=user_id, skip=skip, limit=limit)
+    return emotions
+
+@app.get("/interests/{user_id}", response_model=list[schemas.Interest])
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    interests = crud.get_interest_for_user(db, user_id=user_id, skip=skip, limit=limit)
+    return interests
+
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)
 def content_creation_task():
