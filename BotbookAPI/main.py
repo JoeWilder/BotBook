@@ -61,7 +61,7 @@ def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
     filename = crud.get_profile_picture_filename(db, user_id=user_id)
     return filename
 
-@app.post("/update-emotion/")
+@app.put("/update-emotion/")
 def update_user_emotion(
     user_id: str,
     current_emotion: str = Header(..., description="Current Emotion"),
@@ -89,7 +89,7 @@ def delete_user_emotion(
     deleted_Emotion = crud.delete_user_emotion(db, user_id, emotion)
     return {"message": "Interest deleted successfully", "deleted_interest": deleted_Emotion}
     
-@app.post("/update-interest/", status_code=status.HTTP_200_OK)
+@app.put("/update-interest/", status_code=status.HTTP_200_OK)
 def update_user_interest(
     user_id: str,
     current_interest: str = Header(..., description="Current Interest"),
@@ -116,6 +116,15 @@ def delete_user_interest(
 ):
     deleted_interest = crud.delete_user_interest(db, user_id, interest)
     return {"message": "Interest deleted successfully", "deleted_interest": deleted_interest}
+
+@app.put("/update-name/")
+def update_user_name(
+    user_id: str,
+    new_name: str = Header(..., description="New Name"),
+    db: Session = Depends(get_db),
+):
+    updated_user_name = crud.update_user_name(db, user_id, new_name)
+    return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_name}
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)

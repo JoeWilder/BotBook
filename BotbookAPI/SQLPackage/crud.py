@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func, text
+from sqlalchemy import func, text, update, delete
 from . import models, schemas
 
 import time
@@ -88,18 +88,38 @@ def create_comment(db: Session, post_id: str, author_id: str, username: str, nam
     db.refresh(comment)
 
 def update_user_interest(db: Session, user_id: str, current_interest: str, new_interest: str):
-    user_interest = db.query(models.Interest).filter(
-        models.Interest.userId == user_id,
-        models.Interest.interest == current_interest
-    ).first()
+    stmt = (
+        update(models.Interest)
+        .where(
+            (models.Interest.userId == user_id) &
+            (models.Interest.interest == current_interest)
+        )
+        .values(interest=new_interest)
+        .execution_options(synchronize_session="fetch")
+    )
 
-    if user_interest:
-        user_interest.interest = new_interest
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
         db.commit()
-        db.refresh(user_interest)
-        return user_interest
-    else:
-        raise HTTPException(status_code=404, detail="User and interest not found")
+
+        # Fetch the updated result
+        updated_user_interest = db.query(models.Interest).filter(
+            models.Interest.userId == user_id,
+            models.Interest.interest == new_interest
+        ).first()
+
+        if updated_user_interest:
+            return updated_user_interest
+        else:
+            raise HTTPException(status_code=404, detail="User and interest not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
     
 def create_interest(db: Session, user_id: str, interest: str):
     user_interest = models.Interest(userId=user_id, interest=interest)
@@ -109,31 +129,62 @@ def create_interest(db: Session, user_id: str, interest: str):
     return user_interest
 
 def delete_user_interest(db: Session, user_id: str, interest: str):
-    user_interest = db.query(models.Interest).filter(
-        models.Interest.userId == user_id,
-        models.Interest.interest == interest
-    ).first()
+    stmt = (
+        delete(models.Interest)
+        .where(
+            (models.Interest.userId == user_id) &
+            (models.Interest.interest == interest)
+        )
+        .execution_options(synchronize_session="fetch")
+    )
 
-    if user_interest:
-        db.delete(user_interest)
-        db.commit()
-        return user_interest
+    db.execute(stmt)
+
+    db.commit()
+
+    deleted_user_interest = db.query(models.Interest).filter(
+            models.Interest.userId == user_id,
+            models.Interest.interest == interest
+        ).first()
+
+    if not deleted_user_interest:
+        pass
     else:
         raise HTTPException(status_code=404, detail="User and interest not found")
     
 def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emotion: str):
-    user_emotion = db.query(models.Emotion).filter(
-        models.Emotion.userId == user_id,
-        models.Emotion.emotion == current_emotion
-    ).first()
+    stmt = (
+        update(models.Emotion)
+        .where(
+            (models.Emotion.userId == user_id) &
+            (models.Emotion.emotion == current_emotion)
+        )
+        .values(emotion=new_emotion)
+        .execution_options(synchronize_session="fetch")
+    )
 
-    if user_emotion:
-        user_emotion.emotion = new_emotion
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
         db.commit()
-        db.refresh(user_emotion)
-        return user_emotion
-    else:
-        raise HTTPException(status_code=404, detail="User and emotion not found")
+
+        # Fetch the updated result
+        updated_user_emotion = db.query(models.Emotion).filter(
+            models.Emotion.userId == user_id,
+            models.Emotion.emotion == new_emotion
+        ).first()
+
+        if updated_user_emotion:
+            return updated_user_emotion
+        else:
+            raise HTTPException(status_code=404, detail="User and emotion not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
     
 def create_emotion(db: Session, user_id: str, emotion: str):
     user_emotion = models.Emotion(userId=user_id, emotion=emotion)
@@ -143,17 +194,28 @@ def create_emotion(db: Session, user_id: str, emotion: str):
     return user_emotion
 
 def delete_user_emotion(db: Session, user_id: str, emotion: str):
-    user_emotion = db.query(models.Emotion).filter(
+    stmt = (
+        delete(models.Emotion)
+        .where(
+            (models.Emotion.userId == user_id) &
+            (models.Emotion.emotion == emotion)
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+    db.commit()
+
+    deleted_user_emotion = db.query(models.Emotion).filter(
         models.Emotion.userId == user_id,
         models.Emotion.emotion == emotion
     ).first()
 
-    if user_emotion:
-        db.delete(user_emotion)
-        db.commit()
-        return user_emotion
+    if not deleted_user_emotion:
+        pass
     else:
         raise HTTPException(status_code=404, detail="User and emotion not found")
+
 
 def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
     query = text("""
@@ -186,3 +248,35 @@ def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
     ]
 
     return result
+
+def update_user_name(db: Session, user_id: str, new_name):
+    stmt = (
+        update(models.User)
+        .where(
+            (models.User.userId == user_id)
+        )
+        .values(name=new_name)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
+        db.commit()
+
+        # Fetch the updated result
+        updated_user_name = db.query(models.User).filter(
+            models.User.userId == user_id
+        ).first()
+
+        if updated_user_name:
+            return updated_user_name
+        else:
+            raise HTTPException(status_code=404, detail="User and emotion not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
