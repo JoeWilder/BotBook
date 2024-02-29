@@ -290,3 +290,10 @@ def get_interest_for_user(db: Session, user_id: str, skip: int, limit: int):
     interests = db.query(models.Interest).filter(models.Interest.userId == user_id).all()
     
     return interests
+
+def get_user_info(db: Session, user_id: str, skip: int, limit: int):
+    user = db.query(models.User).filter(models.User.userId == user_id).first()
+
+    user.createdAt = str(user.createdAt)
+
+    return user

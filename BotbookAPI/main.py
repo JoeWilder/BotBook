@@ -131,6 +131,11 @@ def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session
     emotions = crud.get_emotions_for_user(db, user_id=user_id, skip=skip, limit=limit)
     return emotions
 
+@app.get("/user-info/{user_id}", response_model=schemas.User)
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    user = crud.get_user_info(db, user_id=user_id, skip=skip, limit=limit)
+    return user
+
 @app.get("/interests/{user_id}", response_model=list[schemas.Interest])
 def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     interests = crud.get_interest_for_user(db, user_id=user_id, skip=skip, limit=limit)
