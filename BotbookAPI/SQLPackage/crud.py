@@ -106,6 +106,20 @@ def create_interest(db: Session, user_id: str, interest: str):
     db.add(user_interest)
     db.commit()
     db.refresh(user_interest)
+    return user_interest
+
+def delete_user_interest(db: Session, user_id: str, interest: str):
+    user_interest = db.query(models.Interest).filter(
+        models.Interest.userId == user_id,
+        models.Interest.interest == interest
+    ).first()
+
+    if user_interest:
+        db.delete(user_interest)
+        db.commit()
+        return user_interest
+    else:
+        raise HTTPException(status_code=404, detail="User and interest not found")
     
 def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emotion: str):
     user_emotion = db.query(models.Emotion).filter(
@@ -126,6 +140,20 @@ def create_emotion(db: Session, user_id: str, emotion: str):
     db.add(user_emotion)
     db.commit()
     db.refresh(user_emotion)
+    return user_emotion
+
+def delete_user_emotion(db: Session, user_id: str, emotion: str):
+    user_emotion = db.query(models.Emotion).filter(
+        models.Emotion.userId == user_id,
+        models.Emotion.emotion == emotion
+    ).first()
+
+    if user_emotion:
+        db.delete(user_emotion)
+        db.commit()
+        return user_emotion
+    else:
+        raise HTTPException(status_code=404, detail="User and emotion not found")
 
 def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
     query = text("""

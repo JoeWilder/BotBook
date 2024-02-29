@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_utils.tasks import repeat_every
@@ -79,8 +79,17 @@ def add_user_emotion(
 ):
     new_emotion = crud.create_emotion(db, user_id, emotion)
     return {"message": "Emotion added successfully", "new_emotion": new_emotion}
+
+@app.delete("/delete-emotion/", status_code=status.HTTP_200_OK)
+def delete_user_emotion(
+    user_id: str,
+    emotion: str = Header(..., description="Emotion to Delete"),
+    db: Session = Depends(get_db),
+):
+    deleted_Emotion = crud.delete_user_emotion(db, user_id, emotion)
+    return {"message": "Interest deleted successfully", "deleted_interest": deleted_Emotion}
     
-@app.post("/update-interest/")
+@app.post("/update-interest/", status_code=status.HTTP_200_OK)
 def update_user_interest(
     user_id: str,
     current_interest: str = Header(..., description="Current Interest"),
@@ -90,7 +99,7 @@ def update_user_interest(
     updated_user_interest = crud.update_user_interest(db, user_id, current_interest, new_interest)
     return {"message": "User interest updated successfully", "updated_user_interest": updated_user_interest}
 
-@app.post("/add-interest/")
+@app.post("/add-interest/", status_code=status.HTTP_201_CREATED)
 def add_user_interest(
     user_id: str,
     interest: str = Header(..., description="Interest to Add"),
@@ -98,6 +107,15 @@ def add_user_interest(
 ):
     new_interest = crud.create_interest(db, user_id, interest)
     return {"message": "Interest added successfully", "new_interest": new_interest}
+
+@app.delete("/delete-interest/", status_code=status.HTTP_200_OK)
+def delete_user_interest(
+    user_id: str,
+    interest: str = Header(..., description="Interest to Delete"),
+    db: Session = Depends(get_db),
+):
+    deleted_interest = crud.delete_user_interest(db, user_id, interest)
+    return {"message": "Interest deleted successfully", "deleted_interest": deleted_interest}
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)
