@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_utils.tasks import repeat_every
@@ -48,36 +48,8 @@ def read_root():
 
 @app.get("/posts/", response_model=list[schemas.PostResponse])
 def read_all_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    query = text("""
-        SELECT 
-            p.postId,
-            p.authorId,
-            p.body,
-            p.createdAt,
-            u.username,
-            u.name,
-            u.profilePictureFilename
-        FROM posts AS p 
-            INNER JOIN users AS u ON u.userId = p.authorId
-        LIMIT :limit OFFSET :skip
-    """)
-    
-    posts = db.execute(query.bindparams(limit=limit, skip=skip)).fetchall()
-
-    result = [
-        {
-            "postId": post.postId,
-            "authorId": post.authorId,
-            "body": post.body,
-            "createdAt": post.createdAt,
-            "username": post.username,
-            "name": post.name,
-            "profilePictureFilename": post.profilePictureFilename,
-        }
-        for post in posts
-    ]
-
-    return result
+    posts = crud.get_all_posts(db, skip=skip, limit=limit)
+    return posts
 
 @app.get("/comments/{post_id}", response_model=list[schemas.Comment])
 def read_all_post_comments(post_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -89,6 +61,96 @@ def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
     filename = crud.get_profile_picture_filename(db, user_id=user_id)
     return filename
 
+@app.put("/update-emotion/")
+def update_user_emotion(
+    user_id: str,
+    current_emotion: str = Header(..., description="Current Emotion"),
+    new_emotion: str = Header(..., description="New Emotion"),
+    db: Session = Depends(get_db),
+):
+    updated_user_emotion = crud.update_user_emotion(db, user_id, current_emotion, new_emotion)
+    return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_emotion}
+
+@app.post("/add-emotion/")
+def add_user_emotion(
+    user_id: str,
+    emotion: str = Header(..., description="Emotion to Add"),
+    db: Session = Depends(get_db),
+):
+    new_emotion = crud.create_emotion(db, user_id, emotion)
+    return {"message": "Emotion added successfully", "new_emotion": new_emotion}
+
+@app.delete("/delete-emotion/", status_code=status.HTTP_200_OK)
+def delete_user_emotion(
+    user_id: str,
+    emotion: str = Header(..., description="Emotion to Delete"),
+    db: Session = Depends(get_db),
+):
+    deleted_Emotion = crud.delete_user_emotion(db, user_id, emotion)
+    return {"message": "Interest deleted successfully", "deleted_interest": deleted_Emotion}
+    
+@app.put("/update-interest/", status_code=status.HTTP_200_OK)
+def update_user_interest(
+    user_id: str,
+    current_interest: str = Header(..., description="Current Interest"),
+    new_interest: str = Header(..., description="New Interest"),
+    db: Session = Depends(get_db),
+):
+    updated_user_interest = crud.update_user_interest(db, user_id, current_interest, new_interest)
+    return {"message": "User interest updated successfully", "updated_user_interest": updated_user_interest}
+
+@app.post("/add-interest/", status_code=status.HTTP_201_CREATED)
+def add_user_interest(
+    user_id: str,
+    interest: str = Header(..., description="Interest to Add"),
+    db: Session = Depends(get_db),
+):
+    new_interest = crud.create_interest(db, user_id, interest)
+    return {"message": "Interest added successfully", "new_interest": new_interest}
+
+@app.delete("/delete-interest/", status_code=status.HTTP_200_OK)
+def delete_user_interest(
+    user_id: str,
+    interest: str = Header(..., description="Interest to Delete"),
+    db: Session = Depends(get_db),
+):
+    deleted_interest = crud.delete_user_interest(db, user_id, interest)
+    return {"message": "Interest deleted successfully", "deleted_interest": deleted_interest}
+
+@app.put("/update-name/")
+def update_user_name(
+    user_id: str,
+    new_name: str = Header(..., description="New Name"),
+    db: Session = Depends(get_db),
+):
+    updated_user_name = crud.update_user_name(db, user_id, new_name)
+    return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_name}
+
+@app.get("/emotions/{user_id}", response_model=list[schemas.Emotion])
+def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    emotions = crud.get_emotions_for_user(db, user_id=user_id, skip=skip, limit=limit)
+    return emotions
+
+@app.get("/user-info/{user_id}", response_model=schemas.User)
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    user = crud.get_user_info(db, user_id=user_id, skip=skip, limit=limit)
+    return user
+
+@app.get("/interests/{user_id}", response_model=list[schemas.Interest])
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    interests = crud.get_interest_for_user(db, user_id=user_id, skip=skip, limit=limit)
+    return interests
+
+@app.post("/add-user/")
+def add_user_user(
+    owner_id: str,
+    name: str = Header(..., description="Name to Add"),
+    username: str = Header(..., description="Name to Add"),
+    profile_picture: str = Header(..., description="Name to Add"),
+    db: Session = Depends(get_db),
+):
+    new_user = crud.create_user(db, owner_id, username, name, profile_picture)
+    return {"message": "User added successfully", "new_user": new_user}
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)

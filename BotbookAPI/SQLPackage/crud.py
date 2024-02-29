@@ -1,5 +1,7 @@
+from fastapi import HTTPException
+
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, text, update, delete
 from . import models, schemas
 
 import time
@@ -84,3 +86,224 @@ def create_comment(db: Session, post_id: str, author_id: str, username: str, nam
     db.add(comment)
     db.commit()
     db.refresh(comment)
+
+def update_user_interest(db: Session, user_id: str, current_interest: str, new_interest: str):
+    stmt = (
+        update(models.Interest)
+        .where(
+            (models.Interest.userId == user_id) &
+            (models.Interest.interest == current_interest)
+        )
+        .values(interest=new_interest)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
+        db.commit()
+
+        # Fetch the updated result
+        updated_user_interest = db.query(models.Interest).filter(
+            models.Interest.userId == user_id,
+            models.Interest.interest == new_interest
+        ).first()
+
+        if updated_user_interest:
+            return updated_user_interest
+        else:
+            raise HTTPException(status_code=404, detail="User and interest not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
+    
+def create_interest(db: Session, user_id: str, interest: str):
+    user_interest = models.Interest(userId=user_id, interest=interest)
+    db.add(user_interest)
+    db.commit()
+    db.refresh(user_interest)
+    return user_interest
+
+def delete_user_interest(db: Session, user_id: str, interest: str):
+    stmt = (
+        delete(models.Interest)
+        .where(
+            (models.Interest.userId == user_id) &
+            (models.Interest.interest == interest)
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+
+    db.commit()
+
+    deleted_user_interest = db.query(models.Interest).filter(
+            models.Interest.userId == user_id,
+            models.Interest.interest == interest
+        ).first()
+
+    if not deleted_user_interest:
+        pass
+    else:
+        raise HTTPException(status_code=404, detail="User and interest not found")
+    
+def update_user_emotion(db: Session, user_id: str, current_emotion: str, new_emotion: str):
+    stmt = (
+        update(models.Emotion)
+        .where(
+            (models.Emotion.userId == user_id) &
+            (models.Emotion.emotion == current_emotion)
+        )
+        .values(emotion=new_emotion)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
+        db.commit()
+
+        # Fetch the updated result
+        updated_user_emotion = db.query(models.Emotion).filter(
+            models.Emotion.userId == user_id,
+            models.Emotion.emotion == new_emotion
+        ).first()
+
+        if updated_user_emotion:
+            return updated_user_emotion
+        else:
+            raise HTTPException(status_code=404, detail="User and emotion not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
+    
+def create_emotion(db: Session, user_id: str, emotion: str):
+    user_emotion = models.Emotion(userId=user_id, emotion=emotion)
+    db.add(user_emotion)
+    db.commit()
+    db.refresh(user_emotion)
+    return user_emotion
+
+def delete_user_emotion(db: Session, user_id: str, emotion: str):
+    stmt = (
+        delete(models.Emotion)
+        .where(
+            (models.Emotion.userId == user_id) &
+            (models.Emotion.emotion == emotion)
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+    db.commit()
+
+    deleted_user_emotion = db.query(models.Emotion).filter(
+        models.Emotion.userId == user_id,
+        models.Emotion.emotion == emotion
+    ).first()
+
+    if not deleted_user_emotion:
+        pass
+    else:
+        raise HTTPException(status_code=404, detail="User and emotion not found")
+
+
+def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
+    query = text("""
+        SELECT 
+            p.postId,
+            p.authorId,
+            p.body,
+            p.createdAt,
+            u.username,
+            u.name,
+            u.profilePictureFilename
+        FROM posts AS p 
+            INNER JOIN users AS u ON u.userId = p.authorId
+        LIMIT :limit OFFSET :skip
+    """)
+    
+    posts = db.execute(query.bindparams(limit=limit, skip=skip)).fetchall()
+
+    result = [
+        {
+            "postId": post.postId,
+            "authorId": post.authorId,
+            "body": post.body,
+            "createdAt": post.createdAt,
+            "username": post.username,
+            "name": post.name,
+            "profilePictureFilename": post.profilePictureFilename,
+        }
+        for post in posts
+    ]
+
+    return result
+
+def update_user_name(db: Session, user_id: str, new_name):
+    stmt = (
+        update(models.User)
+        .where(
+            (models.User.userId == user_id)
+        )
+        .values(name=new_name)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    try:
+        # Execute the update statement
+        db.execute(stmt)
+
+        # Commit the changes to the database
+        db.commit()
+
+        # Fetch the updated result
+        updated_user_name = db.query(models.User).filter(
+            models.User.userId == user_id
+        ).first()
+
+        if updated_user_name:
+            return updated_user_name
+        else:
+            raise HTTPException(status_code=404, detail="User and emotion not found")
+
+    except Exception as e:
+        # Handle exceptions and rollback changes on error
+        db.rollback()
+        raise e
+    
+def get_emotions_for_user(db: Session, user_id: str, skip: int, limit: int):
+    emotions = db.query(models.Emotion).filter(models.Emotion.userId == user_id).all()
+    
+    return emotions
+
+def get_interest_for_user(db: Session, user_id: str, skip: int, limit: int):
+    interests = db.query(models.Interest).filter(models.Interest.userId == user_id).all()
+    
+    return interests
+
+def get_user_info(db: Session, user_id: str, skip: int, limit: int):
+    user = db.query(models.User).filter(models.User.userId == user_id).first()
+
+    user.createdAt = str(user.createdAt)
+
+    return user
+
+def create_user(db: Session, owner_id: str, username:str, name:str, profile_picture:str):
+    if not profile_picture:
+        profile_picture = "default.jfif"
+
+    user = models.User(ownerId=owner_id, username=username, name=name, createdAt=datetime.now(), profilePictureFilename=profile_picture)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user

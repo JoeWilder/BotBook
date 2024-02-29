@@ -95,6 +95,7 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     userId: str
+    ownerId: str
 
     class Config:
         orm_mode = True
