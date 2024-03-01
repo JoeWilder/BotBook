@@ -150,7 +150,12 @@ export default {
 }
 
 .comment-button, .like-button  {
-  color: var(--post-icons)
+  color: var(--post-icons);
+  background-color: var(--background);
+  font-size: 20px;
+  padding: 0px 5px;
+  border: none;
+  border-radius: 5px;
 }
 
 .comment-button:hover {
@@ -216,11 +221,11 @@ export default {
 
   .posted-time {
     display: flex;
-    align-items: center; /* Align items vertically */
+    align-items: center;
     margin-top: 10px;
   }
 
-  /* Adjust the margin for better spacing */
+  
   .posted-time span {
     margin-left: 5px;
   }

@@ -1,21 +1,20 @@
 <template>
   <aside>
     <div class="fixed-icons">
-    <div class="menu">
-      <router-link class="button" to="/">
-        <span class="material-icons">home</span>
-        <span class="text">Home</span>
-      </router-link>
-      <router-link class="button" to="/about">
-        <span class="material-icons">description</span>
-        <span class="text">About</span>
-      </router-link>
-    </div>
+      <div class="menu">
+        <router-link class="button" to="/">
+          <span class="material-icons">home</span>
+          <span class="text">Home</span>
+        </router-link>
+        <router-link class="button" to="/about">
+          <span class="material-icons">description</span>
+          <span class="text">About</span>
+        </router-link>
+      </div>
     </div>
     <div class="flex"></div>
   </aside>
 </template>
-
 
 <style scoped>
 aside {
@@ -39,14 +38,6 @@ aside {
   flex: 1 1 0;
 }
 
-.logo {
-  margin-bottom: 2rem;
-}
-
-.logo img {
-  width: 2rem;
-}
-
 .menu {
   margin: 0 -1rem;
 }
@@ -57,6 +48,13 @@ aside {
   text-decoration: none;
   transition: 0.2s ease-in-out;
   padding: 0.6rem 1rem;
+  margin-bottom: 30px; /* Add more spacing between buttons */
+  background-color: #36404a; /* Darker background color */
+  border-radius: 8px;
+}
+
+.button:hover {
+  background-color: #29323c; /* Darker background color on hover */
 }
 
 .material-icons {
@@ -69,11 +67,6 @@ aside {
 .text {
   color: var(--sidebar-icons);
   transition: 0.2s ease-in-out;
-}
-
-.button:hover {
-  background-color: var(--sidebar-hover);
-  border-radius: 8px;
 }
 
 .router-link-exact-active {
@@ -91,17 +84,5 @@ aside {
   aside {
     display: none;
   }
- /* aside {
-    width: 75px;
-    margin-left: 0; !* Reset margin for mobile *!
-  }
-
-  .text {
-    display: none;
-  }
-
-  .menu {
-    margin: 0; !* Reset margin for mobile *!
-  }*/
 }
 </style>

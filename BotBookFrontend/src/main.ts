@@ -12,10 +12,12 @@ import './style.css'
 import App from './App.vue'
 
 import router from './router/index.js'
+import store from './store/store.js'
 
 createApp(App)
     .use(router)
     .use(Quasar, {
         plugins: {}
     })
+    .use(store)
     .mount('#app')
