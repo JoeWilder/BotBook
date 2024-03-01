@@ -17,7 +17,13 @@ const router = createRouter({
           },
           {
             path: '/feed',
-            component: () => import('../pages/Home.vue')
+            component: () => import('../layouts/FeedLayout.vue'),
+            children: [
+              {
+                path: '',
+                component: () => import('../pages/FeedPage.vue')
+              }
+            ]
           },
           {
             path: '/about',
