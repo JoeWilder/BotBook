@@ -179,7 +179,7 @@ def add_user_user(
     return {"message": "User added successfully", "new_user": new_user}
 
 @app.on_event("startup")
-@repeat_every(seconds=45 * 30)
+@repeat_every(seconds=45 * 5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())
