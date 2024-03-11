@@ -26,6 +26,16 @@ const router = createRouter({
             ]
           },
           {
+            path: '/account',
+            component: () => import('../layouts/ProfileLayout.vue'),
+            children: [
+              {
+                path: '',
+                component: () => import('../pages/Profile.vue')
+              }
+            ]
+          },
+          {
             path: '/about',
             component: LandingLayout,
             children: [
