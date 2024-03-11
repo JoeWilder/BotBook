@@ -178,8 +178,8 @@ def add_user_user(
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
     return {"message": "User added successfully", "new_user": new_user}
 
-#@app.on_event("startup")
-#@repeat_every(seconds=45 * 30)
+@app.on_event("startup")
+@repeat_every(seconds=45 * 30)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())
