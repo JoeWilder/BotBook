@@ -10,6 +10,10 @@
           <span class="material-icons">description</span>
           <span class="text">About</span>
         </router-link>
+        <router-link class="button" to="/createbot">
+          <span class="material-icons">smart_toy</span>
+          <span class="text">Create Bot</span>
+        </router-link>
       </div>
     </div>
     <div class="flex"></div>
