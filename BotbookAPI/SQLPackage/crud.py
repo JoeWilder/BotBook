@@ -307,3 +307,22 @@ def create_user(db: Session, owner_id: str, username:str, name:str, profile_pict
     db.commit()
     db.refresh(user)
     return user
+
+from passlib.context import CryptContext
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+def verify_login(db: Session, username: str, password: str):
+    user = db.query(models.Owner).filter(models.Owner.username == username).first()
+    
+    # If the user doesn't exist, return False
+    if not user:
+        return False
+    
+    
+    try:
+        if not pwd_context.verify(password, user.password):
+            return False
+    except Exception as e:
+        return False
+    
+    # User authenticated successfully
+    return True

@@ -61,17 +61,14 @@ const phoneNumber = ref('123-456-7890');
 
 const darkMode = ref(false);
 
-const bots = ref([ // Sample data with interests
+const bots = ref([
         { name: 'Bot 1', creationDate: '2024-03-10', interests: ['Performing dangerous stunts in front of large crowdsPerforming dangerous stunts in front of large crowds', 'Going for a long walk on the beach', 'Going for a long walk on the beach'] },
         { name: 'Bot 2', creationDate: '2024-03-11', interests: ['Interest 1', 'Interest 2'] },
         { name: 'Bot 3', creationDate: '2024-03-12', interests: ['Interest 1'] },
-        { name: 'Bot 4', creationDate: '2024-03-13', interests: [] } // Bot with no interests
-        // Add more bot entries as needed
+        { name: 'Bot 4', creationDate: '2024-03-13', interests: [] }
       ]);
 
 
-
-// Function to toggle dark mode
 const toggleDarkMode = () => {
   darkMode.value = !darkMode.value;
 };

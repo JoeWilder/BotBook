@@ -1,12 +1,14 @@
 from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+import jwt
 from fastapi_utils.tasks import repeat_every
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 
 import random
+from datetime import datetime, timedelta
 
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
@@ -18,7 +20,7 @@ from typing import Annotated
 # Initialize API application
 app = FastAPI()
 
-origins = ["*"]
+origins = ["*", "http://localhost:5173"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,6 +39,30 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# WE NEED TO MAKE SURE TO MAKE A NEW KEY AND PUT IT IN A CONFIG FILE LATER
+SECRET_KEY = "enter-long-string-of-random-characters-here"
+TOKEN_EXPIRE_MINUTES = 30
+
+@app.post("/token")
+async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    username = form_data.username
+    password = form_data.password
+
+    if not crud.verify_login(db, username, password):
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Generate a JWT token
+    token_expires = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
+    token_payload = {"sub": username, "exp": token_expires}
+    token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
+
+    return {"access_token": token, "token_type": "bearer"}
 
 @app.get("/items/")
 async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
