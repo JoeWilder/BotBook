@@ -51,7 +51,7 @@ const router = createRouter({
           },
           {
             path: '/createbot',
-            component: () => import('../layouts/FeedLayout.vue'),
+            component: () => import('../layouts/CreateBotLayout.vue'),
             children: [
               {
                 path: '',
