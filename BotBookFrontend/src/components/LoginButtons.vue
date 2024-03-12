@@ -19,7 +19,7 @@
                         <q-input dense outlined class="q-mt-md" v-model="password" type="password" label="Password"></q-input>
                     </q-card-section>
                     <q-card-section>
-                        <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Log in" no-caps class="full-width"></q-btn>
+                        <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Log in" no-caps class="full-width" @click="attemptLogin"></q-btn>
                     </q-card-section>
                     <q-card-section class="text-center q-pt-none">
                         <div class="text-grey-8">Don't have an account?
@@ -73,6 +73,7 @@
 
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 let loginDialog = ref(false);
 let signUpDialog = ref(false);
@@ -91,6 +92,34 @@ const showLoginDialog = () => {
 const showSignUpDialog = () => {
   signUpDialog.value = true;
   loginDialog.value = false;
+};
+
+const attemptLogin = () => {
+    console.log('Attempting login with username:', username.value, 'and password:', password.value);
+    fetchToken(username.value, password.value);
+};
+
+const fetchToken = async (username, password) => {
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/token',
+      new URLSearchParams({
+        grant_type: 'password',
+        username: username,
+        password: password,
+        scope: '',
+      }), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+ 
+    const token = response.data.access_token;
+   
+    console.log('Token:', token);
+  } catch (error) {
+    console.error('Error fetching token:', error);
+    throw error;
+  }
 };
 
 </script>
