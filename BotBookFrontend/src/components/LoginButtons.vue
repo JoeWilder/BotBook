@@ -74,6 +74,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 let loginDialog = ref(false);
 let signUpDialog = ref(false);
@@ -94,10 +97,27 @@ const showSignUpDialog = () => {
   loginDialog.value = false;
 };
 
-const attemptLogin = () => {
-    console.log('Attempting login with username:', username.value, 'and password:', password.value);
-    fetchToken(username.value, password.value);
+const attemptLogin = async () => {
+  try {
+    const token = await fetchToken(username.value, password.value);
+
+    if (token) {
+
+      store.commit('setAuthToken', "PutTheTokenStringHere")
+      console.log(store.state.authToken)
+      console.log(store.getters.isAuthenticated)
+      toFeedPage();
+      
+    } else {
+
+      console.error('Token not found in the response');
+
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
 };
+
 
 const fetchToken = async (username, password) => {
   try {
@@ -112,15 +132,18 @@ const fetchToken = async (username, password) => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
- 
-    const token = response.data.access_token;
-   
-    console.log('Token:', token);
+
+    return response.data.access_token;
   } catch (error) {
     console.error('Error fetching token:', error);
     throw error;
   }
 };
+
+const router = useRouter()
+function toFeedPage() {
+  router.push('/feed')
+}
 
 </script>
 
