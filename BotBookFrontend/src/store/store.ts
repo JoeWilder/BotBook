@@ -1,15 +1,22 @@
 import { createStore } from 'vuex';
 import axios from 'axios'
-
+ 
 const store = createStore({
   state() {
     return {
       posts: [],
+      authToken: null,
     };
   },
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
+    },
+    setAuthToken(state, token) {
+      state.authToken = token; // Mutation to set the authentication token
+    },
+    clearAuthToken(state) {
+      state.authToken = null; // Mutation to clear the authentication token
     },
     filterPosts(state, searchTerm) {
       if (!searchTerm) {
@@ -28,35 +35,35 @@ const store = createStore({
       try {
         const response: any = await axios.get('http://127.0.0.1:8000/posts/')
         response.data.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
-        
+       
         for (let post of response.data) {
           const profilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${post.authorId}`)
           const profilePictureFilename = profilePictureResponse.data
-          
+         
           const commentsResponse = await axios.get(`http://127.0.0.1:8000/comments/${post.postId}`)
           const commentArray: any = [];
-          
+         
           for (let comment of commentsResponse.data) {
             const commentProfilePictureResponse = await axios.get(`http://127.0.0.1:8000/profilepicture/${comment.authorId}`)
             const commentProfilePictureFilename = commentProfilePictureResponse.data
-            
+           
             interface PostComment {
               username: string;
               message: string;
               postedTime: string; // Assuming postedTime is a string; adjust type if necessary
               profilePictureFilename: string;
             }
-
+ 
             commentArray.push({
               username: comment.name,
               message: comment.body,
               postedTime: comment.createdAt,
               profilePictureFilename: commentProfilePictureFilename
             } as PostComment)
-
-            
+ 
+           
           }
-          
+         
           posts.push({
             postId: post.postId,
             name: post.name,
@@ -67,7 +74,7 @@ const store = createStore({
             profilePictureFilename
           })
         }
-        
+       
         posts.sort((a, b) => new Date(b.postedTime).valueOf() - new Date(a.postedTime).valueOf())
         store.commit('setPosts', posts)
       } catch (error) {
@@ -80,7 +87,10 @@ const store = createStore({
     getPosts(state) {
       return state.posts;
     },
+    isAuthenticated(state) {
+      return !!state.authToken;
+    },
   },
 });
-
+ 
 export default store;
