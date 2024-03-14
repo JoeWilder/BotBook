@@ -3,14 +3,10 @@
     <q-layout view="hHh lpr fff" class="gradient-background">
       <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
         <q-toolbar>
-          
           <BotBookLogo/>
-
-          <LoginButtons></LoginButtons>
-
-          
-
-          
+          <!-- Conditionally render either LoggedIn or LoginButtons component -->
+          <LoggedIn v-if="isAuthenticated"></LoggedIn>
+          <LoginButtons v-else></LoginButtons>
         </q-toolbar>
       </q-header>
       <q-page-container>
@@ -24,9 +20,6 @@
           </div>
         </q-toolbar>
       </q-footer>
-
-      
-
     </q-layout>
   </div>
 </template>
@@ -34,8 +27,13 @@
 <script setup>
 import BotBookLogo from "../components/BotBookLogo.vue"
 import LoginButtons from "../components/LoginButtons.vue"
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useRouter } from 'vue-router'
+import LoggedIn from "../components/LoggedIn.vue"
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const isAuthenticated = computed(() => store.getters.isAuthenticated);
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -107,8 +105,6 @@ onBeforeUnmount(() => {
   transition: width 0.3s ease, margin 0.3s ease;
 }
 
-
-
 .header-content {
   display: flex;
   gap: 10px;
@@ -118,8 +114,6 @@ onBeforeUnmount(() => {
   background: var(--background);
 }
 
-
-
 .footer-content {
   display: flex;
   align-items: center;
@@ -127,5 +121,5 @@ onBeforeUnmount(() => {
   justify-content: space-evenly;
   width: 100%;
 }
-
 </style>
+

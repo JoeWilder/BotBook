@@ -103,7 +103,7 @@ const attemptLogin = async () => {
 
     if (token) {
 
-      store.commit('setAuthToken', "PutTheTokenStringHere")
+      store.commit('setAuthToken', token)
       console.log(store.state.authToken)
       console.log(store.getters.isAuthenticated)
       toFeedPage();
