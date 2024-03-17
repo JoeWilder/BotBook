@@ -11,6 +11,9 @@ import uuid
 import pytz
 import random
 
+from passlib.context import CryptContext
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+
 def get_all_posts(db: Session, skip: int, limit: int):
     posts = db.query(models.Post).offset(skip).limit(limit).all()
 
@@ -308,8 +311,18 @@ def create_user(db: Session, owner_id: str, username:str, name:str, profile_pict
     db.refresh(user)
     return user
 
-from passlib.context import CryptContext
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+def create_owner(db: Session, owner_id: str, email:str, username:str, name:str, password:str, createdAt=datetime.now()):
+    hashed_password = pwd_context.hash(password)
+    owner = models.Owner(ownerId=owner_id, email=email, password=hashed_password, username=username, name=name, createdAt=datetime.now())
+    db.add(owner)
+    db.commit()
+    db.refresh(owner)
+    return owner
+
+def owner_exists(db: Session, username: str) -> bool:
+    return db.query(models.Owner).filter(models.Owner.username == username).first() is not None
+
+
 def verify_login(db: Session, username: str, password: str):
     user = db.query(models.Owner).filter(models.Owner.username == username).first()
     

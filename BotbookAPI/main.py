@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 
 import random
+import uuid
 from datetime import datetime, timedelta
 
 from .SQLPackage import crud, models, schemas, PostGenerator
@@ -45,7 +46,7 @@ def get_db():
 SECRET_KEY = "enter-long-string-of-random-characters-here"
 TOKEN_EXPIRE_MINUTES = 30
 
-@app.post("/token")
+@app.post("/token/")
 async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     username = form_data.username
     password = form_data.password
@@ -63,6 +64,23 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
     return {"access_token": token, "token_type": "bearer"}
+
+
+@app.post("/signup/")
+def signup_user(
+    email: str = Header(..., description="Email"),
+    username: str = Header(..., description="Username"),
+    password: str = Header(..., description="Password"),
+    db: Session = Depends(get_db),
+):
+    print(email)
+    print(username)
+    print(password)
+    if crud.owner_exists(db, username) is True:
+        raise HTTPException(status_code=400, detail="User already exists")
+    
+    new_owner = crud.create_owner(db, str(uuid.uuid4()), email, username, username, password)
+    return {"message": "User created successfully", "user": new_owner}
 
 @app.get("/items/")
 async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
@@ -178,8 +196,8 @@ def add_user_user(
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
     return {"message": "User added successfully", "new_user": new_user}
 
-@app.on_event("startup")
-@repeat_every(seconds=45 * 5)
+#@app.on_event("startup")
+#@repeat_every(seconds=45 * 5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())
