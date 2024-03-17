@@ -51,7 +51,9 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     username = form_data.username
     password = form_data.password
 
-    if not crud.verify_login(db, username, password):
+    login_result = crud.verify_login(db, username, password)
+    print(login_result)
+    if login_result is None:
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password",
@@ -60,7 +62,7 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     
     # Generate a JWT token
     token_expires = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
-    token_payload = {"sub": username, "exp": token_expires}
+    token_payload = {"sub": login_result, "exp": token_expires}
     token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
     return {"access_token": token, "token_type": "bearer"}
@@ -195,6 +197,13 @@ def add_user_user(
 ):
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
     return {"message": "User added successfully", "new_user": new_user}
+
+@app.get("/owner/{owner_id}", response_model=schemas.OwnerData)
+def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
+    print("STEP 1 " + owner_id)
+    owner_data = crud.get_owner_data(db, owner_id)
+    print("OWNER DATA: " + str(owner_data))
+    return owner_data
 
 #@app.on_event("startup")
 #@repeat_every(seconds=45 * 5)

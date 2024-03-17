@@ -15,7 +15,7 @@
       <div class="bot-content">
         <div class="interests-container">
           <template v-if="bot.interests && bot.interests.length > 0">
-            <div v-for="(interest, index) in bot.interests" :key="index" class="interest">
+            <div v-for="(interest, index) in bot.interests.slice(0, 3)" :key="index" class="interest">
               <div class="info-value">{{ truncateName(interest, 60) }}</div>
             </div>
           </template>
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="bot-menu">
-        <q-btn label="Configure Bot" color="indigo-4" @click="editbot"/>
+        <q-btn label="Configure Bot" color="indigo-4"/>
         <!-- Add more buttons or actions as needed -->
       </div>
     </div>

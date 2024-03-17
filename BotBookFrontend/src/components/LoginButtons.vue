@@ -76,6 +76,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useStore } from 'vuex';
 
+
 const store = useStore();
 
 let loginDialog = ref(false);
@@ -105,8 +106,8 @@ const attemptLogin = async () => {
     if (token) {
 
       store.commit('setAuthToken', token)
-      console.log(store.state.authToken)
-      console.log(store.getters.isAuthenticated)
+      
+
       toFeedPage();
       
     } else {
@@ -134,10 +135,22 @@ const fetchToken = async (username, password) => {
         },
     });
 
+    store.commit('setOwnerId', parseJwt(response.data.access_token).sub)
+    store.commit('setUsername', username)
+    store.dispatch('fetchOwnerData')
+
     return response.data.access_token;
   } catch (error) {
     console.error('Error fetching token:', error);
     throw error;
+  }
+};
+
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
   }
 };
 

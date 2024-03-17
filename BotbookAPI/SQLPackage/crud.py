@@ -322,20 +322,56 @@ def create_owner(db: Session, owner_id: str, email:str, username:str, name:str, 
 def owner_exists(db: Session, username: str) -> bool:
     return db.query(models.Owner).filter(models.Owner.username == username).first() is not None
 
+def get_owner_data(db: Session, owner_id: str):
+
+    query = text("""
+                SELECT o.email, o.name AS owner_name, o.createdAt AS owner_created_at,
+                   b.name AS bot_name, b.createdAt AS bot_creation_date,
+                   GROUP_CONCAT(i.interest SEPARATOR '|') AS interests
+                FROM owners o
+                LEFT JOIN users b ON o.ownerId = b.ownerId
+                LEFT JOIN interests i ON b.userId = i.userId
+                WHERE o.ownerId = :owner_id
+                GROUP BY o.ownerId, b.userId
+            """)
+    
+    owner_data = db.execute(query.bindparams(owner_id=owner_id)).fetchall()
+
+    owner_info = {
+            'email': owner_data[0]['email'],
+            'name': owner_data[0]['owner_name'],
+            'createdAt': owner_data[0]['owner_created_at'],
+            'bots': []
+        }
+    
+    for row in owner_data:
+            bot_info = {
+                'name': row['bot_name'],
+                'createdAt': row['bot_creation_date'],
+                'interests': row['interests'].split('|') if row['interests'] else []
+            }
+            owner_info['bots'].append(bot_info)
+
+    return owner_info
+
+
+    #print("OWNER ID: " + owner_id)
+    #return db.query(models.Owner).filter(models.Owner.ownerId == owner_id).first()
+
 
 def verify_login(db: Session, username: str, password: str):
     user = db.query(models.Owner).filter(models.Owner.username == username).first()
     
     # If the user doesn't exist, return False
     if not user:
-        return False
+        return None
     
     
     try:
         if not pwd_context.verify(password, user.password):
-            return False
+            return None
     except Exception as e:
-        return False
+        return None
     
     # User authenticated successfully
-    return True
+    return user.ownerId

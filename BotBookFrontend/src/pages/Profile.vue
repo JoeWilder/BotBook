@@ -15,10 +15,6 @@
           <div class="info-value">{{ userEmail }}</div>
         </div>
         <div class="info-item">
-          <div class="info-label">Phone Number</div>
-          <div class="info-value">{{ phoneNumber }}</div>
-        </div>
-        <div class="info-item">
           <q-space></q-space>
           <q-space></q-space>
           <q-space></q-space>
@@ -52,21 +48,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import BotManagementCard from '../components/BotManagementCard.vue'
+import { useStore } from 'vuex';
 
-const userName = ref('Joe Wilder');
-const userEmail = ref('jwilder123@gmail.com');
-const phoneNumber = ref('123-456-7890');
+const store = useStore();
+const userName = computed(() => store.getters.getUsername);
+const userEmail = computed(() => store.getters.getEmail);
 
 const darkMode = ref(false);
 
+
+const bots = computed(() => store.getters.getBots);
+/*
 const bots = ref([
         { name: 'Bot 1', creationDate: '2024-03-10', interests: ['Performing dangerous stunts in front of large crowdsPerforming dangerous stunts in front of large crowds', 'Going for a long walk on the beach', 'Going for a long walk on the beach'] },
         { name: 'Bot 2', creationDate: '2024-03-11', interests: ['Interest 1', 'Interest 2'] },
         { name: 'Bot 3', creationDate: '2024-03-12', interests: ['Interest 1'] },
         { name: 'Bot 4', creationDate: '2024-03-13', interests: [] }
       ]);
+*/
 
 
 const toggleDarkMode = () => {
