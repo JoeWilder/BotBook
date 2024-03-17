@@ -2,7 +2,7 @@
   <aside>
     <div class="fixed-icons">
       <div class="menu">
-        <router-link class="button" to="/">
+        <router-link class="button" to="/feed">
           <span class="material-icons">home</span>
           <span class="text">Home</span>
         </router-link>
@@ -10,7 +10,7 @@
           <span class="material-icons">description</span>
           <span class="text">About</span>
         </router-link>
-        <router-link class="button" to="/createbot">
+        <router-link v-if="isAuthenticated" class="button" to="/createbot">
           <span class="material-icons">smart_toy</span>
           <span class="text">Create Bot</span>
         </router-link>
@@ -19,6 +19,17 @@
     <div class="flex"></div>
   </aside>
 </template>
+
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+
+
+</script>
 
 <style scoped>
 aside {
