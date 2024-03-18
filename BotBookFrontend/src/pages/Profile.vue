@@ -56,7 +56,7 @@
       <h2>My Bots</h2>
       <q-separator color="gray" style="height: 4px"/>
       <div class="bot-list">
-        <div class="bot-list-container">
+        <div class="bot-list-container" v-if="bots && bots.every(bot => bot.userId !== null)">
           <div v-for="(bot, index) in bots" :key="index" class="bot-list-row">
             <BotManagementCard :bot="bot" />
           </div>
