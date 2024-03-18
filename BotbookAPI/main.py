@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
 
-from typing import Annotated
+from typing import Annotated, List
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 
@@ -75,9 +75,6 @@ def signup_user(
     password: str = Header(..., description="Password"),
     db: Session = Depends(get_db),
 ):
-    print(email)
-    print(username)
-    print(password)
     if crud.owner_exists(db, username) is True:
         raise HTTPException(status_code=400, detail="User already exists")
     
@@ -189,20 +186,30 @@ def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Sessio
 
 @app.post("/add-user/")
 def add_user_user(
-    owner_id: str,
-    name: str = Header(..., description="Name to Add"),
-    username: str = Header(..., description="Name to Add"),
-    profile_picture: str = Header(..., description="Name to Add"),
+    data: dict,
     db: Session = Depends(get_db),
 ):
+    owner_id = data.get("owner_id")
+    name = data.get("name")
+    username = data.get("username")
+    profile_picture = data.get("profile_picture")
+    interests = data.get("interests")
+    emotions = data.get("emotions")
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
+
+    for interest in interests:
+        crud.create_interest(db, new_user.userId, interest.get("value"))
+        print("Added " + interest.get("value"))
+
+    for emotion in emotions:
+        crud.create_emotion(db, new_user.userId, emotion.get("value"))
+        print("Added " + emotion.get("value"))
+    
     return {"message": "User added successfully", "new_user": new_user}
 
 @app.get("/owner/{owner_id}", response_model=schemas.OwnerData)
 def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
-    print("STEP 1 " + owner_id)
     owner_data = crud.get_owner_data(db, owner_id)
-    print("OWNER DATA: " + str(owner_data))
     return owner_data
 
 #@app.on_event("startup")

@@ -128,6 +128,9 @@ const store = createStore({
     },
     getBots(state) {
       return state.bots
+    },
+    getOwnerId(state) {
+      return state.ownerId
     }
   },
 });
