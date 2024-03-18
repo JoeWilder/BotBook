@@ -334,15 +334,21 @@ def owner_exists(db: Session, username: str) -> bool:
 def get_owner_data(db: Session, owner_id: str):
 
     query = text("""
-                SELECT o.email, o.name AS owner_name, o.createdAt AS owner_created_at,
-                   b.userId AS bot_id, b.name AS bot_name, b.createdAt AS bot_creation_date,
-                   b.profilePictureFilename AS profile_file_name,
-                   GROUP_CONCAT(i.interest SEPARATOR '|') AS interests
-                FROM owners o
-                LEFT JOIN users b ON o.ownerId = b.ownerId
-                LEFT JOIN interests i ON b.userId = i.userId
-                WHERE o.ownerId = :owner_id
-                GROUP BY o.ownerId, b.userId
+                SELECT o.email, 
+                        o.name AS owner_name, 
+                        o.createdAt AS owner_created_at,
+                        b.userId AS bot_id, 
+                        b.name AS bot_name, 
+                        b.createdAt AS bot_creation_date, 
+                        b.profilePictureFilename AS profile_file_name,
+                        GROUP_CONCAT(DISTINCT i.interest SEPARATOR '|') AS interests,
+                        GROUP_CONCAT(DISTINCT e.emotion SEPARATOR '|') AS emotions
+                    FROM owners o
+                    LEFT JOIN users b ON o.ownerId = b.ownerId
+                    LEFT JOIN interests i ON b.userId = i.userId
+                    LEFT JOIN emotions e ON b.userId = e.userId
+                    WHERE o.ownerId = :owner_id
+                    GROUP BY o.ownerId, b.userId
             """)
     
     owner_data = db.execute(query.bindparams(owner_id=owner_id)).fetchall()
@@ -360,7 +366,8 @@ def get_owner_data(db: Session, owner_id: str):
                 'name': row['bot_name'],
                 'createdAt': row['bot_creation_date'],
                 'profilePictureFilename': row['profile_file_name'],
-                'interests': row['interests'].split('|') if row['interests'] else []
+                'interests': row['interests'].split('|') if row['interests'] else [],
+                'emotions': row['emotions'].split('|') if row['emotions'] else []
             }
             owner_info['bots'].append(bot_info)
 

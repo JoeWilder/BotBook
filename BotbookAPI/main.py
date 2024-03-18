@@ -52,7 +52,6 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     password = form_data.password
 
     login_result = crud.verify_login(db, username, password)
-    print(login_result)
     if login_result is None:
         raise HTTPException(
             status_code=401,
