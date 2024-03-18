@@ -15,14 +15,31 @@
           <div class="info-value">{{ userEmail }}</div>
         </div>
         <div class="info-item">
-          <div class="info-label">Phone Number</div>
-          <div class="info-value">{{ phoneNumber }}</div>
-        </div>
-        <div class="info-item">
           <q-space></q-space>
           <q-space></q-space>
           <q-space></q-space>
-          <q-btn label="Change Password" color="red-3" @click="changePassword" class="info-value"/>
+          <q-btn label="Change Password" color="red-3" @click="changePasswordDialog" class="info-value"/>
+          <q-dialog v-model="passwordChangeDialog">
+            <q-layout view="lHh Lpr lFf">
+                <q-page-container>
+                    <q-page class="flex flex-center">
+                        <q-card class="q-pa-md shadow-2 my_card" bordered>
+                            <q-card-section class="text-center">
+                                <div class="text-grey-9 text-h5 text-weight-bold">Change Password</div>
+                            </q-card-section>
+                            <q-card-section>
+                                <q-input dense outlined class="q-mt-md" v-model="oldPassword" type="password" label="Old Password"></q-input>
+                                <q-input dense outlined class="q-mt-md" v-model="newPassword" type="password" label="New Password"></q-input>
+                                <q-input dense outlined class="q-mt-md" v-model="newPasswordCheck" type="password" label="Re-Enter New Password"></q-input>
+                            </q-card-section>
+                            <q-card-section>
+                                <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Change Password" no-caps class="full-width" @click="attemptPasswordChange"></q-btn>
+                            </q-card-section>
+                        </q-card>
+                    </q-page>
+                </q-page-container>
+            </q-layout>
+        </q-dialog>
           <q-space></q-space>
         </div>
         
@@ -46,27 +63,30 @@
         </div>
       </div>
     </div>
-
-    
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import BotManagementCard from '../components/BotManagementCard.vue'
+import { useStore } from 'vuex';
+import axios from 'axios'
 
-const userName = ref('Joe Wilder');
-const userEmail = ref('jwilder123@gmail.com');
-const phoneNumber = ref('123-456-7890');
+const store = useStore();
+const userName = computed(() => store.getters.getUsername);
+const userEmail = computed(() => store.getters.getEmail);
 
 const darkMode = ref(false);
+const passwordChangeDialog = ref(false);
 
-const bots = ref([
-        { name: 'Bot 1', creationDate: '2024-03-10', interests: ['Performing dangerous stunts in front of large crowdsPerforming dangerous stunts in front of large crowds', 'Going for a long walk on the beach', 'Going for a long walk on the beach'] },
-        { name: 'Bot 2', creationDate: '2024-03-11', interests: ['Interest 1', 'Interest 2'] },
-        { name: 'Bot 3', creationDate: '2024-03-12', interests: ['Interest 1'] },
-        { name: 'Bot 4', creationDate: '2024-03-13', interests: [] }
-      ]);
+
+const bots = computed(() => store.getters.getBots);
+
+const oldPassword = ref("")
+const newPassword = ref("")
+const newPasswordCheck = ref("")
+
+
 
 
 const toggleDarkMode = () => {
@@ -74,9 +94,35 @@ const toggleDarkMode = () => {
 };
 
 // Function to handle changing password
-const changePassword = () => {
-  // Implement password change logic here
+const changePasswordDialog = () => {
+  passwordChangeDialog.value = true
 };
+
+const attemptPasswordChange = async () => {
+
+  console.log("ATTEMPTING")
+  
+  if (newPassword.value != newPasswordCheck.value) {
+    return;
+  }
+
+  console.log("CHANGE")
+
+  try {
+        const response = await axios.post('http://127.0.0.1:8000/verify-password', {
+            owner_id: store.getters.getOwnerId,
+            password: oldPassword.value,
+            new_password: newPassword.value
+        });
+        console.log('Password changed successfully:', response.data.message);
+        return response.data.message;
+    } catch (error) {
+        console.error('Error changing password:', error);
+        throw error;
+    }
+
+}
+
 </script>
 
 <style scoped>

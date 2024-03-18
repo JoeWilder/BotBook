@@ -8,12 +8,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 
 import random
+import uuid
 from datetime import datetime, timedelta
 
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
 
-from typing import Annotated
+from typing import Annotated, List
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 
@@ -45,12 +46,14 @@ def get_db():
 SECRET_KEY = "enter-long-string-of-random-characters-here"
 TOKEN_EXPIRE_MINUTES = 30
 
-@app.post("/token")
+@app.post("/token/")
 async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     username = form_data.username
     password = form_data.password
 
-    if not crud.verify_login(db, username, password):
+    login_result = crud.verify_login(db, username, password)
+    print(login_result)
+    if login_result is None:
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password",
@@ -59,10 +62,46 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     
     # Generate a JWT token
     token_expires = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
-    token_payload = {"sub": username, "exp": token_expires}
+    token_payload = {"sub": login_result, "exp": token_expires}
     token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
     return {"access_token": token, "token_type": "bearer"}
+
+@app.post("/verify-password")
+def verify_password(
+    data: dict,
+    db: Session = Depends(get_db),
+):
+    
+    owner_id = data.get("owner_id")
+    password = data.get("password")
+    new_password = data.get("new_password")
+
+
+    if crud.verify_password(db, owner_id, password, new_password) is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return {"message": "Password successfully change"}
+
+
+
+
+@app.post("/signup/")
+def signup_user(
+    email: str = Header(..., description="Email"),
+    username: str = Header(..., description="Username"),
+    password: str = Header(..., description="Password"),
+    db: Session = Depends(get_db),
+):
+    if crud.owner_exists(db, username) is True:
+        raise HTTPException(status_code=400, detail="User already exists")
+    
+    new_owner = crud.create_owner(db, str(uuid.uuid4()), email, username, username, password)
+    return {"message": "User created successfully", "user": new_owner}
 
 @app.get("/items/")
 async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
@@ -169,14 +208,53 @@ def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Sessio
 
 @app.post("/add-user/")
 def add_user_user(
-    owner_id: str,
-    name: str = Header(..., description="Name to Add"),
-    username: str = Header(..., description="Name to Add"),
-    profile_picture: str = Header(..., description="Name to Add"),
+    data: dict,
     db: Session = Depends(get_db),
 ):
+    owner_id = data.get("owner_id")
+    name = data.get("name")
+    username = data.get("username")
+    profile_picture = data.get("profile_picture")
+    interests = data.get("interests")
+    emotions = data.get("emotions")
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
+
+    for interest in interests:
+        crud.create_interest(db, new_user.userId, interest.get("value"))
+        print("Added " + interest.get("value"))
+
+    for emotion in emotions:
+        crud.create_emotion(db, new_user.userId, emotion.get("value"))
+        print("Added " + emotion.get("value"))
+    
     return {"message": "User added successfully", "new_user": new_user}
+
+@app.delete("/delete-user/")
+def delete_user(
+    data: dict,
+    db: Session = Depends(get_db),
+):
+    userId = data.get("user_id")
+
+    interests = crud.get_interest_for_user(db, userId, 0, 100)
+    for interest in interests:
+        crud.delete_user_interest(db, userId, interest.interest)
+
+    emotions = crud.get_emotions_for_user(db, userId, 0, 100)
+    for emotion in emotions:
+        crud.delete_user_emotion(db, userId, emotion.emotion)
+
+    message = crud.delete_user(db, userId)
+
+    return {"message": "User successfully deleted"}
+
+
+
+@app.get("/owner/{owner_id}", response_model=schemas.OwnerData)
+def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
+    owner_data = crud.get_owner_data(db, owner_id)
+    print(owner_data)
+    return owner_data
 
 @app.on_event("startup")
 @repeat_every(seconds=45 * 5)

@@ -6,6 +6,13 @@ const store = createStore({
     return {
       posts: [],
       authToken: null,
+      ownerId: null,
+      username: null,
+      email: null,
+      name: null,
+      joinDate: null,
+      bots: [],
+
     };
   },
   mutations: {
@@ -13,10 +20,16 @@ const store = createStore({
       state.posts = posts;
     },
     setAuthToken(state, token) {
-      state.authToken = token; // Mutation to set the authentication token
+      state.authToken = token;
     },
     clearAuthToken(state) {
-      state.authToken = null; // Mutation to clear the authentication token
+      state.authToken = null;
+    },
+    setOwnerId(state, ownerId) {
+      state.ownerId = ownerId
+    },
+    setUsername(state, username) {
+      state.username = username;
     },
     filterPosts(state, searchTerm) {
       if (!searchTerm) {
@@ -80,16 +93,45 @@ const store = createStore({
       } catch (error) {
         console.error('Error fetching data:', error)
       }
+    },
+    async fetchOwnerData({ state }) {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/owner/${state.ownerId}`);
+        console.log(response)
+        state.name = response.data.name
+        state.email = response.data.email
+        state.joinDate = response.data.createdAt
+        state.bots = response.data.bots
+      } catch (error) {
+        console.error('Error fetching owner data:', error);
+      }
     }
   },
   getters: {
-    // Optionally, you can define getters to access the posts
     getPosts(state) {
       return state.posts;
     },
     isAuthenticated(state) {
       return !!state.authToken;
     },
+    getUsername(state) {
+      return state.username;
+    },
+    getEmail(state) {
+      return state.email
+    },
+    getName(state) {
+      return state.name
+    },
+    getJoinDate(state) {
+      return state.joinDate
+    },
+    getBots(state) {
+      return state.bots
+    },
+    getOwnerId(state) {
+      return state.ownerId
+    }
   },
 });
  

@@ -99,3 +99,21 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class Bots(BaseModel):
+    userId: str
+    name: str
+    createdAt: datetime
+    profilePictureFilename: str
+    interests: List[str]
+
+class OwnerData(BaseModel):
+    email: str
+    name: str
+    createdAt: datetime
+    bots: List[Bots]
+
+    class Config:
+        orm_mode = True
+

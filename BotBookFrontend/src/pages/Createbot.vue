@@ -11,11 +11,11 @@
           <div class="q-uploader-username-description-container">
             <div class="q-uploader-container">
               <input
+                ref="fileInput"
                 type="file"
-                @change="handleFileUpload"
+                @change="handleFileChange"
                 accept=".png"
                 style="display: none"
-                ref="fileInput"
               />
               <div class="q-uploader-circle" @click="openFileInput">
                 <q-icon v-if="formData.botPicture" :name="null" size="2em" color="white">
@@ -85,6 +85,77 @@
     </q-container>
   </q-page>
 </template>
+
+<script setup>
+
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+
+// Define formData as a ref
+const formData = ref({
+  username: "",
+  botPicture: null,
+  botPictureName: "",
+  emotions: [{ value: "" }],
+  interests: [{ value: "" }],
+});
+
+  function addEmotion() {
+    formData.value.emotions.push({ value: "" });
+  }
+
+  function removeEmotion(index) {
+    formData.value.emotions.splice(index, 1);
+  }
+
+  function addInterest() {
+    formData.value.interests.push({ value: "" });
+  }
+
+  function removeInterest(index) {
+    formData.value.interests.splice(index, 1);
+  }
+
+  function handleFileChange() {
+    files.value = fileInput.value?.files
+  }
+
+  const fileInput = ref(null);
+  function openFileInput() {
+    fileInput.value.click();
+  }
+
+  async function createBot() {
+    console.log(store.getters.getOwnerId)
+    console.log(formData.value.username)
+    console.log(formData.value.emotions)
+    console.log(formData.value.interests)
+    try {
+    const response = await axios.post('http://127.0.0.1:8000/add-user/', {
+      owner_id: store.getters.getOwnerId,
+      name: formData.value.username,
+      username: formData.value.username,
+      profile_picture: "yoda.jfif",
+      interests: formData.value.interests,
+      emotions: formData.value.emotions
+    });
+    
+    console.log('User added successfully:', response.data.new_user);
+    store.dispatch('fetchOwnerData')
+    return response.data.new_user;
+  } catch (error) {
+    console.error('Error adding user:', error);
+    throw error;
+  }
+  }
+
+
+</script>
 
 <style scoped>
 .q-uploader-username-description-container {
@@ -187,70 +258,3 @@
   width: 100px; /* Adjust the width as needed */
 }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      formData: {
-        username: "",
-        botPicture: null,
-        botPictureName: "",
-        emotions: [{ value: "" }],
-        interests: [{ value: "" }],
-      },
-    };
-  },
-  methods: {
-    createBot() {
-      // Handle bot creation logic here
-      // You can make an API request to the server or perform any other actions
-      // Access the bot picture using this.formData.botPicture
-
-      // Show loading indicator while processing
-      this.loading = true;
-
-      // Simulate bot creation success after 2 seconds (replace with actual logic)
-      setTimeout(() => {
-        // Reset loading indicator
-        this.loading = false;
-
-        // Optionally, you can redirect the user to another page
-        // this.$router.push('/bots');
-      }, 2000);
-    },
-    openFileInput() {
-      // Trigger the hidden file input
-      this.$refs.fileInput.click();
-    },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.formData.botPicture = reader.result;
-        };
-        reader.readAsDataURL(file);
-
-        this.formData.botPictureName = file.name;
-      }
-    },
-    addEmotion() {
-      this.formData.emotions.push({ value: "" });
-    },
-
-    removeEmotion(index) {
-      this.formData.emotions.splice(index, 1);
-    },
-
-    addInterest() {
-      this.formData.interests.push({ value: "" });
-    },
-
-    removeInterest(index) {
-      this.formData.interests.splice(index, 1);
-    },
-  },
-};
-</script>

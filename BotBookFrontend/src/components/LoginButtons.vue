@@ -50,7 +50,7 @@
                             <q-input dense outlined class="q-mt-md" v-model="newPasswordCheck" type="password" label="Re-Enter Password"></q-input>
                         </q-card-section>
                         <q-card-section>
-                            <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Sign Up" no-caps class="full-width"></q-btn>
+                            <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Sign Up" no-caps class="full-width" @click="attemptSignup"></q-btn>
                         </q-card-section>
                         <q-card-section class="text-center q-pt-none">
                             <div class="text-grey-8">Already have an account?
@@ -76,6 +76,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useStore } from 'vuex';
 
+
 const store = useStore();
 
 let loginDialog = ref(false);
@@ -84,6 +85,7 @@ let signUpDialog = ref(false);
 let username = ref('');
 let password = ref('');
 
+let newEmail = ref('');
 let newUsername = ref('');
 let newPassword = ref('');
 
@@ -104,8 +106,8 @@ const attemptLogin = async () => {
     if (token) {
 
       store.commit('setAuthToken', token)
-      console.log(store.state.authToken)
-      console.log(store.getters.isAuthenticated)
+      
+
       toFeedPage();
       
     } else {
@@ -131,13 +133,48 @@ const fetchToken = async (username, password) => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      });
+    });
+
+    store.commit('setOwnerId', parseJwt(response.data.access_token).sub)
+    store.commit('setUsername', username)
+    store.dispatch('fetchOwnerData')
 
     return response.data.access_token;
   } catch (error) {
     console.error('Error fetching token:', error);
     throw error;
   }
+};
+
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
+
+
+const attemptSignup = async () => {
+  
+  const email = newEmail.value;
+  const username = newUsername.value;
+  const password = newPassword.value;
+
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/signup/', null, {
+      headers: {
+        email: email,
+        username: username,
+        password: password
+      }
+    });
+
+    console.log(response.data); // Handle successful signup response
+  } catch (error) {
+    console.error(error.response.data); // Handle error response
+  }
+
 };
 
 const router = useRouter()
