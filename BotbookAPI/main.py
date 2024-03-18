@@ -212,8 +212,8 @@ def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
     owner_data = crud.get_owner_data(db, owner_id)
     return owner_data
 
-#@app.on_event("startup")
-#@repeat_every(seconds=45 * 5)
+@app.on_event("startup")
+@repeat_every(seconds=45 * 5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())

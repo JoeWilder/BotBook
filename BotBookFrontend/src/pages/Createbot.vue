@@ -86,7 +86,7 @@
   </q-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'
@@ -154,25 +154,6 @@ const formData = ref({
   }
   }
 
-
-  async function addUser() {
-  try {
-    const response = await axios.post(
-      'http://your-api-url/add-user/',
-      {
-        owner_id: ownerId,
-        name: name,
-        username: username,
-        profile_picture: profilePicture
-      }
-    );
-    console.log('User added successfully:', response.data.new_user);
-    return response.data.new_user;
-  } catch (error) {
-    console.error('Error adding user:', error);
-    throw error;
-  }
-}
 
 </script>
 
