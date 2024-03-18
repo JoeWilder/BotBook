@@ -67,6 +67,28 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
 
     return {"access_token": token, "token_type": "bearer"}
 
+@app.post("/verify-password")
+def verify_password(
+    data: dict,
+    db: Session = Depends(get_db),
+):
+    
+    owner_id = data.get("owner_id")
+    password = data.get("password")
+    new_password = data.get("new_password")
+
+
+    if crud.verify_password(db, owner_id, password, new_password) is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return {"message": "Password successfully change"}
+
+
+
 
 @app.post("/signup/")
 def signup_user(

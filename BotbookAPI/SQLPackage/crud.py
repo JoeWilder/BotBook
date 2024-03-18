@@ -375,3 +375,18 @@ def verify_login(db: Session, username: str, password: str):
     
     # User authenticated successfully
     return user.ownerId
+
+# If correct password, update to new password
+def verify_password(db: Session, owner_id: str, password: str, new_password: str):
+    user = db.query(models.Owner).filter(models.Owner.ownerId == owner_id).first()
+
+    try:
+        if not pwd_context.verify(password, user.password):
+            return None
+    except Exception as e:
+        return None
+
+    user.password = pwd_context.hash(new_password)
+    db.commit()
+    
+    return user.ownerId
