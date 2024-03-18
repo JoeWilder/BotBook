@@ -102,8 +102,10 @@ class User(UserBase):
 
 
 class Bots(BaseModel):
+    userId: str
     name: str
     createdAt: datetime
+    profilePictureFilename: str
     interests: List[str]
 
 class OwnerData(BaseModel):

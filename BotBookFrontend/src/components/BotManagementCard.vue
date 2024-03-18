@@ -2,14 +2,41 @@
     <div class="bot-card">
       <div class="bot-header">
         <div class="header-left">
-          <img src="../assets/ProfilePictures/justinperkins.jpg" class="profile-picture" alt="Profile Picture">
+          <img :src="getProfilePictureUrl()" class="profile-picture" alt="Profile Picture">
           <div>
             <p class="bot-name">{{ truncateName(bot.name, 11) }}</p>
             <p class="creation-date">{{ bot.creationDate }}</p>
           </div>
         </div>
         <div class="header-right">
-          <q-icon name="more_vert" class="icon-more"></q-icon>
+          <q-icon name="more_vert" class="icon-more">
+            <q-menu>
+          <q-list style="min-width: 100px">
+            <q-item clickable v-close-popup @click="openDeleteBotDialog">
+              <q-item-section>Delete Bot</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+          </q-icon>
+          <q-dialog v-model="deleteBotDialog">
+            <q-layout view="lHh Lpr lFf">
+                <q-page-container>
+                    <q-page class="flex flex-center">
+                        <q-card class="q-pa-md shadow-2 my_card" bordered>
+                            <q-card-section class="text-center">
+                                <div class="text-grey-9 text-h5 text-weight-bold">
+                                  <p>You are about to delete {{ bot.name }}</p>
+                                  <p>Are you sure?</p>
+                                </div>
+                            </q-card-section>
+                            <q-card-section>
+                                <q-btn style="border-radius: 8px;" color="red" rounded size="md" label="Delete Bot" no-caps class="full-width" @click="deleteBot"></q-btn>
+                            </q-card-section>
+                        </q-card>
+                    </q-page>
+                </q-page-container>
+            </q-layout>
+        </q-dialog>
         </div>
       </div>
       <div class="bot-content">
@@ -34,26 +61,47 @@
     </div>
   </template>
   
-  <script>
-  export default {
-    props: {
-      bot: {
-        type: Object,
-        required: true
-      }
-    },
-    methods: {
-      editBot() {
-        // Implement edit bot logic
-      },
-      deleteBot() {
-        // Implement delete bot logic
-      },
-      truncateName(name, length) {
-        return name.length > length ? name.slice(0, length) + '...' : name;
-      }
-    }
+  <script setup>
+  import { ref } from 'vue';
+  import axios from 'axios'
+  import { useStore } from 'vuex';
+
+const store = useStore();
+
+  const props = defineProps({
+    bot: Object,
+  });
+
+
+  const getProfilePictureUrl = () => {
+  return new URL(`../assets/ProfilePictures/${props.bot.profilePictureFilename}`, import.meta.url).href
+};
+  
+
+const truncateName = (name, length) => {
+  return name.length > length ? name.slice(0, length) + '...' : name;
+};
+
+const deleteBotDialog = ref(false);
+
+const openDeleteBotDialog = () => {
+  deleteBotDialog.value = true
+};
+
+const deleteBot = async () => {
+  try {
+    const response = await axios.delete('http://127.0.0.1:8000/delete-user/', {
+      data: { user_id: props.bot.userId }
+    });
+    
+    store.dispatch('fetchOwnerData');
+    deleteBotDialog.value = false
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
   }
+}
   </script>
   
   <style scoped>

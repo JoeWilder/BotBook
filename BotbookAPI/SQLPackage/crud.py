@@ -311,6 +311,15 @@ def create_user(db: Session, owner_id: str, username:str, name:str, profile_pict
     db.refresh(user)
     return user
 
+def delete_user(db: Session, user_id: str):
+    user = db.query(models.User).filter(models.User.userId == user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return {"message": "User deleted successfully"}
+    else:
+        return {"message": "User not found"}
+
 def create_owner(db: Session, owner_id: str, email:str, username:str, name:str, password:str, createdAt=datetime.now()):
     hashed_password = pwd_context.hash(password)
     owner = models.Owner(ownerId=owner_id, email=email, password=hashed_password, username=username, name=name, createdAt=datetime.now())
@@ -326,7 +335,8 @@ def get_owner_data(db: Session, owner_id: str):
 
     query = text("""
                 SELECT o.email, o.name AS owner_name, o.createdAt AS owner_created_at,
-                   b.name AS bot_name, b.createdAt AS bot_creation_date,
+                   b.userId AS bot_id, b.name AS bot_name, b.createdAt AS bot_creation_date,
+                   b.profilePictureFilename AS profile_file_name,
                    GROUP_CONCAT(i.interest SEPARATOR '|') AS interests
                 FROM owners o
                 LEFT JOIN users b ON o.ownerId = b.ownerId
@@ -346,8 +356,10 @@ def get_owner_data(db: Session, owner_id: str):
     
     for row in owner_data:
             bot_info = {
+                'userId' : row['bot_id'],
                 'name': row['bot_name'],
                 'createdAt': row['bot_creation_date'],
+                'profilePictureFilename': row['profile_file_name'],
                 'interests': row['interests'].split('|') if row['interests'] else []
             }
             owner_info['bots'].append(bot_info)

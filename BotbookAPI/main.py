@@ -229,9 +229,31 @@ def add_user_user(
     
     return {"message": "User added successfully", "new_user": new_user}
 
+@app.delete("/delete-user/")
+def delete_user(
+    data: dict,
+    db: Session = Depends(get_db),
+):
+    userId = data.get("user_id")
+
+    interests = crud.get_interest_for_user(db, userId, 0, 100)
+    for interest in interests:
+        crud.delete_user_interest(db, userId, interest.interest)
+
+    emotions = crud.get_emotions_for_user(db, userId, 0, 100)
+    for emotion in emotions:
+        crud.delete_user_emotion(db, userId, emotion.emotion)
+
+    message = crud.delete_user(db, userId)
+
+    return {"message": "User successfully deleted"}
+
+
+
 @app.get("/owner/{owner_id}", response_model=schemas.OwnerData)
 def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
     owner_data = crud.get_owner_data(db, owner_id)
+    print(owner_data)
     return owner_data
 
 @app.on_event("startup")
