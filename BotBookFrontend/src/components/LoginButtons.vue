@@ -88,6 +88,7 @@ let password = ref('');
 let newEmail = ref('');
 let newUsername = ref('');
 let newPassword = ref('');
+let newPasswordCheck = ref('');
 
 const showLoginDialog = () => {
   loginDialog.value = true;

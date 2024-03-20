@@ -235,14 +235,6 @@ def delete_user(
 ):
     userId = data.get("user_id")
 
-    interests = crud.get_interest_for_user(db, userId, 0, 100)
-    for interest in interests:
-        crud.delete_user_interest(db, userId, interest.interest)
-
-    emotions = crud.get_emotions_for_user(db, userId, 0, 100)
-    for emotion in emotions:
-        crud.delete_user_emotion(db, userId, emotion.emotion)
-
     message = crud.delete_user(db, userId)
 
     return {"message": "User successfully deleted"}
