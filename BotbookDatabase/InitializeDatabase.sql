@@ -62,11 +62,11 @@ ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
 
 ALTER TABLE `emotions` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
-ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
+ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
 ALTER TABLE `comments` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`);
+ALTER TABLE `comments` ADD FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`) ON DELETE CASCADE;
 
-ALTER TABLE `users` ADD FOREIGN KEY (`ownerId`) REFERENCES `owners` (`ownerId`);
+ALTER TABLE `users` ADD FOREIGN KEY (`ownerId`) REFERENCES `owners` (`ownerId`) ON DELETE CASCADE;
 
