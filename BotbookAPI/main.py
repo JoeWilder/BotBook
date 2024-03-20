@@ -17,6 +17,8 @@ from typing import Annotated
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 
+post_chance = 100
+
 # Initialize API application
 app = FastAPI()
 
@@ -179,47 +181,57 @@ def add_user_user(
     return {"message": "User added successfully", "new_user": new_user}
 
 @app.on_event("startup")
-@repeat_every(seconds=45 * 5)
+@repeat_every(seconds=5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
-    db = next(get_db())
-    try:
-        number_users = crud.get_user_count(db)
-        random_poster = crud.get_random_user(db, number_users)
 
-        print(f"Creating post: {random_poster}")
-        print(random_poster[0][0])
+    post_chance, success_flag = PostGenerator.postAlgorithm(post_chance)
 
-        user_interest = crud.get_user_interest(db, random_poster[0][0])
-        user_emotion = crud.get_user_emotion(db, random_poster[0][0])
+    if (success_flag):
+        print("Generating Post")
 
-        print(user_emotion)
-        print(user_interest)
+        db = next(get_db())
+        try:
+            number_users = crud.get_user_count(db)
+            random_poster = crud.get_random_user(db, number_users)
 
+            print(f"Creating post: {random_poster}")
+            print(random_poster[0][0])
 
-        post_content = PostGenerator.GeneratePost(f"-{str(user_emotion)}", str(user_interest))
-        post = crud.create_post(db, random_poster[0][0], random_poster[0][2], random_poster[0][1], post_content)
+            user_interest = crud.get_user_interest(db, random_poster[0][0])
+            user_emotion = crud.get_user_emotion(db, random_poster[0][0])
 
-        random_number = random.randint(0, 3)
-        print(f"Creating {random_number} comments")
-
-        for i in range(random_number):
-            random_user = crud.get_random_user(db, number_users)
-
-            if (random_user[0][0] == random_poster[0][0]):
-                print("Blocking author from commenting on their own post")
-                continue
-
-            user_emotion = crud.get_user_emotion(db, random_user[0][0])
-            
-            print(f"Creating comment from {random_user}")
             print(user_emotion)
+            print(user_interest)
 
-            comment_content = PostGenerator.GenerateComment(f"-{str(user_emotion)}", post.body)
-            print(f"post: {post}")
-            crud.create_comment(db, post.postId, random_user[0][0], random_user[0][2], random_user[0][1], comment_content)
-        
-    except Exception as e:
-        print(e)
-    finally:
-        db.close()
+
+            post_content = PostGenerator.GeneratePost(f"-{str(user_emotion)}", str(user_interest))
+            post = crud.create_post(db, random_poster[0][0], random_poster[0][2], random_poster[0][1], post_content)
+
+            random_number = random.randint(0, 3)
+            print(f"Creating {random_number} comments")
+
+            for i in range(random_number):
+                random_user = crud.get_random_user(db, number_users)
+
+                if (random_user[0][0] == random_poster[0][0]):
+                    print("Blocking author from commenting on their own post")
+                    continue
+
+                user_emotion = crud.get_user_emotion(db, random_user[0][0])
+                
+                print(f"Creating comment from {random_user}")
+                print(user_emotion)
+
+                comment_content = PostGenerator.GenerateComment(f"-{str(user_emotion)}", post.body)
+                print(f"post: {post}")
+                crud.create_comment(db, post.postId, random_user[0][0], random_user[0][2], random_user[0][1], comment_content)
+            
+        except Exception as e:
+            print(e)
+        finally:
+            db.close()
+    else:
+        print("Failed to Generate Post")
+        print(f"Chance to Post {post_chance}")
+        pass

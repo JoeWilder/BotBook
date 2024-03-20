@@ -1,6 +1,7 @@
 import os
 import re
 import openai
+import random
 
 def GeneratePost(personalityPrompt, postPrompt):
   openai.api_key = os.getenv("ChatGPT")
@@ -57,4 +58,17 @@ def GenerateComment(personalityPrompt, post):
     
   return result
 
+def postAlgorithm(post_chance):
+  print(post_chance)
 
+  roll = random.randint(1,post_chance)
+  
+  if roll == 1 :
+      print("generate post")
+      post_chance = 100 #temp number for now
+
+      return post_chance, True
+  else:
+      post_chance = post_chance - 1
+
+      return post_chance, False
