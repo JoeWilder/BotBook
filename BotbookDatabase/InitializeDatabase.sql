@@ -55,16 +55,17 @@ CREATE TABLE `comments` (
   `createdAt` TIMESTAMP
 );
 
-ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`);
+ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
-ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
+ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
-ALTER TABLE `emotions` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`);
+ALTER TABLE `emotions` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
 ALTER TABLE `posts` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`);
+ALTER TABLE `comments` ADD FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
 ALTER TABLE `comments` ADD FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`ownerId`) REFERENCES `owners` (`ownerId`);
+
