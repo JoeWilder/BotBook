@@ -56,6 +56,7 @@ CREATE TABLE `comments` (
 );
 
 ALTER TABLE `friends` ADD FOREIGN KEY (`followingUserId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
+ALTER TABLE `friends` ADD FOREIGN KEY (`followedUserId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
 ALTER TABLE `interests` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE;
 
