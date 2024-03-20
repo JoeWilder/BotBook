@@ -235,13 +235,13 @@ def delete_user(
 ):
     userId = data.get("user_id")
 
-    interests = crud.get_interest_for_user(db, userId, 0, 100)
-    for interest in interests:
-        crud.delete_user_interest(db, userId, interest.interest)
+    #interests = crud.get_interest_for_user(db, userId, 0, 100)
+    #for interest in interests:
+    #    crud.delete_user_interest(db, userId, interest.interest)
 
-    emotions = crud.get_emotions_for_user(db, userId, 0, 100)
-    for emotion in emotions:
-        crud.delete_user_emotion(db, userId, emotion.emotion)
+    #emotions = crud.get_emotions_for_user(db, userId, 0, 100)
+    #for emotion in emotions:
+    #    crud.delete_user_emotion(db, userId, emotion.emotion)
 
     message = crud.delete_user(db, userId)
 
@@ -255,8 +255,8 @@ def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
     print(owner_data)
     return owner_data
 
-@app.on_event("startup")
-@repeat_every(seconds=45 * 5)
+#@app.on_event("startup")
+#@repeat_every(seconds=45 * 5)
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
     db = next(get_db())
