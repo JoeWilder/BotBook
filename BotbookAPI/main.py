@@ -18,10 +18,10 @@ from typing import Annotated, List
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 
-post_chance = 100
-
 # Initialize API application
 app = FastAPI()
+
+app.post_chance = 75
 
 origins = ["*", "http://localhost:5173"]
 
@@ -254,7 +254,7 @@ def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
 def content_creation_task():
     # We can only query the database from within a fastapi route, so we must make a new session
 
-    post_chance, success_flag = PostGenerator.postAlgorithm(post_chance)
+    app.post_chance, success_flag = PostGenerator.postAlgorithm(app.post_chance)
 
     if (success_flag):
         print("Generating Post")
@@ -302,5 +302,5 @@ def content_creation_task():
             db.close()
     else:
         print("Failed to Generate Post")
-        print(f"Chance to Post {post_chance}")
+        print(f"Chance to Post {app.post_chance}")
         pass
