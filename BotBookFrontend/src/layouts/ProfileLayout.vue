@@ -70,16 +70,19 @@
 </template>
   
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import BotBookLogo from "../components/BotBookLogo.vue"
 import Sidebar from '../components/Sidebar.vue'
+import { useStore } from 'vuex';
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
 
+const store = useStore();
+const userName = computed(() => store.getters.getName);
+const joinDate = computed(() => store.getters.getJoinDate);
+
 const profilePictureUrl = ref('joewilder.jpg');
-const joinDate = ref('January 1, 2022');
-const userName = ref('Joe Wilder');
 const getProfilePictureURL = (filename) => {
   return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
 };
@@ -91,12 +94,10 @@ const scrolled = ref(false);
 const handleScroll = () => {
 
   if (window.scrollY === 0) {
-    console.log("top")
     headerWidth.value = '80vw';
     headerMargin.value = '15px auto 0';
     isAtTop.value = true;
   } else {
-    console.log("not top")
     headerWidth.value = '80vw'
     headerMargin.value = '0px auto 0';
     isAtTop.value = false;

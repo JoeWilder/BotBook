@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 
 class PostResponseBase(BaseModel):
@@ -99,3 +99,22 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class Bots(BaseModel):
+    userId: Optional[str]
+    name: Optional[str]
+    createdAt: Optional[datetime]
+    profilePictureFilename: Optional[str]
+    interests: List[str]
+    emotions: List[str]
+
+class OwnerData(BaseModel):
+    email: str
+    name: str
+    createdAt: datetime
+    bots: Optional[List[Bots]]
+
+    class Config:
+        orm_mode = True
+
