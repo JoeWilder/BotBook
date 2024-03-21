@@ -1,8 +1,9 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
 from fastapi_utils.tasks import repeat_every
+from fastapi.responses import FileResponse
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
@@ -10,6 +11,7 @@ from sqlalchemy.sql import text
 import random
 import uuid
 from datetime import datetime, timedelta
+import os
 
 from .SQLPackage import crud, models, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
@@ -127,6 +129,19 @@ def read_profile_pictures(user_id: str, db: Session = Depends(get_db)):
     filename = crud.get_profile_picture_filename(db, user_id=user_id)
     return filename
 
+
+
+@app.get("/bot-profile-picture/{image_name}")
+async def get_image(image_name: str):
+    file_path = os.path.join(os.getcwd(), "BotbookAPI" + os.path.sep + "BotProfileImages" + os.path.sep + image_name)
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        # Return a 404 Not Found response if the file does not exist
+        return {"message": "404 image not found"}
+
 @app.put("/update-emotion/")
 def update_user_emotion(
     user_id: str,
@@ -219,6 +234,7 @@ def add_user_user(
     interests = data.get("interests")
     emotions = data.get("emotions")
     new_user = crud.create_user(db, owner_id, username, name, profile_picture)
+    print(profile_picture)
 
     for interest in interests:
         crud.create_interest(db, new_user.userId, interest.get("value"))
@@ -229,6 +245,20 @@ def add_user_user(
         print("Added " + emotion.get("value"))
     
     return {"message": "User added successfully", "new_user": new_user}
+
+@app.post("/upload")
+def upload(file: UploadFile = File(...)):
+    try:
+        contents = file.file.read()
+        file_path = os.path.join(os.getcwd(), "BotbookAPI" + os.path.sep + "BotProfileImages" + os.path.sep + file.filename)
+        with open(file_path, 'wb') as f:
+            f.write(contents)
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+    finally:
+        file.file.close()
+
+    return {"message": f"Successfully uploaded {file.filename}"}
 
 @app.delete("/delete-user/")
 def delete_user(

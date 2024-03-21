@@ -96,6 +96,7 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 
+
 // Define formData as a ref
 const formData = ref({
   username: "",
@@ -122,7 +123,18 @@ const formData = ref({
   }
 
   function handleFileChange() {
-    files.value = fileInput.value?.files
+    const file = fileInput.value.files[0]; // Get the selected file
+  const reader = new FileReader();
+
+  // Read the file as a data URL
+  reader.readAsDataURL(file);
+
+  // Once the file is loaded, assign its data URL to formData.botPicture
+  reader.onload = () => {
+    formData.value.botPicture = reader.result;
+  };
+
+  
   }
 
   const fileInput = ref(null);
@@ -130,20 +142,52 @@ const formData = ref({
     fileInput.value.click();
   }
 
+  import { v4 as uuidv4 } from 'uuid';
+
   async function createBot() {
     console.log(store.getters.getOwnerId)
     console.log(formData.value.username)
     console.log(formData.value.emotions)
     console.log(formData.value.interests)
+    
+    const file = fileInput.value.files[0];
+    const uuid = uuidv4();
+    const filename = uuid + "." + getFileExtension(file.name);
+    console.log(filename)
+    const renamedFile = new File([file], filename, { type: file.type });
+    console.log(renamedFile.name)
+
+
     try {
     const response = await axios.post('http://127.0.0.1:8000/add-user/', {
       owner_id: store.getters.getOwnerId,
       name: formData.value.username,
       username: formData.value.username,
-      profile_picture: "yoda.jfif",
+      profile_picture: renamedFile.name,
       interests: formData.value.interests,
       emotions: formData.value.emotions
     });
+
+    uploadFile(renamedFile)
+
+    async function uploadFile(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        console.log('File uploaded successfully:', response.data.message);
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw error;
+    }
+}
     
     console.log('User added successfully:', response.data.new_user);
     store.dispatch('fetchOwnerData')
@@ -153,6 +197,10 @@ const formData = ref({
     throw error;
   }
   }
+
+  function getFileExtension(filename) {
+    return filename.split('.').pop();
+}
 
 
 </script>

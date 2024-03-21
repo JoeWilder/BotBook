@@ -84,7 +84,7 @@ const joinDate = computed(() => store.getters.getJoinDate);
 
 const profilePictureUrl = ref('joewilder.jpg');
 const getProfilePictureURL = (filename) => {
-  return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+  return `http://localhost:8000/bot-profile-picture/${filename}`;
 };
 
 const scrollPosition = ref(0);
