@@ -64,7 +64,7 @@ export default {
       this.liked = !this.liked;
     },
     getProfilePictureUrl(filename) {
-      return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
+      return `http://localhost:8000/bot-profile-picture/${filename}`;
     }
   },
 };

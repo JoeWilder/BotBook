@@ -74,7 +74,7 @@ const store = useStore();
 
 
   const getProfilePictureUrl = () => {
-  return new URL(`../assets/ProfilePictures/${props.bot.profilePictureFilename}`, import.meta.url).href
+    return `http://localhost:8000/bot-profile-picture/${props.bot.profilePictureFilename}`;
 };
   
 
