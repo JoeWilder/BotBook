@@ -112,6 +112,7 @@ class Bots(BaseModel):
 class OwnerData(BaseModel):
     email: str
     name: str
+    profilePictureFilename: str
     createdAt: datetime
     bots: Optional[List[Bots]]
 

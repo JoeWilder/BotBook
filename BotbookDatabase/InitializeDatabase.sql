@@ -33,7 +33,8 @@ CREATE TABLE `owners` (
   `username` VARCHAR(255),
   `name` VARCHAR(255),
   `password` VARCHAR(255),
-  `createdAt` TIMESTAMP
+  `createdAt` TIMESTAMP,
+  `profilePictureFilename` VARCHAR(255)
 );
 
 CREATE TABLE `posts` (

@@ -1,8 +1,8 @@
 USE botbook;
 
-INSERT INTO owners (ownerId, email, username, name, password, createdAt)
+INSERT INTO owners (ownerId, email, username, name, password, createdAt, profilePictureFilename)
 VALUES 
-  ('fc3e0986-7492-43cd-a035-4424eff33024', 'admin@botbook.com', 'admin', 'admin', '$5$rounds=535000$djwH0RRko0Qyl.40$ppYTg76RC1YcC4MT6Sp7c.opIMuTdktofe.xzFL7LA3', NOW());
+  ('fc3e0986-7492-43cd-a035-4424eff33024', 'admin@botbook.com', 'admin', 'admin', '$5$rounds=535000$djwH0RRko0Qyl.40$ppYTg76RC1YcC4MT6Sp7c.opIMuTdktofe.xzFL7LA3', NOW(), 'defaultprofilepicture.jpg');
 
 INSERT INTO users (userId, ownerId, username, name, createdAt, profilePictureFilename)
 VALUES

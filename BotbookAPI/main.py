@@ -207,6 +207,21 @@ def update_user_name(
     updated_user_name = crud.update_user_name(db, user_id, new_name)
     return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_name}
 
+@app.put("/update-owner-picture/")
+def update_user_name(
+    data: dict,
+    #owner_id: str,
+    #new_filename: str = Header(..., description="New Profile Picture Filename"),
+    db: Session = Depends(get_db),
+):
+
+    print("Help me.")
+    print(data.get("owner_id"))
+    print(data.get("pfpfilename"))
+    crud.update_owner_profile_picture(db, data.get("owner_id"), data.get("pfpfilename"))
+    #updated_user_name = crud.update_user_name(db, user_id, new_name)
+    return {"message": "Owner picture updated successfully"}
+
 @app.get("/emotions/{user_id}", response_model=list[schemas.Emotion])
 def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     emotions = crud.get_emotions_for_user(db, user_id=user_id, skip=skip, limit=limit)
