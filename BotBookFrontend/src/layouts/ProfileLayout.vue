@@ -11,7 +11,8 @@
           <!-- Profile section -->
           <div class="profile-section">
             <div class="profile-picture-container">
-              <img :src="getProfilePictureURL(profilePictureUrl)" alt="Profile Picture" class="profile-picture" />
+              <input type="file" @change="handleFileChange" style="display: none;" ref="fileInput">
+              <img :src="getProfilePictureURL()" alt="Profile Picture" class="profile-picture" @click="openFileSelector"/>
             </div>
             <h3>{{ userName }}</h3>
             <p>Member since: {{ joinDate }}</p>
@@ -74,6 +75,8 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import BotBookLogo from "../components/BotBookLogo.vue"
 import Sidebar from '../components/Sidebar.vue'
 import { useStore } from 'vuex';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios'
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -82,9 +85,15 @@ const store = useStore();
 const userName = computed(() => store.getters.getName);
 const joinDate = computed(() => store.getters.getJoinDate);
 
-const profilePictureUrl = ref('joewilder.jpg');
-const getProfilePictureURL = (filename) => {
-  return `http://localhost:8000/bot-profile-picture/${filename}`;
+
+let profilePictureUrl = computed(() => store.getters.getProfilePictureFilename);
+
+console.log("PFP!")
+console.log(profilePictureUrl.value)
+
+const getProfilePictureURL = () => {
+  
+  return `http://localhost:8000/bot-profile-picture/${profilePictureUrl.value}`;
 };
 
 const scrollPosition = ref(0);
@@ -103,6 +112,82 @@ const handleScroll = () => {
     isAtTop.value = false;
   }
 }
+
+
+
+async function handleFileChange() {
+    const file = fileInput.value.files[0]; // Get the selected file
+    const reader = new FileReader();
+
+    console.log("EAIYUFH")
+    console.log(file.name)
+
+    const uuid = uuidv4();
+    const filename = uuid + "." + getFileExtension(file.name);
+    console.log(filename)
+    const renamedFile = new File([file], filename, { type: file.type });
+    console.log(renamedFile.name)
+
+    await uploadFile(renamedFile)
+
+    console.log(store.getters.getOwnerId.value)
+    await updateOwnerPicture(renamedFile.name)
+    store.dispatch('fetchOwnerData')
+
+
+    // Read the file as a data URL
+    reader.readAsDataURL(file);
+    store.commit('setProfilePicture', file.name)
+
+  }
+
+
+  async function updateOwnerPicture(newFilename) {
+     try {
+                const response = await axios.put('http://127.0.0.1:8000/update-owner-picture/', {
+                  owner_id: store.getters.getOwnerId,
+                  pfpfilename: newFilename
+              });
+                console.log(response.data.message); // Log the response message
+                // You can handle the response or perform additional actions here
+            } catch (error) {
+                console.error('Error updating owner picture:', error);
+                // Handle the error or show an error message to the user
+            }
+  }
+
+
+  function getFileExtension(filenameEx) {
+    return filenameEx.split('.').pop();
+}
+
+  const fileInput = ref(null);
+  function openFileSelector() {
+    fileInput.value.click();
+  }
+
+
+  async function uploadFile(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        console.log('File uploaded successfully:', response.data.message);
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw error;
+    }
+}
+
+
+
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);

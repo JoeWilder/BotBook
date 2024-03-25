@@ -14,6 +14,7 @@ class Owner(Base):
     username = Column(String)
     name = Column(String)
     createdAt = Column(DateTime)
+    profilePictureFilename = Column(String)
 
 class User(Base):
     __tablename__ = 'users'

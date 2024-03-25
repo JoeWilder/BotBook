@@ -10,6 +10,7 @@ const store = createStore({
       username: null,
       email: null,
       name: null,
+      profilePictureFilename: null,
       joinDate: null,
       bots: [],
 
@@ -30,6 +31,9 @@ const store = createStore({
     },
     setUsername(state, username) {
       state.username = username;
+    },
+    setProfilePicture(state, pfp) {
+      state.profilePictureFilename = pfp;
     },
     filterPosts(state, searchTerm) {
       if (!searchTerm) {
@@ -97,9 +101,10 @@ const store = createStore({
     async fetchOwnerData({ state }) {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/owner/${state.ownerId}`);
-        console.log(response)
+        console.log(response.data.profilePictureFilename)
         state.name = response.data.name
         state.email = response.data.email
+        state.profilePictureFilename = response.data.profilePictureFilename
         state.joinDate = response.data.createdAt
         state.bots = response.data.bots
       } catch (error) {
@@ -122,6 +127,9 @@ const store = createStore({
     },
     getName(state) {
       return state.name
+    },
+    getProfilePictureFilename(state) {
+      return state.profilePictureFilename
     },
     getJoinDate(state) {
       return state.joinDate

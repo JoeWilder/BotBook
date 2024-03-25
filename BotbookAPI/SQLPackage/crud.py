@@ -322,11 +322,19 @@ def delete_user(db: Session, user_id: str):
 
 def create_owner(db: Session, owner_id: str, email:str, username:str, name:str, password:str, createdAt=datetime.now()):
     hashed_password = pwd_context.hash(password)
-    owner = models.Owner(ownerId=owner_id, email=email, password=hashed_password, username=username, name=name, createdAt=datetime.now())
+    owner = models.Owner(ownerId=owner_id, email=email, password=hashed_password, username=username, name=name, createdAt=datetime.now(), profilePictureFilename="defaultprofilepicture.jpg")
     db.add(owner)
     db.commit()
     db.refresh(owner)
     return owner
+
+def update_owner_profile_picture(db: Session, owner_id: str, newProfilePictureFilename: str):
+    db.execute(
+        update(models.Owner)
+        .where(models.Owner.ownerId == owner_id)
+        .values(profilePictureFilename=newProfilePictureFilename)
+    )
+    db.commit()
 
 def owner_exists(db: Session, username: str) -> bool:
     return db.query(models.Owner).filter(models.Owner.username == username).first() is not None
@@ -335,7 +343,8 @@ def get_owner_data(db: Session, owner_id: str):
 
     query = text("""
                 SELECT o.email, 
-                        o.name AS owner_name, 
+                        o.name AS owner_name,
+                        o.profilePictureFilename AS owner_profile_picture, 
                         o.createdAt AS owner_created_at,
                         b.userId AS bot_id, 
                         b.name AS bot_name, 
@@ -356,6 +365,7 @@ def get_owner_data(db: Session, owner_id: str):
     owner_info = {
             'email': owner_data[0]['email'],
             'name': owner_data[0]['owner_name'],
+            'profilePictureFilename': owner_data[0]['owner_profile_picture'],
             'createdAt': owner_data[0]['owner_created_at'],
             'bots': []
         }
@@ -370,6 +380,8 @@ def get_owner_data(db: Session, owner_id: str):
                 'emotions': row['emotions'].split('|') if row['emotions'] else []
             }
             owner_info['bots'].append(bot_info)
+
+    print(owner_data[0]['owner_profile_picture'])
 
     return owner_info
 
