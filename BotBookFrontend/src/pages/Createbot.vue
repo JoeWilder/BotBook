@@ -124,17 +124,16 @@ const formData = ref({
 
   function handleFileChange() {
     const file = fileInput.value.files[0]; // Get the selected file
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  // Read the file as a data URL
-  reader.readAsDataURL(file);
+    // Read the file as a data URL
+    reader.readAsDataURL(file);
 
-  // Once the file is loaded, assign its data URL to formData.botPicture
-  reader.onload = () => {
-    formData.value.botPicture = reader.result;
-  };
+    // Once the file is loaded, assign its data URL to formData.botPicture
+    reader.onload = () => {
+      formData.value.botPicture = reader.result;
+    };
 
-  
   }
 
   const fileInput = ref(null);

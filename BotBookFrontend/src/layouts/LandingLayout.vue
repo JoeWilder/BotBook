@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-layout view="hHh lpr fff" class="gradient-background">
-      <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
+      <q-header class="q-px-lg justify header titlebar" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
         <q-toolbar>
           <BotBookLogo/>
           <!-- Conditionally render either LoggedIn or LoginButtons component -->
@@ -12,7 +12,7 @@
       <q-page-container>
         <router-view/>
       </q-page-container>
-      <q-footer elevated class="bg-grey-9 text-white">
+      <q-footer elevated class="footer">
         <q-toolbar>
           <div class="footer-content">
             <q-btn flat rounded label="About Us" class="q-pa-sm" @click="toAboutPage"/>
@@ -115,11 +115,21 @@ onBeforeUnmount(() => {
 }
 
 .footer-content {
+  color: var(--text);
   display: flex;
   align-items: center;
   margin: 0 auto;
   justify-content: space-evenly;
   width: 100%;
 }
+
+.titlebar {
+  background-color: var(--titlebar-background);
+}
+
+.footer {
+  background-color: var(--titlebar-background);
+}
+
 </style>
 

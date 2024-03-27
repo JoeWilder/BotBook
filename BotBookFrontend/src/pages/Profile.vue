@@ -49,7 +49,7 @@
         <div class="info-item">
           <div class="info-label">Dark Mode</div>
           <div class="info-value">
-            <q-toggle v-model="darkMode" label="Dark Mode" color="primary" />
+            <q-toggle v-model="darkMode" label="Dark Mode" color="primary" @click="toggleDarkMode"/>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, defineEmits } from 'vue';
 import BotManagementCard from '../components/BotManagementCard.vue'
 import { useStore } from 'vuex';
 import axios from 'axios'
@@ -86,12 +86,22 @@ const oldPassword = ref("")
 const newPassword = ref("")
 const newPasswordCheck = ref("")
 
+const toggleValue = ref(localStorage.getItem("darkMode") === "true");
+const emit = defineEmits(['toggleDarkMode'])
 
 
 
 const toggleDarkMode = () => {
-  darkMode.value = !darkMode.value;
+  localStorage.setItem("darkMode", darkMode.value);
+  window.dispatchEvent(new CustomEvent('dark-mode-update', {
+  detail: {
+    storage: localStorage.getItem('darkMode')
+  }
+}));
 };
+
+
+
 
 // Function to handle changing password
 const changePasswordDialog = () => {

@@ -8,7 +8,7 @@
 </template>
 
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 //import Sidebar from './components/Sidebar.vue'
 //import TitleBar from './components/TitleBar.vue';
@@ -18,6 +18,14 @@ const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');
 const handleToggleChange = () => {
   isDarkMode.value = !isDarkMode.value;
 };
+
+
+
+
+window.addEventListener('dark-mode-update', (event) => {
+    isDarkMode.value = !isDarkMode.value;
+  });
+
 </script>
 
 
@@ -38,7 +46,10 @@ const handleToggleChange = () => {
   --text-bubble-hover: #e0e0e0;
   --app-side-divider: #d7d7d7;
   --searchbar-background: #fff;
-  --searchbar-border: #fff
+  --searchbar-border: #fff;
+  --title-spotlight: #d1e6ec;
+  --secondary-title-spotlight: #f9f9f9;
+  --drawer: #fff
 }
 
 
@@ -62,6 +73,9 @@ const handleToggleChange = () => {
     --searchbar-background: #666666;
     --searchbar-placeholder: #bcbcbc;
     --searchbar-border: #222222;
+    --title-spotlight: #394d52;
+    --secondary-title-spotlight: #222222;
+    --drawer: #1e1e1e;
   }
 
   main {

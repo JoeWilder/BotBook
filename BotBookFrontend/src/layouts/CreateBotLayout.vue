@@ -2,11 +2,11 @@
     <div>
       <q-layout view="hHh LpR fff" class="gradient-background">
         
-        <q-drawer show-if-above dark>
+        <q-drawer show-if-above style="background-color: var(--drawer);">
           <Sidebar/>
         </q-drawer>
 
-      <q-drawer show-if-above side="right" bordered dark/>
+      <q-drawer show-if-above side="right" bordered style="background-color: var(--drawer);"/>
 
 
         <div class="q-pa-md">

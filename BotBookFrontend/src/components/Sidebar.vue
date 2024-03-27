@@ -64,12 +64,12 @@ aside {
   transition: 0.2s ease-in-out;
   padding: 0.6rem 1rem;
   margin-bottom: 30px; /* Add more spacing between buttons */
-  background-color: #36404a; /* Darker background color */
+  background-color: var(--titlebar-background); /* Darker background color */
   border-radius: 8px;
 }
 
 .button:hover {
-  background-color: #29323c; /* Darker background color on hover */
+  background-color: var(--sidebar-highlight); /* Darker background color on hover */
 }
 
 .material-icons {

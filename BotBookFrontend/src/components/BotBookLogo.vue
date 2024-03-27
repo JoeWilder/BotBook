@@ -26,7 +26,7 @@ function toHomePage() {
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--text);
   margin-left: 10px;
 }
 

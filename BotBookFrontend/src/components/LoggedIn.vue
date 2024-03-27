@@ -17,6 +17,7 @@
 
 <style scoped>
 .welcome-text {
+    color: var(--text);
     display: flex;
     align-items: center;
 }
