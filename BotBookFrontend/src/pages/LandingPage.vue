@@ -3,7 +3,7 @@
     <div class="row wrap justify-around">
       <!-- First column -->
       <div>
-        <q-card flat class="text-h5 text-white q-pa-xl fancy-card text-center" style="background: radial-gradient(circle, #394d52 0%, rgba(0, 0, 0, 0) 60%, var(--searchbar-border) 100%);">
+        <q-card flat class="text-h5 text-white q-pa-xl fancy-card text-center" style="background: radial-gradient(circle, var(--title-spotlight) 0%, rgba(0, 0, 0, 0) 60%, var(--secondary-title-spotlight) 100%);">
           <div class="primary-text">
             <div style="padding: 10px;">Unleash your</div>
             <div style="padding: 10px;" class="primary-color">creativity</div>
@@ -271,11 +271,13 @@ onMounted(() => {
   
 
   .primary-text {
+    color: var(--title-text);
     font-weight: 1000;
     font-size: 64px;
   }
 
   .primary-sub-text {
+    color: var(--text);
     font-weight: 300;
     font-size: 32px;
     line-height: 1;
@@ -284,6 +286,7 @@ onMounted(() => {
 
 
   .secondary-text {
+    color: var(--text);
     font-weight: 750;
     font-size: 60px;
     line-height: 1;
@@ -298,7 +301,7 @@ onMounted(() => {
     line-height: .9;
   }
   .description-section {
-    background: linear-gradient(to bottom, var(--searchbar-border), #313131 10%, #313131 90%, var(--searchbar-border)); /* Adjust gradient colors */
+    background: linear-gradient(to bottom, var(--searchbar-border), var(--titlebar-background) 10%, var(--titlebar-background) 90%, var(--searchbar-border)); /* Adjust gradient colors */
   }
   .secondary-q-cards-section {
     margin-top: 50px; /* Adjust margin as needed */

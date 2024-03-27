@@ -193,7 +193,7 @@ function toFeedPage() {
 }
 
 .login-button, .signup-button {
-  color: var(--text-color);
+  color: var(--text);
   font-weight: bold;
 }
 

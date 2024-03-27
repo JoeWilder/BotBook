@@ -1,11 +1,11 @@
 <template>
   <div>
     <q-layout view="hHh LpR fff" class="gradient-background">
-      <q-drawer show-if-above dark>
+      <q-drawer show-if-above style="background-color: var(--drawer);">
         <Sidebar/>
       </q-drawer>
 
-      <q-drawer show-if-above side="right" bordered dark/>
+      <q-drawer show-if-above side="right" style="background-color: var(--drawer);"/>
 
       <div class="q-pa-md">
         <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
@@ -19,9 +19,8 @@
                 rounded
                 outlined
                 hide-bottom-space
-                style="width: 100%; max-width: 400px"
+                style="width: 100%; max-width: 400px;"
                 placeholder="Search"
-                dark
                 @keyup="filterPosts($event)"
               >
                 <template v-slot:append>
@@ -134,6 +133,7 @@ const filterPosts = (event) => {
   flex: 1;
   justify-content: flex-end;
 }
+
 
 </style>
 

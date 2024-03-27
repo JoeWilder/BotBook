@@ -5,6 +5,9 @@ import jwt
 from fastapi_utils.tasks import repeat_every
 from fastapi.responses import FileResponse
 
+from PIL import Image
+from io import BytesIO
+
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 
@@ -265,9 +268,17 @@ def add_user_user(
 def upload(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
+        image = Image.open(BytesIO(contents))
+
+        image.thumbnail((800, 800))  # Resize image to maximum width and height of 800 pixels
+        image_format = image.format  # Preserve original image format
+        compressed_image_buffer = BytesIO()
+        image.save(compressed_image_buffer, format=image_format)
+        compressed_image_contents = compressed_image_buffer.getvalue()
+
         file_path = os.path.join(os.getcwd(), "BotbookAPI" + os.path.sep + "BotProfileImages" + os.path.sep + file.filename)
         with open(file_path, 'wb') as f:
-            f.write(contents)
+            f.write(compressed_image_contents)
     except Exception:
         return {"message": "There was an error uploading the file"}
     finally:

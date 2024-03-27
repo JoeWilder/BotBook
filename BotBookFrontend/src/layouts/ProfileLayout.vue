@@ -3,7 +3,7 @@
       <q-layout view="hHh LpR fff" class="gradient-background">
         
         
-        <q-drawer show-if-above side="left" bordered dark>
+        <q-drawer show-if-above side="left" style="background-color: var(--drawer);">
           <Sidebar/>
         </q-drawer>
 
@@ -276,7 +276,7 @@ onBeforeUnmount(() => {
 
 .profile-section {
   flex: 1; /* Adjust flex value to take up less space */
-  background-color: var(--gradient-background);
+  background-color: var(--drawer);
   color: var(--text);
   border-radius: 30px;
   padding: 20px;
