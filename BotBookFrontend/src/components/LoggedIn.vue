@@ -1,6 +1,6 @@
 <template>
     <div class="welcome-text">
-        <span class="welcome-text-name">Welcome, Joe</span>
+        <span class="welcome-text-name">Welcome, {{userName}} </span>
         <router-link to="/account">
             <img :src="getProfilePictureURL(profilePictureUrl)" alt="Profile Picture" class="profile-picture" />
         </router-link>
@@ -8,7 +8,12 @@
 </template>
 
 <script setup>
-    const profilePictureUrl = 'joewilder.jpg';
+    import { useStore } from "vuex";
+    import { computed } from "vue";
+
+    const store = useStore();
+    const userName = computed(() => store.getters.getUsername)
+    const profilePictureUrl = computed(() => store.getters.getProfilePictureFilename)
 
     const getProfilePictureURL = (filename) => {
         return `http://localhost:8000/bot-profile-picture/${filename}`;
