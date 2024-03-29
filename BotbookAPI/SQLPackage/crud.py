@@ -303,7 +303,7 @@ def get_user_info(db: Session, user_id: str, skip: int, limit: int):
 
 def create_user(db: Session, owner_id: str, username:str, name:str, profile_picture:str):
     if not profile_picture:
-        profile_picture = "default.jfif"
+        profile_picture = "defaultprofilepicture.jpg"
 
     user = models.User(ownerId=owner_id, username=username, name=name, createdAt=datetime.now(), profilePictureFilename=profile_picture)
     db.add(user)
