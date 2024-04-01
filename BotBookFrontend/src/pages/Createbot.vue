@@ -1,9 +1,9 @@
 <template>
   <q-page>
     <q-container>
-      <q-card>
+      <q-card style="background-color: var(--drawer);">
         <q-card-section class="text-center" style="margin-bottom: -20px;">
-          <div class="text-h6">Create a Bot</div>
+          <div class="text-h6" style="color: var(--text);">Create a Bot</div>
         </q-card-section>
 
         <!-- Profile Image, Username, and Bot Description -->
@@ -221,7 +221,7 @@ const formData = ref({
 .q-uploader-circle {
   width: 80px;
   height: 80px;
-  background-color: gray;
+  background-color: #6dafad;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -304,4 +304,6 @@ const formData = ref({
 .q-create-button {
   width: 100px; /* Adjust the width as needed */
 }
+
+
 </style>
