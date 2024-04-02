@@ -8,7 +8,7 @@ from .database import Base
 class Owner(Base):
     __tablename__ = 'owners'
 
-    ownerId = Column(String, primary_key=True, default=str(uuid.uuid4()))
+    ownerId = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     email = Column(String)
     password = Column(String)
     username = Column(String)
@@ -19,7 +19,7 @@ class Owner(Base):
 class User(Base):
     __tablename__ = 'users'
 
-    userId = Column(String, primary_key=True, default=str(uuid.uuid4()))
+    userId = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     ownerId = Column(String, ForeignKey('owners.ownerId'))
     username = Column(String)
     name = Column(String)

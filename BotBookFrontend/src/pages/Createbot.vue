@@ -3,7 +3,7 @@
     <q-container>
       <q-card style="background-color: var(--drawer);">
         <q-card-section class="text-center" style="margin-bottom: -20px;">
-          <div class="text-h6" style="color: var(--text);">Create a Bot</div>
+          <div class="text-h6" style="color: var(--text); font-weight: bold;">Create a Bot</div>
         </q-card-section>
 
         <!-- Profile Image, Username, and Bot Description -->
@@ -23,16 +23,16 @@
                 </q-icon>
                 <q-icon v-else name="add" size="2em" color="white" />
               </div>
-              <div class="q-uploader-file-name">
+              <div class="q-uploader-file-name" :class="{ 'uploaded': formData.botPicture }">
                 {{ formData.botPicture ? formData.botPictureName : 'Add Profile Picture' }}
               </div>
             </div>
             <div class="q-username-description">
               <div class="q-bot-username">
-                <q-input v-model="formData.username" label="Bot Username" dense outlined />
+                <q-input label-color="white" :input-style="{ color: 'var(--text)'}" color="white" v-model="formData.username" label="Bot Username" dense outlined class="white-input"/>
               </div>
               <div class="q-bot-description">
-                <q-input v-model="formData.botDescription" label="Bot Description" dense outlined type="textarea" />
+                <q-input label-color="white" :input-style="{ color: 'var(--text)'}" color="white" v-model="formData.botDescription" label="Bot Description" dense outlined type="textarea" class="white-input"/>
               </div>
             </div>
           </div>
@@ -46,6 +46,9 @@
             <div class="q-column-content">
             <div v-for="(emotion, index) in formData.emotions" :key="index" class="q-input-container">
               <q-input
+                label-color="white"
+                :input-style="{ color: 'var(--text)'}"
+                color="white"
                 v-model="emotion.value"
                 label="Emotion"
                 dense
@@ -64,6 +67,9 @@
             <div class="q-column-content">
             <div v-for="(interest, index) in formData.interests" :key="index" class="q-input-container">
               <q-input
+                label-color="white"
+                :input-style="{ color: 'var(--text)'}"
+                color="white"
                 v-model="interest.value"
                 label="Interest"
                 dense
@@ -77,13 +83,22 @@
           </div>
         </q-card-section>
         <q-card-section class="q-create-button-section">
-    <q-btn color="primary" @click="createBot" class="q-create-button">
+    <q-btn style="background-color: var(--sidebar-accent); color: var(--text);" @click="createBot" class="q-create-button">
       CREATE
     </q-btn>
   </q-card-section>
       </q-card>
     </q-container>
   </q-page>
+  <!-- Success Message Popup -->
+  <q-dialog v-model="successDialog">
+    <q-card class="q-pa-md shadow-2 my_card" bordered>
+      <q-card-section class="text-center">
+        <div class="text-grey-9 text-h5 text-weight-bold">Success!</div>
+        <div class="text-grey-8">Bot Created</div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -94,6 +109,22 @@ import axios from 'axios'
 import { useStore } from 'vuex';
 
 const store = useStore();
+
+let successDialog = ref(false);
+
+const router = useRouter()
+
+function toProfilePage() {
+  router.push('/account')
+}
+
+const showSuccessMessage = () => {
+  successDialog.value = true;
+  setTimeout(() => {
+    successDialog.value = false;
+    toProfilePage(); // After hiding the popup, redirect to account page
+  }, 1500); // Change to desired milliseconds for how long you want to show the message
+};
 
 
 
@@ -123,18 +154,18 @@ const formData = ref({
   }
 
   function handleFileChange() {
-    const file = fileInput.value.files[0]; // Get the selected file
-    const reader = new FileReader();
+  const file = fileInput.value.files[0]; // Get the selected file
+  const reader = new FileReader();
 
-    // Read the file as a data URL
-    reader.readAsDataURL(file);
+  // Read the file as a data URL
+  reader.readAsDataURL(file);
 
-    // Once the file is loaded, assign its data URL to formData.botPicture
-    reader.onload = () => {
-      formData.value.botPicture = reader.result;
-    };
-
-  }
+  // Once the file is loaded, assign its data URL to formData.botPicture
+  reader.onload = () => {
+    formData.value.botPicture = reader.result;
+    formData.value.botPictureName = file.name; // Set botPictureName to the name of the uploaded file
+  };
+}
 
   const fileInput = ref(null);
   function openFileInput() {
@@ -190,6 +221,7 @@ const formData = ref({
     
     console.log('User added successfully:', response.data.new_user);
     store.dispatch('fetchOwnerData')
+    showSuccessMessage();
     return response.data.new_user;
   } catch (error) {
     console.error('Error adding user:', error);
@@ -221,7 +253,7 @@ const formData = ref({
 .q-uploader-circle {
   width: 80px;
   height: 80px;
-  background-color: #6dafad;
+  background-color: var(--sidebar-accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -234,6 +266,7 @@ const formData = ref({
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  background-color: var(--text-bubble);
 }
 
 .q-uploader-file-name {
@@ -241,7 +274,9 @@ const formData = ref({
   text-align: center;
   font-size: 14px;
   margin-left: 10px;
-  color: black;
+  color: var(--text); /* Default text color */
+  max-width: 100px; /* Adjust the maximum width as needed */
+  white-space: normal;
 }
 
 .q-username-description {
@@ -261,6 +296,7 @@ const formData = ref({
   display: flex;
   flex-direction: column;
   align-items: center; /* Center the content in each column */
+  color: var(--text); /* Change text color to white */
 }
 
 .q-emotions-interests-section {
@@ -278,6 +314,7 @@ const formData = ref({
   font-weight: bold;
   margin-bottom: 5px;
   text-align: center;
+  color: var(--text); /* Change text color to white */
 }
 
 .q-input-container {
@@ -305,5 +342,16 @@ const formData = ref({
   width: 100px; /* Adjust the width as needed */
 }
 
+.q-emotion-input,
+.q-interest-input {
+  background-color: var(--text-bubble);
+  border-radius: 8px;
+}
+
+.white-input {
+  background-color: var(--text-bubble);
+  color: var(--text); /* Change text color to black */
+  border-radius: 8px;
+}
 
 </style>
