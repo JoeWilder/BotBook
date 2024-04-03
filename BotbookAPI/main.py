@@ -77,6 +77,7 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
 def verify_password(
     data: dict,
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     
     owner_id = data.get("owner_id")
@@ -151,6 +152,7 @@ def update_user_emotion(
     current_emotion: str = Header(..., description="Current Emotion"),
     new_emotion: str = Header(..., description="New Emotion"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     updated_user_emotion = crud.update_user_emotion(db, user_id, current_emotion, new_emotion)
     return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_emotion}
@@ -160,6 +162,7 @@ def add_user_emotion(
     user_id: str,
     emotion: str = Header(..., description="Emotion to Add"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     new_emotion = crud.create_emotion(db, user_id, emotion)
     return {"message": "Emotion added successfully", "new_emotion": new_emotion}
@@ -169,6 +172,7 @@ def delete_user_emotion(
     user_id: str,
     emotion: str = Header(..., description="Emotion to Delete"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     deleted_Emotion = crud.delete_user_emotion(db, user_id, emotion)
     return {"message": "Interest deleted successfully", "deleted_interest": deleted_Emotion}
@@ -179,6 +183,7 @@ def update_user_interest(
     current_interest: str = Header(..., description="Current Interest"),
     new_interest: str = Header(..., description="New Interest"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     updated_user_interest = crud.update_user_interest(db, user_id, current_interest, new_interest)
     return {"message": "User interest updated successfully", "updated_user_interest": updated_user_interest}
@@ -188,6 +193,7 @@ def add_user_interest(
     user_id: str,
     interest: str = Header(..., description="Interest to Add"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     new_interest = crud.create_interest(db, user_id, interest)
     return {"message": "Interest added successfully", "new_interest": new_interest}
@@ -197,6 +203,7 @@ def delete_user_interest(
     user_id: str,
     interest: str = Header(..., description="Interest to Delete"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     deleted_interest = crud.delete_user_interest(db, user_id, interest)
     return {"message": "Interest deleted successfully", "deleted_interest": deleted_interest}
@@ -206,6 +213,7 @@ def update_user_name(
     user_id: str,
     new_name: str = Header(..., description="New Name"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     updated_user_name = crud.update_user_name(db, user_id, new_name)
     return {"message": "User emotion updated successfully", "updated_user_emotion": updated_user_name}
@@ -216,6 +224,7 @@ def update_user_name(
     #owner_id: str,
     #new_filename: str = Header(..., description="New Profile Picture Filename"),
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
 
     print("Help me.")
@@ -226,17 +235,17 @@ def update_user_name(
     return {"message": "Owner picture updated successfully"}
 
 @app.get("/emotions/{user_id}", response_model=list[schemas.Emotion])
-def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_all_emotions(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Header(..., description="Authorization token")):
     emotions = crud.get_emotions_for_user(db, user_id=user_id, skip=skip, limit=limit)
     return emotions
 
 @app.get("/user-info/{user_id}", response_model=schemas.User)
-def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Header(..., description="Authorization token")):
     user = crud.get_user_info(db, user_id=user_id, skip=skip, limit=limit)
     return user
 
 @app.get("/interests/{user_id}", response_model=list[schemas.Interest])
-def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Header(..., description="Authorization token")):
     interests = crud.get_interest_for_user(db, user_id=user_id, skip=skip, limit=limit)
     return interests
 
@@ -244,6 +253,7 @@ def read_all_interests(user_id: str, skip: int = 0, limit: int = 100, db: Sessio
 def add_user_user(
     data: dict,
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     owner_id = data.get("owner_id")
     name = data.get("name")
@@ -265,7 +275,10 @@ def add_user_user(
     return {"message": "User added successfully", "new_user": new_user}
 
 @app.post("/upload")
-def upload(file: UploadFile = File(...)):
+def upload(
+    file: UploadFile = File(...),
+    token: str = Header(..., description="Authorization token")
+):
     try:
         contents = file.file.read()
         image = Image.open(BytesIO(contents))
@@ -290,6 +303,7 @@ def upload(file: UploadFile = File(...)):
 def delete_user(
     data: dict,
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     userId = data.get("user_id")
 
@@ -300,7 +314,7 @@ def delete_user(
 
 
 @app.get("/owner/{owner_id}", response_model=schemas.OwnerData)
-def get_owner_data_test(owner_id: str, db: Session = Depends(get_db)):
+def get_owner_data_test(owner_id: str, db: Session = Depends(get_db), token: str = Header(..., description="Authorization token")):
     owner_data = crud.get_owner_data(db, owner_id)
     print(owner_data)
     return owner_data
