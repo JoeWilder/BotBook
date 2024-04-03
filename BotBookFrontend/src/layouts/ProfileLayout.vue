@@ -143,17 +143,26 @@ async function handleFileChange() {
 
 
   async function updateOwnerPicture(newFilename) {
+
+
+    const authToken = computed(() => store.getters.getToken)
+    const config = {
+      headers: {
+      'token': authToken.value
+      }
+    }
+
      try {
-                const response = await axios.put('http://127.0.0.1:8000/update-owner-picture/', {
-                  owner_id: store.getters.getOwnerId,
-                  pfpfilename: newFilename
-              });
-                console.log(response.data.message); // Log the response message
-                // You can handle the response or perform additional actions here
-            } catch (error) {
-                console.error('Error updating owner picture:', error);
-                // Handle the error or show an error message to the user
-            }
+        const response = await axios.put('http://127.0.0.1:8000/update-owner-picture/', { 
+          owner_id: store.getters.getOwnerId,
+          pfpfilename: newFilename,
+        }, config);
+        console.log(response.data.message); // Log the response message
+        // You can handle the response or perform additional actions here
+    } catch (error) {
+        console.error('Error updating owner picture:', error);
+        // Handle the error or show an error message to the user
+    }
   }
 
 
@@ -172,9 +181,13 @@ async function handleFileChange() {
         const formData = new FormData();
         formData.append('file', file);
 
+        const authToken = computed(() => store.getters.getToken)
+        
+
         const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'token': authToken.value
             }
         });
 

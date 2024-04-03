@@ -80,6 +80,7 @@ async def generate_token(
 def verify_password(
     data: dict,
     db: Session = Depends(get_db),
+    token: str = Header(..., description="Authorization token")
 ):
     
     owner_id = data.get("owner_id")
@@ -346,8 +347,10 @@ def delete_user(
 def get_owner_data_test(
     owner_id: str, 
     db: Session = Depends(get_db),
-    token: str = Header(..., description="Authorization token")
+    token: str = Header(..., description="Authorization token"),
 ):
+    print("Test")
+    print(token)
     owner_data = crud.get_owner_data(db, owner_id)
     print(owner_data)
     return owner_data
