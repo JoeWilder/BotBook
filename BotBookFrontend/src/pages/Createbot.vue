@@ -88,7 +88,7 @@
 
 <script setup>
 
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useStore } from 'vuex';
@@ -157,13 +157,6 @@ const formData = ref({
     console.log(renamedFile.name)
 
 
-    const authToken = computed(() => store.getters.getToken)
-    const config = {
-      headers: {
-      'token': authToken.value
-      }
-    }
-
     try {
     const response = await axios.post('http://127.0.0.1:8000/add-user/', {
       owner_id: store.getters.getOwnerId,
@@ -172,7 +165,7 @@ const formData = ref({
       profile_picture: renamedFile.name,
       interests: formData.value.interests,
       emotions: formData.value.emotions
-    }, config);
+    });
 
     uploadFile(renamedFile)
 
@@ -183,8 +176,7 @@ const formData = ref({
 
         const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
-                'token': authToken.value
+                'Content-Type': 'multipart/form-data'
             }
         });
 

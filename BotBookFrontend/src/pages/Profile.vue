@@ -118,19 +118,12 @@ const attemptPasswordChange = async () => {
 
   console.log("CHANGE")
 
-  const authToken = computed(() => store.getters.getToken)
-    const config = {
-      headers: {
-      'token': authToken.value
-      }
-    }
-
   try {
         const response = await axios.post('http://127.0.0.1:8000/verify-password', {
             owner_id: store.getters.getOwnerId,
             password: oldPassword.value,
             new_password: newPassword.value
-        }, config);
+        });
         console.log('Password changed successfully:', response.data.message);
         return response.data.message;
     } catch (error) {

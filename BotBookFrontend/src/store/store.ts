@@ -100,14 +100,7 @@ const store = createStore({
     },
     async fetchOwnerData({ state }) {
       try {
-
-        const config = {
-          headers: {
-            'token': `${state.authToken}`,
-          }
-        };
-
-        const response = await axios.get(`http://127.0.0.1:8000/owner/${state.ownerId}`, config);
+        const response = await axios.get(`http://127.0.0.1:8000/owner/${state.ownerId}`);
         console.log(response.data.profilePictureFilename)
         state.name = response.data.name
         state.email = response.data.email
@@ -146,9 +139,6 @@ const store = createStore({
     },
     getOwnerId(state) {
       return state.ownerId
-    },
-    getToken(state) {
-      return state.authToken
     }
   },
 });

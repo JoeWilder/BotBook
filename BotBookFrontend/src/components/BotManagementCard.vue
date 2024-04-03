@@ -62,7 +62,7 @@
   </template>
   
   <script setup>
-  import { ref, computed } from 'vue';
+  import { ref } from 'vue';
   import axios from 'axios'
   import { useStore } from 'vuex';
 
@@ -89,22 +89,10 @@ const openDeleteBotDialog = () => {
 };
 
 const deleteBot = async () => {
-
-
-  const authToken = computed(() => store.getters.getToken)
-  console.log(authToken)
-
-  const config = {
-    headers: {
-    'token': `${authToken}`
-    },
-    data: {
-      user_id: props.bot.userId
-    }
-  }
-
   try {
-    const response = await axios.delete('http://127.0.0.1:8000/delete-user/', config);
+    const response = await axios.delete('http://127.0.0.1:8000/delete-user/', {
+      data: { user_id: props.bot.userId }
+    });
     
     store.dispatch('fetchOwnerData');
     deleteBotDialog.value = false
