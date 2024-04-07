@@ -10,6 +10,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 //import Sidebar from './components/Sidebar.vue'
 //import TitleBar from './components/TitleBar.vue';
 
@@ -18,6 +19,34 @@ const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');
 const handleToggleChange = () => {
   isDarkMode.value = !isDarkMode.value;
 };
+
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
+
+const store = useStore();
+const storedToken = localStorage.getItem('authToken');
+if (storedToken) {
+  console.log("Token found")
+  console.log(storedToken)
+  //console.log(storedToken.access_token)
+  const storedData = JSON.parse(storedToken);
+
+
+
+  console.log(storedData)
+  console.log(storedData.username)
+  store.commit('setAuthToken', storedData.access_token);
+  store.commit('setOwnerId', parseJwt(storedData.access_token).sub)
+  store.commit('setUsername', storedData.username)
+  store.dispatch('fetchOwnerData')
+}
+
+
 
 
 

@@ -11,11 +11,12 @@
           <!-- Profile section -->
           <div class="profile-section">
             <div class="profile-picture-container">
-              <input type="file" @change="handleFileChange" style="display: none;" ref="fileInput">
+              <input type="file" @change="handleFileChange" style="display: none;" ref="fileInput" accept=".png, .jpg">
               <img :src="getProfilePictureURL()" alt="Profile Picture" class="profile-picture" @click="openFileSelector"/>
             </div>
             <h3>{{ userName }}</h3>
-            <p>Member since: {{ joinDate }}</p>
+            <p>Joined BotBook {{ formattedTime() }}</p>
+            <q-btn label="Logout" color="indigo-11" @click="logout" class="info-value"/>
           </div>
         </q-drawer>
 
@@ -24,37 +25,7 @@
         <div>
           <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
             <q-toolbar>
-            <BotBookLogo></BotBookLogo>
-            <div style="
-                flex: 1 1 0%;
-                display: flex;
-                justify-content: center;
-                "
-            >
-                
-            </div>
-            <div
-                style="flex: 1 1 0%; text-align: right;"
-            >
-
-            <q-btn flat icon="menu">
-              <q-menu
-                transition-show="jump-down"
-                transition-hide="jump-up"
-              >
-              <q-list style="min-width: 100px">
-                <!-- Use router-link for navigation -->
-                <router-link class="menu-item" to="/settings">
-                  <q-item clickable>
-                    <span class="material-icons settings-icon">settings</span>
-                    <q-item-section class="menu-item-text">Settings</q-item-section>
-                  </q-item>
-                </router-link>
-              </q-list>
-              </q-menu>
-            </q-btn>
-                
-            </div>
+              <BotBookLogo></BotBookLogo>
             </q-toolbar>
             </q-header>
         </div>
@@ -74,9 +45,14 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import BotBookLogo from "../components/BotBookLogo.vue"
 import Sidebar from '../components/Sidebar.vue'
+import LoggedIn from "../components/LoggedIn.vue"
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
+import moment from 'moment';
+
+const router = useRouter();
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -95,6 +71,10 @@ const getProfilePictureURL = () => {
   
   return `http://localhost:8000/bot-profile-picture/${profilePictureUrl.value}`;
 };
+
+const formattedTime = () => {
+  return moment(joinDate.value).fromNow()
+}
 
 const scrollPosition = ref(0);
 let isAtTop = ref(true);
@@ -200,6 +180,12 @@ async function handleFileChange() {
         console.error('Error uploading file:', error);
         throw error;
     }
+}
+
+
+function logout() {
+  store.commit('logout')
+  router.push('/feed');
 }
 
 

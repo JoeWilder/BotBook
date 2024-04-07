@@ -14,7 +14,7 @@
                 ref="fileInput"
                 type="file"
                 @change="handleFileChange"
-                accept=".png"
+                accept=".png, .jpg"
                 style="display: none"
               />
               <div class="q-uploader-circle" @click="openFileInput">

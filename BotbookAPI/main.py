@@ -71,7 +71,7 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
     token_payload = {"sub": login_result, "exp": token_expires}
     token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "username": username}
 
 @app.post("/verify-password")
 def verify_password(
