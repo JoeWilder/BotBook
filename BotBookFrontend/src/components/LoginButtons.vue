@@ -205,6 +205,8 @@ const fetchToken = async (username, password) => {
     store.commit('setUsername', username)
     store.dispatch('fetchOwnerData')
 
+    localStorage.setItem('authToken', JSON.stringify(response.data));
+
     return response.data.access_token;
   } catch (error) {
     usernamePasswordError.value = false;

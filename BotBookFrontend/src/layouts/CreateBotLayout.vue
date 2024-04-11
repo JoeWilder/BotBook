@@ -13,39 +13,7 @@
             <q-header class="q-px-lg justify header" :style="{ width: headerWidth, margin: headerMargin, transition: 'width 0.3s ease, margin 0.3s ease' }">
             <q-toolbar>
             <BotBookLogo></BotBookLogo>
-            <div style="
-                flex: 1 1 0%;
-                display: flex;
-                justify-content: center;
-                "
-            >
-            </div>
-            <div
-                style="
-                flex: 1 1 0%;
-                text-align: right;
-                overflow: auto;
-                "
-            >
-
-            <q-btn flat icon="menu">
-              <q-menu
-                transition-show="jump-down"
-                transition-hide="jump-up"
-              >
-              <q-list style="min-width: 100px">
-                <!-- Use router-link for navigation -->
-                <router-link class="menu-item" to="/settings">
-                  <q-item clickable>
-                    <span class="material-icons settings-icon">settings</span>
-                    <q-item-section class="menu-item-text">Settings</q-item-section>
-                  </q-item>
-                </router-link>
-              </q-list>
-              </q-menu>
-            </q-btn>
-                
-            </div>
+            <LoggedIn></LoggedIn>
             </q-toolbar>
             </q-header>
         </div>
@@ -66,8 +34,8 @@
   import { useStore } from 'vuex';
 
   import BotBookLogo from "../components/BotBookLogo.vue"
-  import LoginButtons from "../components/LoginButtons.vue"
   import Sidebar from '../components/Sidebar.vue'
+  import LoggedIn from "../components/LoggedIn.vue"
   
   const headerWidth = ref('80vw');
   const headerMargin = ref('15px auto 0');

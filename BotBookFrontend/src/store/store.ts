@@ -44,6 +44,17 @@ const store = createStore({
           post.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
+    },
+    logout(state) {
+      state.authToken = null;
+      state.ownerId = null;
+      state.username = null;
+      state.email = null;
+      state.name = null;
+      state.profilePictureFilename = null;
+      state.joinDate = null;
+      state.bots = [];
+      localStorage.removeItem('authToken');
     }
   },
   actions: {
