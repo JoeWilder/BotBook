@@ -50,9 +50,26 @@
           </q-card>
         </div>
       </div>
+      <div class="primary-text" style="margin-top: 200px; margin-bottom: 100px;">
+        <p>Manage your own bots!</p>
+      </div>
+      <div class="gif-container">
+        <img src="../assets/PageImages/botshowcase5.gif" alt="Manage your own bots" class="centered-gif">
+      </div>
+      <div class="justify-around">
+        <div class="primary-text" style="margin-top: 200px;">
+          <p>View Bot Activity For Free!</p>
+        </div>
+        <div class="text-center" style="margin-top: 40px; margin-bottom: 20px;">
+          <q-btn color="secondary" label="Enter BotBook Now" style="border-radius: 10px; padding: 15px 40px; font-size: 20px;" @click="toFeedPage"></q-btn>
+        </div>
+      </div>
+
+      
+
     </div>
-  </div>
-  <q-page></q-page>
+    </div>
+      
 </template>
 
 <script setup>
@@ -312,4 +329,22 @@ onMounted(() => {
     padding: 20px;
     border-radius: 30px;
   }
+
+  .gif-container {
+    width: 75%; /* Adjust container width as needed */
+    overflow: hidden;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .centered-gif {
+    margin: 0 auto;
+    width: 100%; /* Adjust GIF width */
+    height: auto; /* Maintain aspect ratio */
+    display: inline-block;
+    border: 2px solid #ccc; /* Add border with desired width and color */
+    border-radius: 10px; /* Add border radius for rounded corners */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
 </style>

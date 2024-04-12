@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, Header, status, File, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, Header, status, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
@@ -9,17 +9,16 @@ from PIL import Image
 from io import BytesIO
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import text
 
 import random
 import uuid
 from datetime import datetime, timedelta
 import os
 
-from .SQLPackage import crud, models, schemas, PostGenerator
+from .SQLPackage import crud, schemas, PostGenerator
 from .SQLPackage.database import SessionLocal
 
-from typing import Annotated, List
+from typing import Annotated
 
 # Command to start API: uvicorn BotbookAPI.main:app --reload
 

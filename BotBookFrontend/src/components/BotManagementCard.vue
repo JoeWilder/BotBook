@@ -54,9 +54,10 @@
           </template>
         </div>
       </div>
-      <div class="bot-menu">
-        <q-btn label="Configure Bot" color="indigo-4"/>
-        <!-- Add more buttons or actions as needed -->
+      <div class="bot-menu-container">
+        <div class="bot-menu">
+          <q-btn label="Configure Bot" color="indigo-4" disable/>
+        </div>
       </div>
     </div>
   </template>
@@ -128,6 +129,7 @@ const deleteBot = async () => {
     justify-content: space-between;
     transition: background-color 0.3s ease;
     overflow: hidden;
+    position: relative;
   }
   
   .bot-content {
@@ -185,7 +187,8 @@ const deleteBot = async () => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    flex-grow: 1; /* Allow container to grow */
+    flex-grow: 1;
+    overflow: hidden;
   }
   
   .interest {
@@ -207,10 +210,20 @@ const deleteBot = async () => {
     color: var(--error);
   }
   
+  
   .bot-menu {
     margin-top: 10px; /* Add margin to separate from interests */
     text-align: center;
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
   }
+
+  
   
   .info-value {
     background-color: var(--app-side-divider);
