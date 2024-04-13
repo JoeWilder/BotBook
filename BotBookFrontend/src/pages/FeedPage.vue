@@ -1,7 +1,5 @@
 <template>
-  <q-page>
-    
-    <div class="post-container">
+    <div class="post-container q-px-xl">
       <div class="post-list">
         <div v-if="posts.length === 0" class="no-content-message">
           <p>Sorry, there is no content yet. Please come back later.</p>
@@ -35,8 +33,6 @@
         </div>
       </div>
     </div>
-
-  </q-page>
 </template>
 
 <script setup>
@@ -82,7 +78,6 @@ onMounted(() => {
 .post-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Minimum height to fill the viewport */
 }
 
 

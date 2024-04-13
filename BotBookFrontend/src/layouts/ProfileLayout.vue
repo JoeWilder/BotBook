@@ -3,13 +3,13 @@
       <q-layout view="hHh LpR fff" class="gradient-background">
         
         
-        <q-drawer show-if-above side="left" style="background-color: var(--drawer);">
-          <Sidebar/>
+        <q-drawer v-model="showLeftDrawer" :mini=miniMode show-if-above side="left" style="background-color: var(--drawer);" class="sidebar-left">
+          <Sidebar v-if="!miniMode"/>
         </q-drawer>
 
-        <q-drawer show-if-above side="right" style="background-color: var(--background);">
+        <q-drawer v-model="showRightDrawer" show-if-above side="right" style="background-color: var(--background);">
           <!-- Profile section -->
-          <div class="profile-section">
+          <div class="profile-section" v-if="!miniStateRight">
             <div class="profile-picture-container">
               <input type="file" @change="handleFileChange" style="display: none;" ref="fileInput" accept=".png, .jpg">
               <img :src="getProfilePictureURL()" alt="Profile Picture" class="profile-picture" @click="openFileSelector"/>
@@ -42,7 +42,7 @@
 </template>
   
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watchEffect } from 'vue';
 import BotBookLogo from "../components/BotBookLogo.vue"
 import Sidebar from '../components/Sidebar.vue'
 import LoggedIn from "../components/LoggedIn.vue"
@@ -53,6 +53,8 @@ import axios from 'axios'
 import moment from 'moment';
 
 const router = useRouter();
+const showLeftDrawer = ref(false)
+const showRightDrawer = ref(false)
 
 const headerWidth = ref('80vw');
 const headerMargin = ref('15px auto 0');
@@ -64,8 +66,22 @@ const joinDate = computed(() => store.getters.getJoinDate);
 
 let profilePictureUrl = computed(() => store.getters.getProfilePictureFilename);
 
-console.log("PFP!")
-console.log(profilePictureUrl.value)
+let miniState = ref(false)
+
+let miniStateRight = ref(false)
+
+const isVerticalMode = ref(false)
+
+const miniMode = computed(() => {
+  console.log(isVerticalMode.value)
+  return isVerticalMode.value ? true : false;
+});
+
+const handleResize = () => {
+  console.log("RESIZE")
+  isVerticalMode.value = window.innerHeight > window.innerWidth;
+};
+
 
 const getProfilePictureURL = () => {
   
@@ -191,12 +207,16 @@ function logout() {
 
 
 
+
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', handleResize);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', handleResize);
 });
    
   </script>

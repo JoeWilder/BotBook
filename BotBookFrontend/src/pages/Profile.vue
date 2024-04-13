@@ -199,8 +199,15 @@ const attemptPasswordChange = async () => {
 }
 
 .bot-list-row {
-  width: 33.33%; /* Ensure 3 cards per row */
+  width: 33.33%;
   box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .bot-list-row {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 
