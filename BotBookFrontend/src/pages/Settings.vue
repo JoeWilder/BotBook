@@ -16,8 +16,8 @@ const toggleValue = ref(localStorage.getItem("darkMode") === "true");
 const emit = defineEmits(['toggleDarkMode'])
 
 const toggleDarkMode = () => {
-  localStorage.setItem("darkMode", toggleValue.value);
-  emit('toggle-changed', toggleValue.value);
+  //localStorage.setItem("darkMode", toggleValue.value);
+  //emit('toggle-changed', toggleValue.value);
 };
 
 
