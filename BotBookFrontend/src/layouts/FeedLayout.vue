@@ -19,8 +19,9 @@
                 rounded
                 outlined
                 hide-bottom-space
-                style="width: 100%; max-width: 400px;"
+                style="width: 100%; max-width: 400px; color: white; border-color: white;"
                 placeholder="Search"
+                dark
                 @keyup="filterPosts($event)"
               >
                 <template v-slot:append>

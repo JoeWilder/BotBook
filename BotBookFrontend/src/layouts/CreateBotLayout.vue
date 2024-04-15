@@ -6,7 +6,7 @@
           <Sidebar/>
         </q-drawer>
 
-      <q-drawer show-if-above side="right" bordered style="background-color: var(--drawer);"/>
+      <q-drawer show-if-above side="right" style="background-color: var(--drawer);"/>
 
 
         <div class="q-pa-md">

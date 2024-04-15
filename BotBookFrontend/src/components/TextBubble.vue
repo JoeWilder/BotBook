@@ -13,9 +13,8 @@
         />
       </div>
       <div class="post-header">
-        <div class="post-header-text"> {{ name }}<span class="post-headerSpecial">
-            <span class="material-icons post__badge"> verified </span> {{ username }}
-          </span>
+        <div class="post-header-text"> {{ name }}
+          <span class="post-headerSpecial"></span>
         </div>
       </div>
       <div class="post-header-description">

@@ -49,15 +49,19 @@
         <div class="info-item">
           <div class="info-label">Dark Mode</div>
           <div class="info-value">
-            <q-toggle v-model="darkMode" label="Dark Mode" color="primary" @click="toggleDarkMode"/>
+            <q-toggle v-model="toggleValue" label="Dark Mode" color="primary" @click="toggleDarkMode"/>
           </div>
         </div>
       </div>
-      <h2>My Bots</h2>
+      <div class="row wrap" style="justify-content: space-between; align-items: center;">
+        <h2>My Bots</h2>
+        <q-select rounded standout v-model="model" :options="sortByOptions" label="Filter" style="max-width: 200px; width: 200px; margin-top: 15px;" bg-color="blue-2" :display-value="`${sortBy}`"/>
+      </div>
+      
       <q-separator color="gray" style="height: 4px"/>
       <div class="bot-list">
-        <div class="bot-list-container" v-if="bots && bots.every(bot => bot.userId !== null)">
-          <div v-for="(bot, index) in bots" :key="index" class="bot-list-row">
+        <div class="bot-list-container" v-if="filteredBots && filteredBots.every(bot => bot.userId !== null)">
+          <div v-for="(bot, index) in filteredBots" :key="index" class="bot-list-row">
             <BotManagementCard :bot="bot" />
           </div>
         </div>
@@ -67,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineEmits } from 'vue';
+import { ref, computed, defineEmits, watch } from 'vue';
 import BotManagementCard from '../components/BotManagementCard.vue'
 import { useStore } from 'vuex';
 import axios from 'axios'
@@ -79,8 +83,26 @@ const userEmail = computed(() => store.getters.getEmail);
 const darkMode = ref(false);
 const passwordChangeDialog = ref(false);
 
+const model = ref(null)
 
 const bots = computed(() => store.getters.getBots);
+
+const sortByOptions = ['Alphabetical', 'Creation Date'];
+const sortBy = ref(sortByOptions[0]);
+
+watch(model, (newValue) => {
+  if (newValue === 'Alphabetical' || newValue === 'Creation Date') {
+    sortBy.value = newValue;
+  }
+});
+
+const filteredBots = computed(() => {
+  if (sortBy.value === 'Alphabetical') {
+    return bots.value.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy.value === 'Creation Date') {
+    return bots.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+});
 
 const oldPassword = ref("")
 const newPassword = ref("")
@@ -92,7 +114,7 @@ const emit = defineEmits(['toggleDarkMode'])
 
 
 const toggleDarkMode = () => {
-  localStorage.setItem("darkMode", darkMode.value);
+  localStorage.setItem("darkMode", toggleValue.value);
   window.dispatchEvent(new CustomEvent('dark-mode-update', {
   detail: {
     storage: localStorage.getItem('darkMode')
@@ -109,14 +131,11 @@ const changePasswordDialog = () => {
 };
 
 const attemptPasswordChange = async () => {
-
-  console.log("ATTEMPTING")
   
   if (newPassword.value != newPasswordCheck.value) {
     return;
   }
 
-  console.log("CHANGE")
 
   const authToken = computed(() => store.getters.getToken)
     const config = {
@@ -131,7 +150,7 @@ const attemptPasswordChange = async () => {
             password: oldPassword.value,
             new_password: newPassword.value
         }, config);
-        console.log('Password changed successfully:', response.data.message);
+        console.log('Password changed successfully');
         return response.data.message;
     } catch (error) {
         console.error('Error changing password:', error);

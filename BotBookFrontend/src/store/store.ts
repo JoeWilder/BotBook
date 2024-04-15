@@ -109,7 +109,7 @@ const store = createStore({
         console.error('Error fetching data:', error)
       }
     },
-    async fetchOwnerData({ state }) {
+    async fetchOwnerData({ state, commit }) {
       try {
 
         const config = {
@@ -127,6 +127,7 @@ const store = createStore({
         state.bots = response.data.bots
       } catch (error) {
         console.error('Error fetching owner data:', error);
+        commit("logout")
       }
     }
   },
