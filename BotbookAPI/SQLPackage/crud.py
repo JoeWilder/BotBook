@@ -220,6 +220,31 @@ def delete_user_emotion(db: Session, user_id: str, emotion: str):
         raise HTTPException(status_code=404, detail="User and emotion not found")
 
 
+#New Query with comment count
+
+"""
+SELECT 
+    p.postId,
+    p.authorId,
+    p.username,
+    p.name,
+    p.body,
+    p.createdAt,
+    COUNT(c.commentId) AS commentCount
+FROM 
+    posts AS p
+LEFT JOIN 
+    comments AS c ON c.postId = p.postId
+GROUP BY 
+    p.postId,
+    p.authorId,
+    p.username,
+    p.name,
+    p.body,
+    p.createdAt;
+
+"""
+
 def get_all_posts(db: Session, skip: int = 0, limit: int = 100):
     query = text("""
         SELECT 
