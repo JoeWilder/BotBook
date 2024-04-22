@@ -90,10 +90,19 @@ const posts = [
 ];
 
 
+
+
 let currentPostIndex = 0;
 let name = ref(posts[0].name)
 let message = ref(posts[0].message)
 let profilePictureFilename = ref(posts[0].profilePictureFilename)
+
+// Preload images
+for(let i=0;i < posts.length; i++) {
+  let img = new Image()
+  img.src = new URL(`../assets/ProfilePictures/${posts[i].profilePictureFilename}`, import.meta.url).href
+  console.log(img)
+}
 
 function handleFinishedTyping() {
 

@@ -28,9 +28,9 @@
                                 <div class="text-grey-9 text-h5 text-weight-bold">Change Password</div>
                             </q-card-section>
                             <q-card-section>
-                                <q-input dense outlined class="q-mt-md" v-model="oldPassword" type="password" label="Old Password"></q-input>
+                                <q-input dense outlined class="q-mt-md" v-model="oldPassword" type="password" label="Old Password" :error="oldPasswordError !== null" :error-message="oldPasswordError"></q-input>
                                 <q-input dense outlined class="q-mt-md" v-model="newPassword" type="password" label="New Password"></q-input>
-                                <q-input dense outlined class="q-mt-md" v-model="newPasswordCheck" type="password" label="Re-Enter New Password"></q-input>
+                                <q-input dense outlined class="q-mt-md" v-model="newPasswordCheck" type="password" label="Re-Enter New Password" :error="passwordChangeError !== null" :error-message="passwordChangeError"></q-input>
                             </q-card-section>
                             <q-card-section>
                                 <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Change Password" no-caps class="full-width" @click="attemptPasswordChange"></q-btn>
@@ -39,6 +39,14 @@
                     </q-page>
                 </q-page-container>
             </q-layout>
+        </q-dialog>
+        <q-dialog v-model="successDialog">
+          <q-card class="q-pa-md shadow-2 my_card" bordered>
+            <q-card-section class="text-center">
+              <div class="text-grey-9 text-h5 text-weight-bold">Success!</div>
+              <div class="text-grey-8">Your password has been changed.</div>
+            </q-card-section>
+          </q-card>
         </q-dialog>
           <q-space></q-space>
         </div>
@@ -82,6 +90,14 @@ const userEmail = computed(() => store.getters.getEmail);
 
 const darkMode = ref(false);
 const passwordChangeDialog = ref(false);
+let successDialog = ref(false);
+
+const showSuccessMessage = () => {
+  successDialog.value = true;
+  setTimeout(() => {
+    successDialog.value = false;
+  }, 2000);
+};
 
 const model = ref(null)
 
@@ -89,6 +105,8 @@ const bots = computed(() => store.getters.getBots);
 
 const sortByOptions = ['Alphabetical', 'Creation Date'];
 const sortBy = ref(sortByOptions[0]);
+
+
 
 watch(model, (newValue) => {
   if (newValue === 'Alphabetical' || newValue === 'Creation Date') {
@@ -107,6 +125,11 @@ const filteredBots = computed(() => {
 const oldPassword = ref("")
 const newPassword = ref("")
 const newPasswordCheck = ref("")
+
+const passwordChangeError = ref(null)
+const passwordChangeErrorMessage = ref("")
+
+const oldPasswordError = ref(null)
 
 const toggleValue = ref(localStorage.getItem("darkMode") === "true");
 const emit = defineEmits(['toggleDarkMode'])
@@ -133,6 +156,8 @@ const changePasswordDialog = () => {
 const attemptPasswordChange = async () => {
   
   if (newPassword.value != newPasswordCheck.value) {
+    passwordChangeError.value = "Passwords must match"
+    passwordChangeErrorMessage.value = "Passwords do not match"
     return;
   }
 
@@ -151,11 +176,14 @@ const attemptPasswordChange = async () => {
             new_password: newPassword.value
         }, config);
         console.log('Password changed successfully');
+        showSuccessMessage()
         return response.data.message;
     } catch (error) {
         console.error('Error changing password:', error);
-        throw error;
+        oldPasswordError.value = "Old password is incorrect"
     }
+
+  
 
 }
 

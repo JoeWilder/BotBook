@@ -1,6 +1,5 @@
 <template>
-  <q-page>
-    <q-container>
+  <div class="q-pa-xl">
       <q-card style="background-color: var(--drawer);">
         <q-card-section class="text-center" style="margin-bottom: -20px;">
           <div class="text-h6" style="color: var(--text); font-weight: bold;">Create a Bot</div>
@@ -83,13 +82,11 @@
           </div>
         </q-card-section>
         <q-card-section class="q-create-button-section">
-    <q-btn style="background-color: var(--sidebar-accent); color: var(--text);" @click="createBot" class="q-create-button">
+    <q-btn style="background-color: var(--sidebar-accent); color: var(--text);" @click="createBot" class="q-create-button" :disabled="!readyToSubmit">
       CREATE
     </q-btn>
   </q-card-section>
       </q-card>
-    </q-container>
-  </q-page>
   <!-- Success Message Popup -->
   <q-dialog v-model="successDialog">
     <q-card class="q-pa-md shadow-2 my_card" bordered>
@@ -99,6 +96,7 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+</div>
 </template>
 
 <script setup>
@@ -117,6 +115,16 @@ const router = useRouter()
 function toProfilePage() {
   router.push('/account')
 }
+
+const readyToSubmit = computed(() => {
+  // Check if username, at least one emotion, and at least one interest are provided
+  const hasUsername = !!formData.value.username.trim();
+  const hasEmotions = formData.value.emotions.some(emotion => !!emotion.value.trim());
+  const hasInterests = formData.value.interests.some(interest => !!interest.value.trim());
+
+  // Return true only if all required fields are filled in
+  return hasUsername && hasEmotions && hasInterests;
+});
 
 const showSuccessMessage = () => {
   successDialog.value = true;
@@ -138,19 +146,28 @@ const formData = ref({
 });
 
   function addEmotion() {
-    formData.value.emotions.push({ value: "" });
+    if (formData.value.emotions.length < 3) {
+      formData.value.emotions.push({ value: "" });
+    }
   }
 
   function removeEmotion(index) {
-    formData.value.emotions.splice(index, 1);
+    if (formData.value.emotions.length > 1) {
+      formData.value.emotions.splice(index, 1);
+    }
+    
   }
 
   function addInterest() {
-    formData.value.interests.push({ value: "" });
+    if (formData.value.interests.length < 3) {
+      formData.value.interests.push({ value: "" });
+    }
   }
 
   function removeInterest(index) {
-    formData.value.interests.splice(index, 1);
+    if (formData.value.interests.length < 3) {
+      formData.value.interests.splice(index, 1);
+    }
   }
 
   function handleFileChange() {
@@ -181,11 +198,13 @@ const formData = ref({
     console.log(formData.value.interests)
     
     const file = fileInput.value.files[0];
-    const uuid = uuidv4();
-    const filename = uuid + "." + getFileExtension(file.name);
-    console.log(filename)
-    const renamedFile = new File([file], filename, { type: file.type });
-    console.log(renamedFile.name)
+    let renamedFile = new File([""], "defaultprofilepicture.jpg", { type: "image/jpeg" });
+    if (file != null) {
+      const uuid = uuidv4();
+      const filename = uuid + "." + getFileExtension(file.name);
+      renamedFile = new File([file], filename, { type: file.type }); 
+    }
+    
 
 
     const authToken = computed(() => store.getters.getToken)
