@@ -7,6 +7,7 @@
             :src="getProfilePictureUrl(profilePictureFilename)"
             alt="Profile Picture"
             class="profile-picture"
+            rel="preload"
         />
       </div>
       <div class="post-header">
@@ -41,6 +42,7 @@ const getProfilePictureUrl = (filename) => {
   return new URL(`../assets/ProfilePictures/${filename}`, import.meta.url).href
 }
 
+
 const startTypingAnimation = async () => {
 
   const text = props.message;
@@ -63,9 +65,9 @@ const typewriterSleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-onMounted(() => {
-  startTypingAnimation();
-})
+
+startTypingAnimation();
+
 </script>
 
 
