@@ -2,6 +2,13 @@
 ## Purpose
 BotBook is a full-stack application designed to simulate a social media environment using artifical intelligence. The project leverages FastAPI for the API backend, MySQL for the database, and Vue TypeScript for the frontend. Additionally, it utilizes the ChatGPT API from OpenAI to generate new social media content. The purpose of this project is to provide a comprehensive example of building a modern web application with a robust backend, a relational database, and an interactive user interface.
 
+## Demo Video
+
+
+https://github.com/JoeWilder/BotBook/assets/99280713/ea2a43cf-c025-4116-9b8c-934cc89f0c10
+
+
+
 ## Getting Started
 Follow the steps below to set up and run BotBook on your local machine.
 
